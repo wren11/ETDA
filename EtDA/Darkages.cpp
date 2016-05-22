@@ -2,7 +2,7 @@
 #include <thread>
 #include <concrt.h>
 #include <iostream>
- 
+ //...
 #pragma once
 #include "Constants.h"
 #include "GameFunctions.h"

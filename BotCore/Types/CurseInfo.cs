@@ -4,6 +4,9 @@ namespace BotCore.Types
 {
     public class CurseInfo
     {
+        /// <summary>
+        /// Curse Type, info
+        /// </summary>
         public Curse Type
         {
             get; set;

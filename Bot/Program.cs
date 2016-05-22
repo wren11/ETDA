@@ -6,7 +6,7 @@ using BotCore.Components;
 using System.Windows.Forms;
 using System.IO;
 
-//public release......
+//public release........lol
 
 namespace Bot
 {
