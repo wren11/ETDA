@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>PostSharp.Patterns.Diagnostics</name>
+  </assembly>
+  <members>
+    <member name="T:PostSharp.Patterns.Diagnostics.ILogAspect">
+      <summary>
+            Runtime semantics of the logging aspect.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogAspectConfiguration">
+      <summary>
+            Configuration of an <see cref="T:PostSharp.Patterns.Diagnostics.ILogAspect" />.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.#ctor">
+      <summary>
+        <markup>
+          <include item="SMCAutoDocConstructor">
+            <parameter>PostSharp.Patterns.Diagnostics.LogAspectConfiguration</parameter>
+          </include>
+        </markup>
+      </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnEntryLevel">
+      <summary>
+            Gets or sets the severity level for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnEntryOptions">
+      <summary>
+            Gets or sets options for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnExceptionLevel">
+      <summary>
+            Gets or sets the severity level for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnExceptionOptions">
+      <summary>
+            Gets or sets options for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnSuccessLevel">
+      <summary>
+            Gets or sets the severity level for logging on method success.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.OnSuccessOptions">
+      <summary>
+            Gets or sets options for logging on method success.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfiguration.ProfileName">
+      <summary>
+            Gets or sets the name of the logging profile.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute">
+      <summary>
+            Configures an aspect of type <see cref="T:PostSharp.Patterns.Diagnostics.ILogAspect" />.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.#ctor">
+      <summary>
+        <markup>
+          <include item="SMCAutoDocConstructor">
+            <parameter>PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute</parameter>
+          </include>
+        </markup>
+      </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnEntryLevel">
+      <summary>
+            Gets or sets the severity level for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnEntryOptions">
+      <summary>
+            Gets or sets options for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnExceptionLevel">
+      <summary>
+            Gets or sets the severity level for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnExceptionOptions">
+      <summary>
+            Gets or sets options for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnSuccessLevel">
+      <summary>
+            Gets or sets the severity level for logging on method success.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAspectConfigurationAttribute.OnSuccessOptions">
+      <summary>
+            Gets or sets options for logging on method success.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogAttribute">
+      <summary>
+            Custom attribute that, when applied on a method, causes PostSharp to implement tracing before and after execution of this method.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAttribute.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Patterns.Diagnostics.LogAttribute" />.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAttribute.#ctor(System.String)">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Patterns.Diagnostics.LogAttribute" /> and specifies a logging profile.
+            </summary>
+      <param name="profileName">The name of the logging profile, or <c>null</c> to use the default logging profile.</param>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnEntryLevel">
+      <summary>
+            Gets or sets the severity level for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnEntryOptions">
+      <summary>
+            Gets or sets options for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnExceptionLevel">
+      <summary>
+            Gets or sets the severity level for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnExceptionOptions">
+      <summary>
+            Gets or sets options for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnSuccessLevel">
+      <summary>
+            Gets or sets the severity level for logging on method success.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttribute.OnSuccessOptions">
+      <summary>
+            Gets or sets options for logging on method success.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogAttributeBase">
+      <summary>
+            Base class for all logging aspects.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAttributeBase.#ctor">
+      <summary>
+        <markup>
+          <include item="SMCAutoDocConstructor">
+            <parameter>PostSharp.Patterns.Diagnostics.LogAttributeBase</parameter>
+          </include>
+        </markup>
+      </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttributeBase.Configuration">
+      <summary>
+            Gets the aspect configuration.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogAttributeBase.CreateAspectConfiguration">
+      <summary>
+        <markup>
+          <include item="SMCMissingTag">
+            <parameter>summary</parameter>
+            <parameter>M:PostSharp.Patterns.Diagnostics.LogAttributeBase.CreateAspectConfiguration</parameter>
+          </include>
+        </markup>
+      </summary>
+      <returns>
+        <markup>
+          <include item="SMCMissingTag">
+            <parameter>returns</parameter>
+            <parameter>M:PostSharp.Patterns.Diagnostics.LogAttributeBase.CreateAspectConfiguration</parameter>
+          </include>
+        </markup>
+      </returns>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LogAttributeBase.ProfileName">
+      <summary>
+            Gets or sets the name of the logging profile. 
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogExceptionAttribute">
+      <summary>
+            Custom attribute that, when applied on a method, causes PostSharp to implement tracing upon exception in this method.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LogExceptionAttribute.#ctor">
+      <summary>
+            Initializes a new <see cref="T:PostSharp.Patterns.Diagnostics.LogExceptionAttribute" />.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LoggingProfile">
+      <summary>
+            Logging profiles are named configurations of logging aspects. They are typically instantiated in the PostSharp XML project file.
+            </summary>
+    </member>
+    <member name="M:PostSharp.Patterns.Diagnostics.LoggingProfile.#ctor">
+      <summary>
+        <markup>
+          <include item="SMCAutoDocConstructor">
+            <parameter>PostSharp.Patterns.Diagnostics.LoggingProfile</parameter>
+          </include>
+        </markup>
+      </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnEntryLevel">
+      <summary>
+            Gets or sets the severity level for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnEntryOptions">
+      <summary>
+            Gets or sets options for logging before method execution.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnExceptionLevel">
+      <summary>
+            Gets or sets the severity level for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnExceptionOptions">
+      <summary>
+            Gets or sets options for logging on method exception.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnSuccessLevel">
+      <summary>
+            Gets or sets the severity level for logging on method success.
+            </summary>
+    </member>
+    <member name="P:PostSharp.Patterns.Diagnostics.LoggingProfile.OnSuccessOptions">
+      <summary>
+            Gets or sets options for logging on method success.
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogLevel">
+      <summary>
+            Specifies the severity of a logged message.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.None">
+      <summary>
+            No message should be logged.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.Debug">
+      <summary>
+            The message should be logged at Debug/Trace level (when applicable).
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.Info">
+      <summary>
+            The message should be logged at Info level (when applicable).
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.Warning">
+      <summary>
+            The message should be logged at Warning level (when applicable).
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.Error">
+      <summary>
+            The message should be logged at Error level (when applicable).
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogLevel.Fatal">
+      <summary>
+            The message should be logged at Fatal level (when applicable).
+            </summary>
+    </member>
+    <member name="T:PostSharp.Patterns.Diagnostics.LogOptions">
+      <summary>
+            Specifies the options for logging parameter names, types and values.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.None">
+      <summary>
+            No parameter information included.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.IncludeParameterType">
+      <summary>
+            Includes parameter type information.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.IncludeParameterName">
+      <summary>
+            Includes parameter name.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.IncludeParameterValue">
+      <summary>
+            Includes parameter value, by calling <see cref="M:System.Object.ToString" /> on the object instance.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.IncludeReturnValue">
+      <summary>
+            Includes the return value.
+            </summary>
+    </member>
+    <member name="F:PostSharp.Patterns.Diagnostics.LogOptions.IncludeThisArgument">
+      <summary>
+            Includes the value of <c>this</c> argument in an instance method.
+            </summary>
+    </member>
+  </members>
+</doc>

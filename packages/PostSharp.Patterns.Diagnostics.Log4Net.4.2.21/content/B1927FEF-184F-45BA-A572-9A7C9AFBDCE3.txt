@@ -1,0 +1,2 @@
+This file is required for the installation of a NuGet package, 
+and can be safely deleted when the installation has completed.
