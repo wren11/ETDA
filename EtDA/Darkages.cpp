@@ -204,9 +204,16 @@ void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 				USHORT ycord = (USHORT)((data[index + 5] << 8) + data[index + 6]);
 				USHORT sprite = (USHORT)((data[index + 11] << 8) + data[index + 12]);
 
+
+
 				if (sprite > 0x8000 && sprite < 0x9000)
 				{
-					if (sprite == 32908 && *((int*)0x00750008) == 1)
+					if (sprite == 0 || sprite == 32000)
+					{
+						data[index + 11] = 0x93;
+						data[index + 12] = 0x00;
+					}
+					else if (sprite == 32908 && *((int*)0x00750008) == 1)
 					{
 						data[index + 11] = 0x90;
 						data[index + 12] = 0x00;
