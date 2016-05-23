@@ -57,7 +57,7 @@ public:
 		void *(__thiscall *WalkTo)(void*, int a2, int a3) = (void*(__thiscall*)(void*, int a2, int a3))0x0061A1E0;
 
 		if (SetCursor(pt) > 0)
-			WalkTo(this, pt.X, pt.Y);
+			WalkTo(this, pt.X, pt.Y);;
 	}
 
 	typedef int(__stdcall *OnCharacterLoginEvent)(char * username, char * password); 
