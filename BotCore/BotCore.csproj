@@ -102,7 +102,7 @@
     </Compile>
     <Compile Include="Components\Activebar.cs" />
     <Compile Include="Interop\MemoryPatternSearcher.cs" />
-    <Compile Include="PathFinding\RecursionSolver.cs" />
+    <Compile Include="States\RecursionSolver.cs" />
     <Compile Include="Shared\Client.cs" />
     <Compile Include="Shared\Collections.cs" />
     <Compile Include="Components\GameEquipment.cs" />

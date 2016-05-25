@@ -103,13 +103,6 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="PathFinder.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\thC2UHG7VN.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="EtDA.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

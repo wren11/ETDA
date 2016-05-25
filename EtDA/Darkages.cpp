@@ -50,11 +50,43 @@ typedef int(__thiscall *pPaint)(int *ecx, int hdc); pPaint hPaint = NULL;
 typedef HDC(__thiscall *DAGetDC)(int ecx);          DAGetDC pDAGetDC = NULL;
 
 HDC context = NULL;
+bool hud = false;
 
-void RenderCalls(HWND hwnd)
+void RenderCalls()
 {
 	if (context == NULL)
 		return;
+
+
+	if (hud)
+	{
+		std::string s(base.Name);
+
+		if (s.empty())
+		{
+			char *name = { 0 };
+
+			__asm
+			{
+				mov eax, userNameoffset
+				mov name, eax
+			}
+
+			s = name;
+		}
+
+		::SetBkMode(context, TRANSPARENT);
+		::SetTextColor(context, RGB(0, 33, 255));
+		::TextOut(context, 395 + 295, 380, s.c_str(), s.length());
+
+		HPEN hEllipsePen;
+		COLORREF qEllipseColor;
+		qEllipseColor = RGB(255, 0, 0);
+		hEllipsePen = CreatePen(PS_DASH, 0.5, qEllipseColor);
+		HPEN hPenOld = (HPEN)SelectObject(context, hEllipsePen);
+
+		Arc(context, 558, 276, 681, 437, 0, 0, 0, 0);
+	}
 
 	/*HDC hdcMem = CreateCompatibleDC(context);
 	HGDIOBJ oldBitmap = SelectObject(hdcMem, hBitmap);
@@ -93,9 +125,8 @@ int __fastcall DrawOverlay(int *ecx, int hdcptr)
 		Status st = GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
 		return st;
-	}
-
-	RenderCalls((HWND)ecx);
+	}	
+	RenderCalls();
 	hPaint(ecx, hdcptr);
 }
 
@@ -110,7 +141,6 @@ void RedirectPacketInformation(byte *packet, int length, int type)
 {
 	try
 	{
-
 		if (!IsWindow(hTargetWnd))
 		{
 			hTargetWnd = FindWindow(NULL, "etda");
@@ -143,6 +173,7 @@ int __stdcall OnPacketSend(BYTE *data, int arg1, int arg2, char arg3)
 
 	if (data[0] == 0x13)
 	{
+		hud = !hud;
 		//Later _Render(100, false, &RenderCalls);
 	}
 
