@@ -239,17 +239,24 @@ namespace BotCore
                 while (client.InjectToClientQueue.TryDequeue(out activeBuffer))
                 {
                     Interlocked.Add(ref _Total, 1);
-                    
                     while (client.Memory.Read<byte>((IntPtr)0x00721000, false) == 1)
                     {
                         if (!client.Memory.IsRunning)
                             break;
                         Thread.Sleep(1);
                     }
-                    client.Memory.Write((IntPtr)0x00721000, 1, false);
-                    client.Memory.Write((IntPtr)0x00721004, 0, false);
-                    client.Memory.Write((IntPtr)0x00721008, activeBuffer.Length, false);
-                    client.Memory.Write((IntPtr)0x00721012, activeBuffer, false);
+                    try
+                    {
+                        client.Memory.Write((IntPtr)0x00721000, 1, false);
+                        client.Memory.Write((IntPtr)0x00721004, 0, false);
+                        client.Memory.Write((IntPtr)0x00721008, activeBuffer.Length, false);
+                        client.Memory.Write((IntPtr)0x00721012, activeBuffer, false);
+                    }
+                    catch
+                    {
+                        client.CleanUpMememory();
+                        return;
+                    }
                 }
             }
         }
@@ -421,18 +428,25 @@ namespace BotCore
         
         private void PrepareComponents()
         {
-            InstalledComponents.Add(new Inventory() { Client = this });
-            InstalledComponents.Add(new PlayerAttributes() { Client = this });
-            InstalledComponents.Add(new Magic() { Client = this });
-            InstalledComponents.Add(new GameEquipment() { Client = this });
-            InstalledComponents.Add(new Activebar() { Client = this });
-            InstalledComponents.Add(new TargetFinder() { Client = this });
+            //core components, endabled by default
+            InstalledComponents.Add(new Inventory() { Client = this, Enabled = true });
+            InstalledComponents.Add(new PlayerAttributes() { Client = this, Enabled = true });
+            InstalledComponents.Add(new Magic() { Client = this, Enabled = true });
+            InstalledComponents.Add(new GameEquipment() { Client = this, Enabled = true });
+            InstalledComponents.Add(new Activebar() { Client = this, Enabled = true });
+            InstalledComponents.Add(new TargetFinder() { Client = this, Enabled = true });
 
+            //disabled by default components
+            InstalledComponents.Add(new StressTest() { Client = this, Enabled = false });
+
+            //mandatory components
             FieldMap = new Map();
+            FieldMap.Enabled = true;
             FieldMap.Client = this;
             FieldMap.Init(0, 0, 0);
             InstalledComponents.Add(FieldMap);
 
+            //init state machine.
             StateMachine = new GameStateEngine(this);
             LoadStates("BotCore.dll");
 
@@ -476,7 +490,8 @@ namespace BotCore
                 }
 
                 foreach (UpdateableComponent component in copy)
-                    component.Update(tick);
+                    if (component.Enabled)
+                        component.Update(tick);
 
                 var objs = ObjectSearcher.VisibleObjects.ToArray();
                 foreach (var obj in objs)

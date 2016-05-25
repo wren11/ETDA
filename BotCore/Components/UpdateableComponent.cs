@@ -6,6 +6,11 @@ namespace BotCore
     [Serializable]
     public abstract class UpdateableComponent : IDisposable
     {
+        public bool Enabled
+        {
+            get; set;
+        }
+
         public GameClient Client
         {
             get; set;

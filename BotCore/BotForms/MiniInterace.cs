@@ -1,5 +1,7 @@
-﻿using BotCore.Shared.Helpers;
+﻿using BotCore.Components;
+using BotCore.Shared.Helpers;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace BotCore
@@ -54,6 +56,18 @@ namespace BotCore
             {
                 button1.Text = "Running!";
             }
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            var component = client.InstalledComponents.OfType<StressTest>().FirstOrDefault();
+            if (component != null)
+                component.Enabled = checkBox1.Checked;
         }
     }
 }
