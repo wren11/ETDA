@@ -7,7 +7,7 @@ namespace BotCore.Actions
 {
     public class GameActions
     {
-
+          
         //Base Functions Must be defined in here.
         //The callback is optional, But must be specified as final constructor.
 
@@ -17,8 +17,7 @@ namespace BotCore.Actions
             p.Write(new byte[] { 0x13, 0x01 });
             GameClient.InjectPacket<ServerPacket>(client, p);
 
-            if (callback != null)
-                callback(client, p);
+            callback?.Invoke(client, p);
         }
 
 
@@ -29,8 +28,7 @@ namespace BotCore.Actions
             GameClient.InjectPacket<ServerPacket>(client, p);
             GameClient.InjectPacket<ServerPacket>(client, p);
 
-            if (callback != null)
-                callback(client, p);
+            callback?.Invoke(client, p);
         }
 
         public static void PlayAnimation(GameClient client, short number, Position xy)
@@ -74,8 +72,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot,
@@ -87,8 +84,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot, MapObject obj,
@@ -106,10 +102,7 @@ namespace BotCore.Actions
             packet.WriteInt16(obj.ServerPosition.Y);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
-
-            Thread.Sleep(100);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot, GameClient obj,
@@ -128,8 +121,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void RequestProfile(GameClient client,
@@ -140,8 +132,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
     
         public static void Say(GameClient client, MapObject obj, string val)
