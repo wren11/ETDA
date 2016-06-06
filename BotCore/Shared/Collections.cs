@@ -269,7 +269,7 @@ namespace BotCore
             BaseStaffs["Magus Kronos"] = new StaffTable() { Level = 19, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Holy Zeus"] = new StaffTable() { Level = 19, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 2 } };
             BaseStaffs["Assassin's Cross"] = new StaffTable() { Id = 162, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.All, Value = 2 } };
-            BaseStaffs["Andor Staff"] = new StaffTable() { Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.All, Value = 2 } };
+            BaseStaffs["Andor Staff"] = new StaffTable() { Id = 153, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.All, Value = 2 } };
             BaseStaffs["Veltain Staff"] = new StaffTable() { Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.All, Value = 2 } };
             BaseStaffs["Empowered Holy Gnarl"] = new StaffTable() { Id = 87, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.Single, Value = 0, Name = "ard cradh" } };
             BaseStaffs["Empowered Magus Orb"] = new StaffTable() { Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
@@ -294,7 +294,7 @@ namespace BotCore
             BaseStaffs["Glimmering Wand"] = new StaffTable() { Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Holy Hy-brasyl Baton"] = new StaffTable() { Id = 6, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Brute's Quill1"] = new StaffTable() { Id = 239, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
-            BaseStaffs["Yowien Tree Staff"] = new StaffTable() { Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
+            BaseStaffs["Yowien Tree Staff"] = new StaffTable() { Id = 30, Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Goldberry Harp"] = new StaffTable() { Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Master Divine Staff"] = new StaffTable() { Id = 110, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.AllExcept, Name = "cradh", Value = 3 } };
         }

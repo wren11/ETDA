@@ -103,6 +103,7 @@
     <Compile Include="Components\Activebar.cs" />
     <Compile Include="Components\StressTest.cs" />
     <Compile Include="Interop\MemoryPatternSearcher.cs" />
+    <Compile Include="States\BotStates\AttackMonsters.cs" />
     <Compile Include="States\RecursionSolver.cs" />
     <Compile Include="Shared\Client.cs" />
     <Compile Include="Shared\Collections.cs" />
