@@ -44,13 +44,11 @@ Currently ETDA supports the following functionality:
 This bot is in early development.
 
 Current Features:
-[x]. State Machine Based   ( Fast Response  )
-[x]. Component Based       ( Modular design )
-[x]. Customizable States, Plugins, Components
-[x]. No Scripting Necessary
-[ ]. Every class Supported, Including Subpaths.
-[ ]. Dynamic Path Finding
-[ ]. Dynamic Hunting Routes
+- [x]. State Machine Based   ( Fast Response  )
+- [x]. Component Based       ( Modular design )
+- [x]. Customizable States, Plugins, Components
+- [x]. No Scripting Necessary
+- [ ]. Every class Supported, Including Subpaths.
+- [ ]. Dynamic Path Finding
+- [ ]. Dynamic Hunting Routes
 
-Road Map:
-`git status`
