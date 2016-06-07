@@ -1,7 +1,7 @@
 # ETDA
 A Memory Based Darkages Hunting Bot.
 
-![img]http://s32.postimg.org/ok7drfpqd/etda.png
+![img](http://s32.postimg.org/ok7drfpqd/etda.png)
 
 I wrote this bot for the challenge of writing a bot without a network based backend.
 I wanted to develop a concept used in many other games and bring the same approach to darkages.
