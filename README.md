@@ -31,7 +31,7 @@ Currently ETDA supports the following functionality:
 
 *ETDA Interaction*
 - ClickToMove(Point) Invokation
-- SetCursoe(Point)
+- SetCursor(Point)
 - WalkTo(Point A, Point B)
 
 *ETDA Overlaying*
