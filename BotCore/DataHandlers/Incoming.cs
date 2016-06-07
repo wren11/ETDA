@@ -270,6 +270,11 @@ namespace BotCore.DataHandlers
                 obj.ServerPosition = newPosition;
                 obj.OnPositionUpdated(client, oldPosition, newPosition);
             }
+
+
+            client.Steps++;
+            CasterHelper.Reset();
+
         }
 
         public static void AislingsAdded(object sender, Packet packet)

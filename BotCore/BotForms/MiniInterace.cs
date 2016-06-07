@@ -1,4 +1,5 @@
-﻿using BotCore.Components;
+﻿using BotCore.Actions;
+using BotCore.Components;
 using BotCore.Shared.Helpers;
 using System;
 using System.Linq;
@@ -68,6 +69,11 @@ namespace BotCore
             var component = client.InstalledComponents.OfType<StressTest>().FirstOrDefault();
             if (component != null)
                 component.Enabled = checkBox1.Checked;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            GameActions.Walk(client, Types.Direction.North);
         }
     }
 }

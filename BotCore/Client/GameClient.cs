@@ -141,6 +141,8 @@ namespace BotCore
 
         public string EquippedWeapon { get; set; }
 
+        public int Steps { get; set; }
+
         public List<GameClient> OtherClients
         {
             get
@@ -176,6 +178,7 @@ namespace BotCore
         public static extern void OnAction([MarshalAs(UnmanagedType.FunctionPtr)] ProgressCallback callbackPointer);
 
         internal static string Hack { get; set; }
+        public int WalkOrdinal { get; internal set; }
 
         public void InitializeMemory(Process p, string Hack)
         {

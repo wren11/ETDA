@@ -171,11 +171,11 @@ int __stdcall OnPacketSend(BYTE *data, int arg1, int arg2, char arg3)
 
 	RedirectPacketInformation(data, arg1, 2);
 
-	if (data[0] == 0x13)
-	{
-		hud = !hud;
-		//Later _Render(100, false, &RenderCalls);
-	}
+	//if (data[0] == 0x13)
+	//{
+	//	hud = !hud;
+	//	//Later _Render(100, false, &RenderCalls);
+	//}
 
 	__asm
 	{

@@ -71,11 +71,11 @@
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(716, 431);
+            this.tabPage1.Size = new System.Drawing.Size(716, 433);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Botting States";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -116,7 +116,7 @@
             this.comboBox1.Location = new System.Drawing.Point(11, 8);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(192, 24);
+            this.comboBox1.Size = new System.Drawing.Size(192, 22);
             this.comboBox1.TabIndex = 2;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -138,10 +138,10 @@
             // statepanel
             // 
             this.statepanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statepanel.Location = new System.Drawing.Point(4, 20);
+            this.statepanel.Location = new System.Drawing.Point(4, 17);
             this.statepanel.Margin = new System.Windows.Forms.Padding(4);
             this.statepanel.Name = "statepanel";
-            this.statepanel.Size = new System.Drawing.Size(476, 389);
+            this.statepanel.Size = new System.Drawing.Size(476, 392);
             this.statepanel.TabIndex = 0;
             // 
             // tabPage2
@@ -154,11 +154,11 @@
             this.tabPage2.Controls.Add(this.richTextBox2);
             this.tabPage2.Controls.Add(this.checkBox1);
             this.tabPage2.Controls.Add(this.richTextBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Location = new System.Drawing.Point(4, 23);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabPage2.Size = new System.Drawing.Size(716, 431);
+            this.tabPage2.Size = new System.Drawing.Size(716, 433);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Packet Editor";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -185,11 +185,12 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
             "Client",
-            "Server"});
+            "Server",
+            "Auto"});
             this.comboBox2.Location = new System.Drawing.Point(470, 396);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 24);
+            this.comboBox2.Size = new System.Drawing.Size(121, 22);
             this.comboBox2.TabIndex = 6;
             this.comboBox2.Text = "Server";
             // 
@@ -216,7 +217,7 @@
             this.checkBox3.Location = new System.Drawing.Point(482, 280);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(86, 20);
+            this.checkBox3.Size = new System.Drawing.Size(68, 18);
             this.checkBox3.TabIndex = 4;
             this.checkBox3.Text = "Incoming";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -231,7 +232,7 @@
             this.checkBox2.Location = new System.Drawing.Point(587, 280);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(88, 20);
+            this.checkBox2.Size = new System.Drawing.Size(69, 18);
             this.checkBox2.TabIndex = 3;
             this.checkBox2.Text = "Outgoing";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -258,7 +259,7 @@
             this.checkBox1.Location = new System.Drawing.Point(14, 280);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(74, 20);
+            this.checkBox1.Size = new System.Drawing.Size(58, 18);
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "Enable";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -282,7 +283,7 @@
             // 
             // BotInterface
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 460);
             this.Controls.Add(this.tabControl1);
