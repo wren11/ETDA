@@ -52,4 +52,4 @@ Current Features:
 
 
 Road Map:
-- ToDO
+`git status`
