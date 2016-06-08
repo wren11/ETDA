@@ -15,7 +15,7 @@ and exposes them so that they can be used or called externally, In some cases, t
 and the information detoured to our main application. In this instance (BotCore).
 
 The BotCore manages all the consumer aspects of the Interop Communication that is done via Write/Read Process Memory
-as i felt small data would not require a real IPC layer. Having said that, my results have been good so i went this this approach.
+as i felt small data would not require a real IPC layer. Having said that, my results have been good so i went with this approach.
 
 ETDA sits between the Client, and Acts as an interface between the external Caller and the invokee.
 ETDA is still a work in progress and Many features will become available as progression and development continues.
@@ -45,7 +45,7 @@ Currently ETDA supports the following functionality:
 
 This bot is in early development.
 
-Current Features:
+*Current Roadmap*
 - [x] State Machine Based   ( Fast Response  )
 - [x] Component Based       ( Modular design )
 - [x] Customizable States, Plugins, Components
@@ -53,4 +53,19 @@ Current Features:
 - [ ] Every class Supported, Including Subpaths.
 - [ ] Dynamic Path Finding
 - [ ] Dynamic Hunting Routes
+
+*Upcoming RoadMap*
+- [ ] Remove all static addresse and replace with patterns
+- [ ] Replace ActiveBar Component so that a pattern scan is not needed.
+- 
+
+#credits
+
+- Shynd, He taught me the basics of a memory based bot years ago and i guess you can say this idea is derived alot from what he taught me.
+- ZenLulz, for his fantastic Memorysharp library.
+- Acht/Kyle, I stole his neat RegexMessageHandler code which i found in a public bot.
+- Huy/Jimmy, Thanks for helping with the states and some of the prelim code.
+
+This program is for educational purposes only and all code posted here is public domain.
+however please give credit where credit is due.
 
