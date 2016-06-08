@@ -53,9 +53,11 @@ This bot is in early development.
 - [x] Component Based       ( Modular design )
 - [x] Customizable States, Plugins, Components
 - [x] No Scripting Necessary
+- [x] Packet Editor
 - [ ] Every class Supported, Including Subpaths.
 - [ ] Dynamic Path Finding
 - [ ] Dynamic Hunting Routes
+- [ ] Packet Editor Dialog Support
 
 *Upcoming RoadMap*
 - [ ] Remove all static addresse and replace with patterns
