@@ -60,7 +60,7 @@ This bot is in early development.
 
 # credits
 
-- Shynd, He taught me the basics of a memory based bot years ago and i guess you can say this idea is derived alot from what he taught me.
+- Shynd, He taught me the basics of a memory based bot years ago and i guess you can say this idea is derived alot from what he taught me. *DA Procuration!*
 - ZenLulz, for his fantastic Memorysharp library.
 - Acht/Kyle, I stole his neat RegexMessageHandler code which i found in a public bot.
 - Huy/Jimmy, Thanks for helping with the states and some of the prelim code.
