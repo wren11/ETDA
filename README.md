@@ -57,9 +57,8 @@ This bot is in early development.
 *Upcoming RoadMap*
 - [ ] Remove all static addresse and replace with patterns
 - [ ] Replace ActiveBar Component so that a pattern scan is not needed.
-- 
 
-#credits
+# credits
 
 - Shynd, He taught me the basics of a memory based bot years ago and i guess you can say this idea is derived alot from what he taught me.
 - ZenLulz, for his fantastic Memorysharp library.
