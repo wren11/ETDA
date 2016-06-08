@@ -1,6 +1,9 @@
 # ETDA
 A Memory Based Darkages Hunting Bot.
 
+Status: Working for USDA Darkages Clients (www.darkages.com) *7.41*
+@[DarkAges741single.exe](https://s3.amazonaws.com/kru-downloads/da/DarkAges741single.exe)
+
 ![img](http://s32.postimg.org/ok7drfpqd/etda.png)
 
 I wrote this bot for the challenge of writing a bot without a network based backend.
