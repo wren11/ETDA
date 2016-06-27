@@ -7,7 +7,7 @@ namespace BotCore.Actions
 {
     public class GameActions
     {
-
+          
         //Base Functions Must be defined in here.
         //The callback is optional, But must be specified as final constructor.
 
@@ -17,8 +17,7 @@ namespace BotCore.Actions
             p.Write(new byte[] { 0x13, 0x01 });
             GameClient.InjectPacket<ServerPacket>(client, p);
 
-            if (callback != null)
-                callback(client, p);
+            callback?.Invoke(client, p);
         }
 
 
@@ -29,8 +28,7 @@ namespace BotCore.Actions
             GameClient.InjectPacket<ServerPacket>(client, p);
             GameClient.InjectPacket<ServerPacket>(client, p);
 
-            if (callback != null)
-                callback(client, p);
+            callback?.Invoke(client, p);
         }
 
         public static void PlayAnimation(GameClient client, short number, Position xy)
@@ -51,10 +49,6 @@ namespace BotCore.Actions
             GameClient.InjectPacket<ClientPacket>(client, packet);
         }
 
-        public static DateTime LastUseInvetorySlot = DateTime.Now;
-
-
-
         public static void UseInventorySlot(GameClient client, byte slot)
         {
             var packet = new Packet();
@@ -74,8 +68,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot,
@@ -87,8 +80,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot, MapObject obj,
@@ -106,10 +98,7 @@ namespace BotCore.Actions
             packet.WriteInt16(obj.ServerPosition.Y);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
-
-            Thread.Sleep(100);
+            callback?.Invoke(client, packet);
         }
 
         public static void EndSpell(GameClient client, byte slot, GameClient obj,
@@ -128,8 +117,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
 
         public static void RequestProfile(GameClient client,
@@ -140,8 +128,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
 
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            if (callback != null)
-                callback(client, packet);
+            callback?.Invoke(client, packet);
         }
     
         public static void Say(GameClient client, MapObject obj, string val)
@@ -155,5 +142,45 @@ namespace BotCore.Actions
             p.WriteByte(0x00);
             GameClient.InjectPacket<ClientPacket>(client, p);
         }
+
+        public static void Walk(GameClient Client, Direction dir)
+        {
+            CasterHelper.EnsureOnce(Client.GetType(), () =>
+            {
+                BeginWalk(Client, dir);
+                EndWalk(Client, dir);
+            }, Client.Steps);
+        }
+
+        public static void BeginWalk(GameClient Client, Direction dir)
+        {
+            var p = new Packet();
+            p.WriteByte(0x06);
+            p.WriteByte((byte)dir);
+            p.WriteByte((byte)(Client.WalkOrdinal++ % 255));
+            p.WriteByte(0x00);
+            p.WriteByte(0x06);
+            GameClient.InjectPacket<ServerPacket>(Client, p);
+            Client?.ApplyMovementLock();
+        }
+
+        public static void EndWalk(GameClient Client, Direction dir, int WalkSpeed = 50)
+        {
+            short x = Client.FieldMap.X();
+            short y = Client.FieldMap.Y();
+
+            var p = new Packet();
+            p.WriteByte(0x0C);
+            p.WriteInt32(Client.Attributes.Serial);
+            p.WriteInt16(x);
+            p.WriteInt16(y);
+            p.WriteByte((byte)dir);
+            p.WriteByte(0x00);
+
+            GameClient.InjectPacket<ClientPacket>(Client, p);
+            Thread.Sleep(WalkSpeed);
+            Client?.ReleaseMovementLock();
+        }
+
     }
 }

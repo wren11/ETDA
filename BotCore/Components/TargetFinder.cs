@@ -74,7 +74,7 @@ namespace BotCore.Components
 
         public TargetFinder()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(150.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(0.1));
             OnTargetUpdated += TargetsUpdated;
         }
 

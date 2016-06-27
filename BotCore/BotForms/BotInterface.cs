@@ -222,7 +222,7 @@ namespace BotCore
             if (!IsSendingPackets)
                 return;
 
-            AppendText(richTextBox1, e.ToString(), Color.Blue, true);
+            AppendText(richTextBox1, "s: " + e.ToString(), Color.Blue, true);
         }
 
         private void EditorReceivedPacket(object sender, Packet e)
@@ -230,7 +230,7 @@ namespace BotCore
             if (!IsReceivingPackets)
                 return;
 
-            AppendText(richTextBox1, e.ToString(), Color.Red, true);
+            AppendText(richTextBox1, "r: " + e.ToString(), Color.Red, true);
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
@@ -264,9 +264,44 @@ namespace BotCore
             {
                 try
                 {
-                    var buffer = StringToByteArray(line.Replace(" ", string.Empty).Trim());
+                    byte[] buffer = null;
+                    var newline = line;
+
+                    if (comboBox2.Text == "Auto")
+                    {
+                        bool outgoing = false;
+
+                        if (line.StartsWith("r:"))
+                            newline = line.Replace("r:", string.Empty);
+                        else if (line.StartsWith("s:"))
+                        {
+                            newline = line.Replace("s:", string.Empty);
+                            outgoing = true;
+                        }
+
+                        newline = newline.Trim();
+                        buffer = StringToByteArray(newline.Replace(" ", string.Empty).Trim());
+                        if (buffer != null && buffer.Length <= 0)
+                            continue;
+
+                        if (outgoing)
+                            GameClient.InjectPacket<ServerPacket>(client, new Packet(buffer));
+                        else
+                            GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer));
+
+                        continue;
+                    }
+
+                    if (line.StartsWith("r:"))
+                        newline = line.Replace("r:", string.Empty);
+                    else if (line.StartsWith("s:"))
+                        newline = line.Replace("s:", string.Empty);
+
+                    buffer = StringToByteArray(newline.Replace(" ", string.Empty).Trim());
                     if (buffer != null && buffer.Length <= 0)
                         continue;
+
+
 
                     if (comboBox2.Text == "Client")
                         GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer));

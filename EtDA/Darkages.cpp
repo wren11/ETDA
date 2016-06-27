@@ -126,6 +126,7 @@ int __fastcall DrawOverlay(int *ecx, int hdcptr)
 
 		return st;
 	}	
+
 	RenderCalls();
 	hPaint(ecx, hdcptr);
 }
@@ -170,12 +171,6 @@ int __stdcall OnPacketSend(BYTE *data, int arg1, int arg2, char arg3)
 	}
 
 	RedirectPacketInformation(data, arg1, 2);
-
-	if (data[0] == 0x13)
-	{
-		hud = !hud;
-		//Later _Render(100, false, &RenderCalls);
-	}
 
 	__asm
 	{
