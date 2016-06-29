@@ -1,4 +1,7 @@
 # ETDA
+
+# Note, This project is still in development. 
+
 A Memory Based Darkages Hunting Bot.
 
 > Status: Working for USDA Darkages Clients (www.darkages.com) *7.41*
