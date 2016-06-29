@@ -1,6 +1,11 @@
 # ETDA
 
 # Note, This project is still in development. 
+This Project is still in development, The current release forecast is unknown for the current
+development roadmap, Feel free to submit contributions to further push this project along the way.
+currently, The framework is in working condition but is missing many features listed on the roadmap for ETDA.
+the Bot that uses the framework, BotCore is in early stages of development and has a long way to go, however having said that,
+it has alot done, so check out the code and have fun!.
 
 A Memory Based Darkages Hunting Bot.
 
