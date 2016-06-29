@@ -145,11 +145,8 @@ namespace BotCore.Actions
 
         public static void Walk(GameClient Client, Direction dir)
         {
-            CasterHelper.EnsureOnce(Client.GetType(), () =>
-            {
-                BeginWalk(Client, dir);
-                EndWalk(Client, dir);
-            }, Client.Steps);
+            BeginWalk(Client, dir);
+            EndWalk(Client, dir);
         }
 
         public static void BeginWalk(GameClient Client, Direction dir)

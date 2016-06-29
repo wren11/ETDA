@@ -214,17 +214,52 @@ namespace BotCore
         internal ConcurrentQueue<byte[]> InjectToClientQueue = new ConcurrentQueue<byte[]>();
         internal static int _Total;
 
+        static int calculate_crc(byte[] bytes)
+        {
+            int i;
+            int crc_value = 0;
+            for (int len = 0; len < bytes.Length; len++)
+            {
+                for (i = 0x80; i != 0; i >>= 1)
+                {
+                    if ((crc_value & 0x8000) != 0)
+                    {
+                        crc_value = (crc_value << 1) ^ 0x8005;
+                    }
+                    else
+                    {
+                        crc_value = crc_value << 1;
+                    }
+                    if ((bytes[len] & i) != 0)
+                    {
+                        crc_value ^= 0x8005;
+                    }
+                }
+            }
+            return crc_value;
+        }
+
+        static int lastCrc = 0;
+
         public static void InjectPacket<T>(GameClient client, Packet packet) where T : Packet
         {
-            if (typeof(T) == typeof(ClientPacket))
-                client.InjectToClientQueue.Enqueue(packet.Data);
-            else if (typeof(T) == typeof(ServerPacket))
-                client.InjectToServerQueue.Enqueue(packet.Data);
+            var crc = packet.Data[0] + packet.Data.Length;
+
+            if (crc != lastCrc)
+            {
+
+                if (typeof(T) == typeof(ClientPacket))
+                    client.InjectToClientQueue.Enqueue(packet.Data);
+                else if (typeof(T) == typeof(ServerPacket))
+                    client.InjectToServerQueue.Enqueue(packet.Data);
+
+                lastCrc = crc;
+            }
         }
         #endregion
 
         #region Packet Consumers
-        
+
         internal static void ProcessInQueue(GameClient client)
         {
             while (true)

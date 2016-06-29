@@ -13,8 +13,5 @@ namespace BotCore.Types
             Slot = slot;
         }
 
-        public void OnUsed(DateTime now, GameClient client)
-        {
-        }
     }
 }

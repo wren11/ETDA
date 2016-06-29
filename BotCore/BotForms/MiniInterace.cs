@@ -21,7 +21,8 @@ namespace BotCore
 
         private void MiniInterace_VisibleChanged(object sender, EventArgs e)
         {
-            this.Text = client.Attributes.PlayerName + " (" + client.Attributes.Serial + ")";
+            if (client.Attributes != null)
+                this.Text = client?.Attributes.PlayerName + " (" + client.Attributes.Serial + ")";
         }
 
         private void MiniInterace_FormClosing(object sender, FormClosingEventArgs e)
@@ -74,6 +75,22 @@ namespace BotCore
         private void button4_Click(object sender, EventArgs e)
         {
             GameActions.Walk(client, Types.Direction.North);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            GameActions.Walk(client, Types.Direction.South);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            GameActions.Walk(client, Types.Direction.West);
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            GameActions.Walk(client, Types.Direction.East);
         }
     }
 }

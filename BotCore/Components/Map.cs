@@ -385,7 +385,7 @@ namespace BotCore.Components
             {
                 for (int i = 0; i < _MapObjects.Length; i++)
                 {
-                    if (_MapObjects[i % _MapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) >= 12)
+                    if (_MapObjects[i % _MapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) < 9)
                         _MapObjects[i % _MapObjects.Length].OnDiscovery(Client);
                 }
             }
@@ -397,7 +397,7 @@ namespace BotCore.Components
             {
                 for (int i = 0; i < _MapObjects.Length; i++)
                 {
-                    if (_MapObjects[i % _MapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) >= 12)
+                    if (_MapObjects[i % _MapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) > 9)
                         _MapObjects[i % _MapObjects.Length].OnRemoved(Client);
                 }
             }            

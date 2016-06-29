@@ -140,14 +140,15 @@ namespace BotCore.Types
         }
 
         public int TargetPriority { get; set; }
+
         public Func<MapObject, bool> CanTarget { get; set; }
+
         public CurseInfo CurseInfo { get; set; }
+
         public FasInfo FasInfo { get; set; }
 
         public override void Pulse()
         {
-
-
             if (CurseInfo != null)
             {
                 GameActions.Say(Client, this, (CurseInfo.Duration - (int)((DateTime.Now - CurseInfo.Applied).TotalMilliseconds)).ToString());
