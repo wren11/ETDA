@@ -1,18 +1,15 @@
-﻿using System.Linq;
-using BotCore.States;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using BotCore.Actions;
 using BotCore.DataHandlers;
+using BotCore.States;
 
 namespace BotCore
 {
     [Serializable]
     public class Client : GameClient
     {
-        public DateTime LastMessage { get; internal set; }
-
-        public Client() : base()
+        public Client()
         {
             Client = this;
             Client.SpellBar = new List<short>();
@@ -56,32 +53,34 @@ namespace BotCore
 
         private void PreparePrelims()
         {
-            BotForm = new BotInterface(this);
-            BotForm.MdiParent = Collections.ParentForm;
+            BotForm = new BotInterface(this)
+            {
+                MdiParent = Collections.ParentForm
+            };
             BotForm.Show();
             BotForm.Text = Attributes.PlayerName;
 
-            GameActions.Refresh(Client, (a, b) => { return true; });
-            GameActions.Refresh(Client, (a, b) => { return true; });
+            GameActions.Refresh(Client, (a, b) => true);
+            GameActions.Refresh(Client, (a, b) => true);
 
             Client.ReleaseMovementLock();
         }
 
         //This is used to manage Auto Logging-In (If Enabled).
-        internal void OnClientStateUpdated(bool Transit)
+        internal void OnClientStateUpdated(bool transit)
         {
-            if (ClientReady && !Transit)
+            if (ClientReady && !transit)
             {
                 Client.CleanUpMememory();
                 Console.WriteLine("Cleanup Time");
             }
 
             Console.WriteLine("Client is ready.");
-            ClientReady = Transit;
+            ClientReady = transit;
         }
 
         public override void TransitionTo(GameState current, TimeSpan Elapsed)
-        {          
+        {
             current.InTransition = false;
 
             //we must signal that no states are running here.

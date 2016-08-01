@@ -1,6 +1,5 @@
 ﻿using BotCore.Actions;
 using BotCore.Components;
-using BotCore.Shared.Helpers;
 using System;
 using System.Linq;
 using System.Windows.Forms;

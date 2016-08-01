@@ -1,42 +1,43 @@
-﻿using BotCore.Actions;
-using BotCore.PathFinding;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using BotCore.Actions;
+using BotCore.PathFinding;
 
 namespace BotCore.Types
 {
     public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable
     {
-        public EventHandler<List<PathSolver.PathFinderNode>> PathUpdated = delegate { };
-        
-        public ushort Sprite;
-
         public Direction Direction;
 
+        internal bool isCursed;
+
         public Position OldPosition;
+        public EventHandler<List<PathSolver.PathFinderNode>> PathUpdated = delegate { };
+
+        public ushort Sprite;
+
+        public Stopwatch timer = new Stopwatch();
 
         public DateTime TimeSeen = DateTime.Now;
 
-        internal bool isCursed;
+        public MapObject()
+        {
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
+        }
 
         public Position ServerPosition { get; set; }
 
         public int Serial { get; set; }
- 
+
         public MapObjectType Type { get; set; }
-
-        public List<PathSolver.PathFinderNode> PathToMapObject { get; set; }
-
-        public Stopwatch timer = new Stopwatch();
 
         public int MovementSpeed { get; set; }
 
-        public MapObject()
-        {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1000));
-        }
+        public CurseInfo CurseInfo { get; set; }
+
+        public FasInfo FasInfo { get; set; }
 
         public void OnDiscovery(GameClient client)
         {
@@ -53,7 +54,44 @@ namespace BotCore.Types
             timer.Start();
         }
 
-        private void ReassignObj(GameClient client)
+        public void OnRemoved(GameClient client)
+        {
+            Console.WriteLine("Entity: {0} was Removed.", Serial);
+            client.FieldMap.SetPassable(ServerPosition);
+            client.FieldMap.RemoveObject(this);
+            PathToMapObject = null;
+        }
+
+        public void OnPositionUpdated(GameClient client, Position oldPosition, Position newPosition)
+        {
+            if (Timer == null)
+            {
+                Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
+            }
+
+            Timer.Reset();
+            
+
+            //lets time movement speed.
+            if (timer.ElapsedMilliseconds > 0)
+                MovementSpeed = (int) timer.ElapsedMilliseconds;
+
+
+            Console.WriteLine("Entity Moved {0},{1} -> {2},{3}", oldPosition.X, oldPosition.Y, newPosition.X, newPosition.Y);
+
+            timer.Restart();
+            client.FieldMap.SetPassable(oldPosition);
+            client.FieldMap.SetWall(newPosition);
+            UpdatePath(client);
+        }
+
+        public List<PathSolver.PathFinderNode> PathToMapObject { get; set; }
+
+        public int TargetPriority { get; set; }
+
+        public Func<MapObject, bool> CanTarget { get; set; }
+
+        void ReassignObj(GameClient client)
         {
             var obj = client.FieldMap.MapObjects.FirstOrDefault(i => i.Serial == Serial);
             if (obj == null)
@@ -62,25 +100,21 @@ namespace BotCore.Types
             {
                 if (obj is Aisling)
                 {
-                    if ((obj as Aisling).IsHidden && (this is Aisling)
+                    if ((obj as Aisling).IsHidden && this is Aisling
                         && !(this as Aisling).IsHidden)
                     {
                         (obj as Aisling).IsHidden = false;
                     }
-                }
-                else
-                {
-                    obj = this;
-                }
+                }      
             }
         }
 
-        private void OverrideTargetPriorties()
+        void OverrideTargetPriorties()
         {
-            if (Collections.TargetConditions.ContainsKey((short)Sprite))
+            if (Collections.TargetConditions.ContainsKey((short) Sprite))
             {
-                CanTarget = Collections.TargetConditions[(short)Sprite].predicate;
-                TargetPriority = Collections.TargetConditions[(short)Sprite].Priority;
+                CanTarget = Collections.TargetConditions[(short) Sprite].predicate;
+                TargetPriority = Collections.TargetConditions[(short) Sprite].Priority;
             }
         }
 
@@ -88,23 +122,23 @@ namespace BotCore.Types
         //only hard coded logic should be placed here.
         private void SetTargetPriorties(GameClient client)
         {
-            if (Type == MapObjectType.Monster && CanTarget == null) 
+            if (Type == MapObjectType.Monster && CanTarget == null)
                 // don't re-create it again if it's already defined.
                 //as this can be defined by plugin settings.
             {
                 switch (Sprite)
                 {
                     case 1: // target is a wasp.
-                        {
-                            CanTarget = (target) => true; //return true, no special condition here.
-                            TargetPriority = 1; //give it 1, making this sprite a higher priority.
-                        }
+                    {
+                        CanTarget = target => true; //return true, no special condition here.
+                        TargetPriority = 1; //give it 1, making this sprite a higher priority.
+                    }
                         break;
                     default:
-                        {
-                            CanTarget = (target) => true;
-                            TargetPriority = 0; //give it 0 - nothing special.
-                        }
+                    {
+                        CanTarget = target => true;
+                        TargetPriority = 0; //give it 0 - nothing special.
+                    }
                         break;
                 }
             }
@@ -119,40 +153,11 @@ namespace BotCore.Types
                 PathUpdated(client, PathToMapObject);
             }
         }
-
-        public void OnRemoved(GameClient client)
-        {
-            client.FieldMap.SetPassable(ServerPosition);
-            client.FieldMap.RemoveObject(this);
-            PathToMapObject = null;
-        }
-
-        public void OnPositionUpdated(GameClient client, Position oldPosition, Position newPosition)
-        {
-            //lets time movement speed.
-            if (timer.ElapsedMilliseconds > 0)
-                MovementSpeed = (int)timer.ElapsedMilliseconds;
-
-            timer.Restart();
-            client.FieldMap.SetPassable(oldPosition);
-            client.FieldMap.SetWall(newPosition);
-            UpdatePath(client);
-        }
-
-        public int TargetPriority { get; set; }
-
-        public Func<MapObject, bool> CanTarget { get; set; }
-
-        public CurseInfo CurseInfo { get; set; }
-
-        public FasInfo FasInfo { get; set; }
-
+        
         public override void Pulse()
         {
-            if (CurseInfo != null)
-            {
-                GameActions.Say(Client, this, (CurseInfo.Duration - (int)((DateTime.Now - CurseInfo.Applied).TotalMilliseconds)).ToString());
-            }
+            if (Type == MapObjectType.Monster)
+                GameActions.Say(Client, this, Serial + " (" + ServerPosition.X + "," + ServerPosition.Y + ")  " + (CurseInfo != null ? "Cursed" : "Not Cursed"));
         }
 
         public override void Update(TimeSpan tick)

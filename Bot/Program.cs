@@ -18,17 +18,17 @@ namespace Bot
         static DateTime LastUpdate { get; set; }
 
         //List of Updateable components, Add more here if needed.
-        static List<UpdateableComponent> Components = new List<UpdateableComponent>();
+        static List<UpdateableComponent> _components = new List<UpdateableComponent>();
 
-        static MainForm ParentForm = new MainForm();
+        static readonly MainForm _parentForm = new MainForm();
 
-        static Thread UpdatingThread = null;
+        static Thread _updatingThread = null;
 
         [STAThread]
         static void Main(string[] args)
         {
             //set parent
-            Collections.ParentForm = ParentForm;
+            Collections.ParentForm = _parentForm;
 
             //Set a tick rate of 60 frames per second.
             UpdateSpan = TimeSpan.FromSeconds(1.0 / 60.0);
@@ -37,12 +37,11 @@ namespace Bot
             SetupComponents();
 
             //Update Frame
-            UpdatingThread = new Thread(new ThreadStart(DoUpdate));
-            UpdatingThread.IsBackground = true;
-            UpdatingThread.Start();
+            _updatingThread = new Thread(DoUpdate) {IsBackground = true};
+            _updatingThread.Start();
 
             //this simply runs the MainForm Thread
-            Application.Run(ParentForm);
+            Application.Run(_parentForm);
         }
 
         //This Function Sets up Components used for this bot.
@@ -55,7 +54,7 @@ namespace Bot
             monitor.Removed += monitor_Removed;
 
             //Add this to our component list, so it will get updated in the main frame.
-            Components.Add(monitor);
+            _components?.Add(monitor);
         }
 
         //DA process was removed, unload all necessary resources.
@@ -81,7 +80,7 @@ namespace Bot
             //Add to our Global collections dictionary.
             Collections.AttachedClients[(int)sender] = client;
 
-            ParentForm.Invoke((MethodInvoker)delegate ()
+            _parentForm.Invoke((MethodInvoker)delegate ()
             {
                 //invoke OnAttached, so signal creation of Packet Handlers.
                 client.OnAttached();
@@ -114,16 +113,16 @@ namespace Bot
         static void Update(TimeSpan elapsedTime)
         {
             //Update all components.
-            lock (Components)
+            lock (_components)
             {
-                Components.ForEach(i => i.Update(elapsedTime));
+                _components.ForEach(i => i.Update(elapsedTime));
             }
 
             //Update all attached clients in our collections dictionary, this will allow
             //any updateable components inside client to also update accordinaly to the elapsed frame.
 
             //copy memory here is deliberate!
-            var copy = new List<Client>();
+            List<Client> copy;
             lock (Collections.AttachedClients)
                 copy = new List<Client>(Collections.AttachedClients.Values);
 
