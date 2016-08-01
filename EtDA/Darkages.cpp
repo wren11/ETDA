@@ -87,17 +87,9 @@ void RenderCalls()
 
 		Arc(context, 558, 276, 681, 437, 0, 0, 0, 0);
 	}
-
-	/*HDC hdcMem = CreateCompatibleDC(context);
-	HGDIOBJ oldBitmap = SelectObject(hdcMem, hBitmap);
-	BITMAP bitmap;
-
-	GetObject(hBitmap, sizeof(bitmap), &bitmap);
-	BitBlt(context, 0, 0, bitmap.bmWidth, bitmap.bmHeight, hdcMem, 0, 0, SRCCOPY);
-
-	SelectObject(hdcMem, oldBitmap);
-	DeleteDC(hdcMem);*/
 }
+
+int DA741_GETDC = 0x004AC8C0;
 
 int __fastcall DrawOverlay(int *ecx, int hdcptr)
 {
@@ -105,7 +97,7 @@ int __fastcall DrawOverlay(int *ecx, int hdcptr)
 
 	if (context == NULL)
 	{
-		void *GetDC = (void*)0x004AC8C0;
+		void *GetDC = (void*)DA741_GETDC;
 
 		__asm
 		{
@@ -118,7 +110,7 @@ int __fastcall DrawOverlay(int *ecx, int hdcptr)
 			pop ecx
 		}
 
-		context = (HDC)ptx;
+		context = HDC(ptx);
 
 		GdiplusStartupInput gdiplusStartupInput;
 		ULONG_PTR           gdiplusToken;
@@ -136,7 +128,7 @@ int __stdcall OnCharacterLogin(char *username, char *password)
 	return base.OnCharacter(username, password);
 }
 
-HWND hTargetWnd = FindWindow(NULL, "etda");
+HWND hTargetWnd = FindWindow(nullptr, "etda");
 
 void RedirectPacketInformation(byte *packet, int length, int type)
 {
@@ -144,7 +136,7 @@ void RedirectPacketInformation(byte *packet, int length, int type)
 	{
 		if (!IsWindow(hTargetWnd))
 		{
-			hTargetWnd = FindWindow(NULL, "etda");
+			hTargetWnd = FindWindow(nullptr, "etda");
 			return;
 		}
 
@@ -153,8 +145,13 @@ void RedirectPacketInformation(byte *packet, int length, int type)
 		payload.cbData = sizeof(BYTE) * length;
 		payload.lpData = packet;
 
-		SendMessageTimeout(hTargetWnd, WM_COPYDATA, (WPARAM)(int)packet, (LPARAM)(LPVOID)&payload, SMTO_NORMAL, 5, NULL);
-		SendMessageTimeout(hTargetWnd, WM_COPYDATA, (WPARAM)da.ProcessId == 0 ? GetCurrentProcessId() : da.ProcessId, (LPARAM)(LPVOID)&payload, SMTO_NORMAL, 10, NULL);
+		SendMessageTimeout(hTargetWnd, WM_COPYDATA, 
+			static_cast<WPARAM>(
+		    reinterpret_cast<int>(packet)), 
+			reinterpret_cast<LPARAM>(
+			static_cast<LPVOID>(&payload)), SMTO_NORMAL, 5,
+			nullptr);
+		SendMessageTimeout(hTargetWnd, WM_COPYDATA, static_cast<WPARAM>(da.ProcessId) == 0 ? GetCurrentProcessId() : da.ProcessId, (LPARAM)(LPVOID)&payload, SMTO_NORMAL, 10, NULL);
 	}
 	catch (exception)
 	{
@@ -183,17 +180,17 @@ int __stdcall OnPacketSend(BYTE *data, int arg1, int arg2, char arg3)
 
 void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 {
-	if (data[0] == 0x19 && *((int*)0x00750002) == 1)
+	if (data[0] == 0x19 && *reinterpret_cast<int*>(0x00750002) == 1)
 	{
 		return;
 	}
 
-	if (data[0] == 0x13 && *((int*)0x00750004) == 1)
+	if (data[0] == 0x13 && *reinterpret_cast<int*>(0x00750004) == 1)
 	{
 		return;
 	}
 
-	if (data[0] == 0x29 && *((int*)0x00750006) == 1)
+	if (data[0] == 0x29 && *reinterpret_cast<int*>(0x00750006) == 1)
 	{
 		short animation = (data[9] << 8) | data[10];
 		if (animation == 33)

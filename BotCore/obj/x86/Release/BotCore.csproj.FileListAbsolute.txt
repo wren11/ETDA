@@ -1,0 +1,17 @@
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\sotp.dat
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\BotCore.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\BotCore.pdb
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\Fasm.NET.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\log4net.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\MemorySharp.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\Microsoft.CSharp.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\x86\Release\log4net.xml
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.csprojResolveAssemblyReference.cache
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.BotInterface.resources
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.MiniInterace.resources
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.BotForms.statetoggle.resources
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.Properties.Resources.resources
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.States.StateSettings.resources
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.csproj.GenerateResource.Cache
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.dll
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.pdb

@@ -31,6 +31,8 @@ namespace BotCore.DataHandlers
                {
                    LoadMap(client, number, width, height);
                    client.MapLoaded = true;
+                   //reset again
+                   client.Active?.HardReset();
                }) { IsBackground = true }.Start();
 
             GameActions.RequestProfile(client);

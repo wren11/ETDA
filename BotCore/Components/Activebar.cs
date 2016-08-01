@@ -1,6 +1,7 @@
 ﻿using BotCore.Interop;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace BotCore.Components
 {
@@ -24,18 +25,33 @@ namespace BotCore.Components
         public Activebar()
         {
             Timer = new UpdateTimer(TimeSpan.FromMilliseconds(135.0));
+            HardReset();
         }
 
         public void Reset()
         {
-            m_active.Clear();
-            Client.SpellBar.Clear();
+            if (Client != null)
+            {
+                m_active = new List<byte>();
+                Client.SpellBar = new List<short>();
+            }
+        }
+
+        public void HardReset()
+        {
+            if (Client == null || !Client.Memory.IsRunning)
+                return;
+
+            MemoryPointer = 0;
+            Reset();
         }
 
         public override void Pulse()
         {
             if (!IsInGame())
                 return;
+
+
 
             if (MemoryPointer == 0)
             {
