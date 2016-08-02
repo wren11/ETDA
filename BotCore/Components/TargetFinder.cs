@@ -9,9 +9,12 @@ namespace BotCore.Components
     {
         public EventHandler<MapObject[]> OnTargetUpdated  = delegate { };
 
-        private MapObject[] _mobjects = new MapObject[0];
+        MapObject[] _mobjects = new MapObject[0];
 
-        private MapObject m_SelectedTarget;
+        MapObject m_SelectedTarget;
+
+        List<MapObject> m_TargetedMonsters = new List<MapObject>();
+
         protected MapObject SelectedTarget
         {
             get { return m_SelectedTarget; }
@@ -21,8 +24,6 @@ namespace BotCore.Components
         {
             get { return SelectedTarget; }
         }
-
-        private List<MapObject> m_TargetedMonsters = new List<MapObject>();
 
         public List<MapObject> TargetedMonsters
         {
@@ -51,12 +52,12 @@ namespace BotCore.Components
 
         public MapObject RetreivePlayerTarget(Predicate<MapObject> predicate)
         {
-            return VisibleObjects.ToList().Find(predicate);
+            return VisibleObjects.ToList().Find(n => n is Aisling && predicate(n));
         }
 
         public List<MapObject> RetreivePlayerTargets(Predicate<MapObject> predicate)
         {
-            return VisibleObjects.ToList().FindAll(predicate);
+            return VisibleObjects.ToList().FindAll(n => n is Aisling && predicate(n));
         }
 
         public MapObject[] VisibleObjects
@@ -78,12 +79,12 @@ namespace BotCore.Components
             OnTargetUpdated += TargetsUpdated;
         }
 
-        private void TargetsUpdated(object sender, MapObject[] e)
+        void TargetsUpdated(object sender, MapObject[] e)
         {
             SelectTarget(e);
         }
 
-        private void SelectTarget(MapObject[] e)
+        void SelectTarget(MapObject[] e)
         {
             m_TargetedMonsters.Clear();
             foreach (var obj in e.OrderBy(i => i.TargetPriority))
@@ -116,7 +117,7 @@ namespace BotCore.Components
 
                 //this is preliminary checks, to ensure target is valid.
                 var objects = (from v in Client.FieldMap.MapObjects
-                               where v != null && v.Serial != Client.Attributes.Serial
+                               where v != null 
                                && v.ServerPosition.DistanceFrom(Client.Attributes.ClientPosition) < 12
                                orderby v.ServerPosition.DistanceFrom(Client.Attributes.ClientPosition) descending 
                                select v).ToArray();

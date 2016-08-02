@@ -343,5 +343,31 @@ namespace BotCore
         {
             client.Paused = false;
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (!client.IsInGame())
+                return;
+
+            var ids = client.ObjectSearcher
+                ?.RetreivePlayerTargets(i => i != null)
+                .Select(i => i.Serial).ToArray();
+
+            if (ids.Length > 0)
+            {
+                foreach (var id in ids)
+                {
+                    var packet = new Packet();
+                    packet.WriteByte(0x29);
+                    packet.WriteInt32(id);
+                    packet.WriteInt32(client.Attributes.Serial);
+                    packet.WriteAnimation(Animation.ardcradh);
+                    packet.WriteUInt16(0x0000);
+                    packet.WriteUInt16(0x0064);
+
+                    GameClient.InjectPacket<ClientPacket>(client, packet);
+                }
+            }
+        }
     }
 }

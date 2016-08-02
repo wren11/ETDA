@@ -43,7 +43,7 @@ namespace BotCore.Types
         {
             Client = client;
 
-            if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling)
+            if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling || this is Aisling)
                 client.FieldMap.SetWall(ServerPosition);
 
             ReassignObj(client);
@@ -147,6 +147,7 @@ namespace BotCore.Types
         public void UpdatePath(GameClient client)
         {
             if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling
+                || this is Aisling
                 && Serial != client.Attributes.Serial)
             {
                 PathToMapObject = client.FieldMap.Search(client.Attributes.ClientPosition, ServerPosition);
@@ -156,8 +157,11 @@ namespace BotCore.Types
         
         public override void Pulse()
         {
-            if (Type == MapObjectType.Monster)
-                GameActions.Say(Client, this, Serial + " (" + ServerPosition.X + "," + ServerPosition.Y + ")  " + (CurseInfo != null ? "Cursed" : "Not Cursed"));
+            if (CurseInfo != null && CurseInfo.CurseElapsed)
+                CurseInfo = null;
+
+            //if (Type == MapObjectType.Monster || this is Aisling)
+            //    GameActions.Say(Client, this, Serial + " (" + ServerPosition.X + "," + ServerPosition.Y + ")  " + (CurseInfo != null ? "Cursed" : "Not Cursed"));
         }
 
         public override void Update(TimeSpan tick)
@@ -168,6 +172,28 @@ namespace BotCore.Types
             {
                 Pulse();
                 Timer.Reset();
+            }
+        }
+
+        public void OnAnimation(short animation, int to, int @from)
+        {
+            switch ((Animation)animation)
+            {
+                //TODO: Add more Animation Handling here.
+                case Animation.ardcradh:
+                {
+                    if (CurseInfo != null)
+                        CurseInfo.Applied = DateTime.Now;
+
+                    if (CurseInfo == null)
+                    {
+                        CurseInfo = new CurseInfo();
+                        CurseInfo.Applied = DateTime.Now;
+                        CurseInfo.Type = CurseInfo.Curse.ardcradh;
+                        CurseInfo.Duration = 240000;
+                    }
+                    isCursed = true;
+                } break;
             }
         }
     }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
+using BotCore.Types;
 
 namespace BotCore
 {
@@ -22,6 +25,22 @@ namespace BotCore
         public Packet(byte OpCode) : this()
         {
             WriteByte(OpCode);
+        }
+
+        public Packet(string hex) : this()
+        {
+            try
+            {
+                hex = hex.Replace(" ", string.Empty).Trim();
+                Data = Enumerable.Range(0, hex.Length)
+                    .Where(x => x % 2 == 0)
+                    .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                    .ToArray();
+            }
+            catch
+            {
+                return;
+            }
         }
 
         public Packet(byte[] data) : this()
@@ -227,6 +246,10 @@ namespace BotCore
             Write(data);
         }
 
+        public void WriteAnimation(Animation value)
+        {
+            WriteUInt16((ushort)value);
+        }
         public void WriteUInt16(ushort value)
         {
             var data = BitConverter.GetBytes(value);

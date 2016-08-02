@@ -448,7 +448,13 @@ namespace BotCore.DataHandlers
 
             if (from == client.Attributes.Serial)
             {
-                client.LastCastTarget = client.FieldMap.GetObject(i => i.Serial == to);
+                client.LastCastTarget = client.FieldMap?.GetObject(i => i.Serial == to);
+            }
+
+            var obj = client.FieldMap?.GetObject(i => i.Serial == to);
+            if (obj != null)
+            {
+                obj.OnAnimation(animation, to, from);
             }
         }
 
