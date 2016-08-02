@@ -17,8 +17,14 @@ A Memory Based Darkages Hunting Bot.
 I wrote this bot for the challenge of writing a bot without a network based backend.
 I wanted to develop a concept used in many other games and bring the same approach to darkages.
 
-THe pros of using a memory base over a networking one is very significant.
-in terms of response time and overall performance.
+The advantages of using a memory base backend over a networking layer is very significant.
+in terms of response time and overall performance, because there is much less overhead retrieving and sending information.
+For instance, A proxy will need an additional socket layer ontop of your clients socket layer to send and retrieve information,
+ontop of this, it also needs to parse the raw packet bytes, append buffers, then sequentially decrypt them and then handle them again to extract the information, and then encrypt them again and send them back to the clients socket layer,
+this is alot of stuff happening, Stuff that is done already by the clients own socket layer, so ultiizing memory, we can bypass
+all of this and jump straight to the clients own function and call it directly, inline, allowing the client to do the work.
+I've written plently of network bots in the past,  UDBot (Proboably the First bot ever written), DABasherBot (2004-2006, Private Bot, specefically written for bashers in Nobis), Bot2008, (written in 2006, released 2008), Bot2009 (Released 2009), Wrenbot (Post 2009, never completed) just to give you a history. So While those network bots did a decent job of collecting XP, they were often unreliable for long peroids of botting sessions, would unpredicattly disconnect, and so the idea behind ETDA is to make it light as possible, and fast as possible and reliable as possible.
+
 
 > This application ultilizes ETDA.dll
 this is a dll written in c++, prior to being injected it hooks the necessary functions used in the DA Client
