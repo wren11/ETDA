@@ -95,13 +95,14 @@ namespace Bot
                 return;
             if (c.ClientPacketHandler == null)
                 return;
-            if (packet.Type == 2 &&
-                c.ClientPacketHandler[packet.Data[0]] != null)
-                c.ClientPacketHandler[packet.Data[0]](id, packet);
-            else if (packet.Type == 1 &&
-                     c.ServerPacketHandler[packet.Data[0]] != null)
-                c.ServerPacketHandler[packet.Data[0]](id, packet);
 
+            if (packet.Type == 2)
+                c.ClientPacketHandler[packet.Data[0]]?.Invoke(id, packet);
+            else if (packet.Type == 1)
+                c.ServerPacketHandler[packet.Data[0]]?.Invoke(id, packet);
+            else if (packet.Type == 3) {
+                
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]

@@ -23,7 +23,6 @@ C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\Debug\log4net.dll
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\Debug\MemorySharp.dll
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\Debug\Microsoft.CSharp.dll
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\bin\Debug\log4net.xml
-C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.csprojResolveAssemblyReference.cache
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.BotInterface.resources
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.MiniInterace.resources
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.BotForms.statetoggle.resources

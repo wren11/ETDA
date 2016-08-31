@@ -284,7 +284,7 @@ namespace BotCore.States
             {
                 target.CurseInfo = new CurseInfo();
                 target.CurseInfo.Applied = DateTime.Now;
-                target.isCursed = true;
+                target.IsCursed = true;
 
 
                 switch (value)

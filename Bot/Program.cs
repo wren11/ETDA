@@ -5,7 +5,8 @@ using BotCore;
 using BotCore.Components;
 using System.Windows.Forms;
 using System.IO;
-
+using Binarysharp.MemoryManagement;
+using System.Text;
 
 namespace Bot
 {
@@ -80,11 +81,43 @@ namespace Bot
             //Add to our Global collections dictionary.
             Collections.AttachedClients[(int)sender] = client;
 
+            InjectCodeStubs(client);
+
             _parentForm.Invoke((MethodInvoker)delegate ()
             {
                 //invoke OnAttached, so signal creation of Packet Handlers.
                 client.OnAttached();
             });
+        }
+
+        public static void InjectCodeStubs(GameClient client)
+        {
+            if (client == null || client.Memory == null || !client.Memory.IsRunning)
+                return;
+
+            var mem = client.Memory;
+            var offset = 0x697B;
+            var send = mem.Read<int>((IntPtr)0x85C000, false) + offset;
+            var payload = new byte[] { 0x13, 0x01 };
+            var payload_length_arg = 
+                mem.Memory.Allocate(2, 
+                Binarysharp.MemoryManagement.Native.MemoryProtectionFlags.ExecuteReadWrite);
+            mem.Write((IntPtr)payload_length_arg.BaseAddress, (short)payload.Length, false);
+            var payload_arg =
+                mem.Memory.Allocate(sizeof(byte) * payload.Length,
+                Binarysharp.MemoryManagement.Native.MemoryProtectionFlags.ExecuteReadWrite);
+            mem.Write((IntPtr)payload_arg.BaseAddress, payload, false);
+
+            var asm = new string[]
+            {
+                "mov eax, " + payload_length_arg.BaseAddress,
+                "push eax",
+                "mov edx, " + payload_arg.BaseAddress,
+                "push edx",               
+                "call " + send,
+            };
+
+            mem.Assembly.Inject(asm, (IntPtr)0x006FE000);
         }
 
         //this is updated 60 frames per second.

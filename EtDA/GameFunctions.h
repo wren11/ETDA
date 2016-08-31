@@ -63,6 +63,13 @@ public:
 		}
 	}
 
+	int __stdcall StubSender(BYTE *packet, int Length)
+	{
+		MessageBox(NULL, "1", "2", MB_OK);
+		return 1;
+	}
+
+
 	static int SendToServer(BYTE *packet, int Length)
 	{
 		int cave = (int)VirtualAllocEx(GetCurrentProcess(), NULL, Length, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);

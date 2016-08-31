@@ -42,8 +42,8 @@ public:
 Darkages da;
 DABase base;
 
-typedef void(_stdcall *OnRecvEvent)(BYTE *data, unsigned int Length); OnRecvEvent Receiver = NULL;
-typedef int(__stdcall *OnSendEvent)(BYTE *data, int arg1, int arg2, char arg3); OnSendEvent Sender = NULL;
+typedef void (_stdcall *OnRecvEvent)(BYTE *data, unsigned int Length); OnRecvEvent Receiver = NULL;
+typedef int  (__stdcall *OnSendEvent)(BYTE *data, int arg1, int arg2, char arg3); OnSendEvent Sender = NULL;
 
 /* DirectDraw / GDI */
 typedef int(__thiscall *pPaint)(int *ecx, int hdc); pPaint hPaint = NULL;
@@ -305,6 +305,7 @@ void Darkages::Run()
 	Receiver = (OnRecvEvent)DetourFunction((PBYTE)recvPacketin, (PBYTE)OnPacketRecv);
 	Sender = (OnSendEvent)DetourFunction((PBYTE)sendPacketout, (PBYTE)OnPacketSend);
 	hPaint = (pPaint)DetourFunction((PBYTE)0x004AC910, (PBYTE)DrawOverlay);
+
 	LetsGo(*this, &CallBack);
 }
 
@@ -322,8 +323,12 @@ void Darkages::LetsGo(Darkages& obj, Callback cb)
 	obj.base->Name = name;
 	obj.ProcessId = GetCurrentProcessId();
 	cb(obj);
-}
 
+
+	//typedef int func(BYTE*, int);
+	//func* f = (func*)&GameFunction::StubSender;
+	//WriteProcessMemory(GetCurrentProcess(), (void*)0x0085C000, (void*)&f, 4, NULL);
+}
 
 void Darkages::CleanUp()
 {

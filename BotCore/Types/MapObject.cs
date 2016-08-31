@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using BotCore.Actions;
 using BotCore.PathFinding;
 
 namespace BotCore.Types
 {
     public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable
     {
+        public MapObject()
+        {
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100));
+        }
+
         public Direction Direction;
 
-        internal bool isCursed;
+        internal bool IsCursed;
 
         public Position OldPosition;
         public EventHandler<List<PathSolver.PathFinderNode>> PathUpdated = delegate { };
@@ -21,11 +25,6 @@ namespace BotCore.Types
         public Stopwatch timer = new Stopwatch();
 
         public DateTime TimeSeen = DateTime.Now;
-
-        public MapObject()
-        {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
-        }
 
         public Position ServerPosition { get; set; }
 
@@ -39,11 +38,18 @@ namespace BotCore.Types
 
         public FasInfo FasInfo { get; set; }
 
+        public List<PathSolver.PathFinderNode> PathToMapObject { get; set; }
+
+        public int TargetPriority { get; set; }
+
+        public Func<MapObject, bool> CanTarget { get; set; }
+
         public void OnDiscovery(GameClient client)
         {
             Client = client;
 
-            if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling || this is Aisling)
+            if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling ||
+                this is Aisling)
                 client.FieldMap.SetWall(ServerPosition);
 
             ReassignObj(client);
@@ -70,14 +76,15 @@ namespace BotCore.Types
             }
 
             Timer.Reset();
-            
+
 
             //lets time movement speed.
             if (timer.ElapsedMilliseconds > 0)
                 MovementSpeed = (int) timer.ElapsedMilliseconds;
 
 
-            Console.WriteLine("Entity Moved {0},{1} -> {2},{3}", oldPosition.X, oldPosition.Y, newPosition.X, newPosition.Y);
+            Console.WriteLine("Entity Moved {0},{1} -> {2},{3}", oldPosition.X, oldPosition.Y, newPosition.X,
+                newPosition.Y);
 
             timer.Restart();
             client.FieldMap.SetPassable(oldPosition);
@@ -85,13 +92,7 @@ namespace BotCore.Types
             UpdatePath(client);
         }
 
-        public List<PathSolver.PathFinderNode> PathToMapObject { get; set; }
-
-        public int TargetPriority { get; set; }
-
-        public Func<MapObject, bool> CanTarget { get; set; }
-
-        void ReassignObj(GameClient client)
+        private void ReassignObj(GameClient client)
         {
             var obj = client.FieldMap.MapObjects.FirstOrDefault(i => i.Serial == Serial);
             if (obj == null)
@@ -105,11 +106,11 @@ namespace BotCore.Types
                     {
                         (obj as Aisling).IsHidden = false;
                     }
-                }      
+                }
             }
         }
 
-        void OverrideTargetPriorties()
+        private void OverrideTargetPriorties()
         {
             if (Collections.TargetConditions.ContainsKey((short) Sprite))
             {
@@ -154,7 +155,7 @@ namespace BotCore.Types
                 PathUpdated(client, PathToMapObject);
             }
         }
-        
+
         public override void Pulse()
         {
             if (CurseInfo != null && CurseInfo.CurseElapsed)
@@ -175,9 +176,9 @@ namespace BotCore.Types
             }
         }
 
-        public void OnAnimation(short animation, int to, int @from)
+        public void OnAnimation(short animation, int to, int from)
         {
-            switch ((Animation)animation)
+            switch ((Animation) animation)
             {
                 //TODO: Add more Animation Handling here.
                 case Animation.ardcradh:
@@ -187,13 +188,16 @@ namespace BotCore.Types
 
                     if (CurseInfo == null)
                     {
-                        CurseInfo = new CurseInfo();
-                        CurseInfo.Applied = DateTime.Now;
-                        CurseInfo.Type = CurseInfo.Curse.ardcradh;
-                        CurseInfo.Duration = 240000;
+                        CurseInfo = new CurseInfo
+                        {
+                            Applied = DateTime.Now,
+                            Type = CurseInfo.Curse.ardcradh,
+                            Duration = 240000
+                        };
                     }
-                    isCursed = true;
-                } break;
+                    IsCursed = true;
+                }
+                    break;
             }
         }
     }
