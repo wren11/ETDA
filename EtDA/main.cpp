@@ -26,11 +26,11 @@ DWORD WINAPI PacketRecvConsumer(LPVOID Args)
 
 		try
 		{
-			if (*reinterpret_cast<int*>(0x00721000) == 1)
+			if (*reinterpret_cast<int*>(RecvConsumerPacketAvailable) == 1)
 			{
-				auto target = *reinterpret_cast<int*>(0x00721004);
-				auto length = *reinterpret_cast<int*>(0x00721008);
-				auto data = reinterpret_cast<unsigned char*>(0x00721012);
+				auto target = *reinterpret_cast<int*>(RecvConsumerPacketType);
+				auto length = *reinterpret_cast<int*>(RecvConsumerPacketLength);
+				auto data = reinterpret_cast<unsigned char*>(RecvConsumerPacketData);
 
 				if (data == 0)
 					continue;
@@ -44,16 +44,16 @@ DWORD WINAPI PacketRecvConsumer(LPVOID Args)
 				if (packet.size() == 0 || packet.size() != length)
 				{
 					packet.clear();
-					*reinterpret_cast<int*>(0x00721000) = 0;
+					*reinterpret_cast<int*>(RecvConsumerPacketAvailable) = 0;
 					continue;
 				}
 				else
 				{
 					GameFunction::SendToClient(&packet[0], length);
 					packet.clear();
-					*reinterpret_cast<int*>(0x00721000) = 0;
-					*reinterpret_cast<int*>(0x00721012) = 0;
-					WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(0x00721012), 0x00, 2048, NULL);
+					*reinterpret_cast<int*>(RecvConsumerPacketAvailable) = 0;
+					*reinterpret_cast<int*>(RecvConsumerPacketData) = 0;
+					WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(RecvConsumerPacketData), 0x00, 2048, NULL);
 				}
 			}
 		}
@@ -73,11 +73,11 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 
 		try
 		{
-			if (*((int*)0x006FD000) == 1)
+			if (*reinterpret_cast<int*>(SendConsumerPacketAvailable) == 1)
 			{
-				int target = *((int*)0x006FD004);
-				int length = *((int*)0x006FD008);
-				unsigned char* data = (unsigned char*)0x006FD012;
+				auto target = *reinterpret_cast<int*>(SendConsumerPacketType);
+				auto length = *reinterpret_cast<int*>(SendConsumerPacketLength);
+				auto data = reinterpret_cast<unsigned char*>(SendConsumerPacketData);
 
 				if (data == 0)
 					continue;
@@ -85,23 +85,22 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 					continue;
 
 				vector<byte> packet;
-				for (int i = 0; i < length; i++ , data++)
+				for (int i = 0; i < length; i++, data++)
 					packet.push_back(*data);
 
 				if (packet.size() == 0 || packet.size() != length)
 				{
 					packet.clear();
-					*((int*)0x006FD000) = 0;
+					*reinterpret_cast<int*>(SendConsumerPacketAvailable) = 0;
 					continue;
 				}
 				else
 				{
 					GameFunction::SendToServer(&packet[0], length);
 					packet.clear();
-					*((int*)0x006FD000) = 0;
-					*((int*)0x006FD012) = 0;
-
-					WriteProcessMemory(GetCurrentProcess(), (void*)0x006FD012, 0x00, 2048, NULL);
+					*reinterpret_cast<int*>(SendConsumerPacketAvailable) = 0;
+					*reinterpret_cast<int*>(SendConsumerPacketData) = 0;
+					WriteProcessMemory(GetCurrentProcess(), reinterpret_cast<void*>(SendConsumerPacketData), 0x00, 2048, NULL);
 				}
 			}
 		}

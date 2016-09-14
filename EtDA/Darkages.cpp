@@ -89,8 +89,6 @@ void RenderCalls()
 	}
 }
 
-int DA741_GETDC = 0x004AC8C0;
-
 int __fastcall DrawOverlay(int *ecx, int hdcptr)
 {
 	int ptx = { 0 };
@@ -180,17 +178,17 @@ int __stdcall OnPacketSend(BYTE *data, int arg1, int arg2, char arg3)
 
 void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 {
-	if (data[0] == 0x19 && *reinterpret_cast<int*>(0x00750002) == 1)
+	if (data[0] == 0x19 && *reinterpret_cast<int*>(OptionA) == 1)
 	{
 		return;
 	}
 
-	if (data[0] == 0x13 && *reinterpret_cast<int*>(0x00750004) == 1)
+	if (data[0] == 0x13 && *reinterpret_cast<int*>(OptionB) == 1)
 	{
 		return;
 	}
 
-	if (data[0] == 0x29 && *reinterpret_cast<int*>(0x00750006) == 1)
+	if (data[0] == 0x29 && *reinterpret_cast<int*>(OptionC) == 1)
 	{
 		short animation = (data[9] << 8) | data[10];
 		if (animation == 33)
@@ -236,7 +234,7 @@ void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 						data[index + 11] = 0x93;
 						data[index + 12] = 0x00;
 					}
-					else if (sprite == 32908 && *((int*)0x00750008) == 1)
+					else if (sprite == 32908 && *((int*)OptionD) == 1)
 					{
 						data[index + 11] = 0x90;
 						data[index + 12] = 0x00;
@@ -246,7 +244,7 @@ void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 				}
 				else
 				{
-					if (sprite < 0x8000 && *((int*)0x00750010) == 1)
+					if (sprite < 0x8000 && *((int*)OptionE) == 1)
 					{
 						data[index + 11] = 0x40;
 						data[index + 12] = 14;
@@ -296,7 +294,7 @@ int CallBack(Darkages da)
 	da.ProcessId = GetCurrentProcessId();
 	base = *da.base;
 
-	base.OnCharacter = (DABase::OnCharacterLoginEvent)DetourFunction((PBYTE)0x004C1B60, (PBYTE)OnCharacterLogin);
+	base.OnCharacter = (DABase::OnCharacterLoginEvent)DetourFunction((PBYTE)hOnCharacter, (PBYTE)OnCharacterLogin);
 	return 1;
 }
 
@@ -304,7 +302,7 @@ void Darkages::Run()
 {
 	Receiver = (OnRecvEvent)DetourFunction((PBYTE)recvPacketin, (PBYTE)OnPacketRecv);
 	Sender = (OnSendEvent)DetourFunction((PBYTE)sendPacketout, (PBYTE)OnPacketSend);
-	hPaint = (pPaint)DetourFunction((PBYTE)0x004AC910, (PBYTE)DrawOverlay);
+	hPaint = (pPaint)DetourFunction((PBYTE)hPaintPtr, (PBYTE)DrawOverlay);
 
 	LetsGo(*this, &CallBack);
 }

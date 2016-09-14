@@ -60,8 +60,8 @@ namespace BotCore
             BotForm.Show();
             BotForm.Text = Attributes.PlayerName;
 
-            GameActions.Refresh(Client, (a, b) => true);
-            GameActions.Refresh(Client, (a, b) => true);
+            GameActions.Refresh(Client, true, (a, b) => true);
+            GameActions.Refresh(Client, true, (a, b) => true);
 
             Client.ReleaseMovementLock();
         }

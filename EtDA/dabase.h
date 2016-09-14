@@ -46,7 +46,7 @@ public:
 		return Set(ptr, pt.X, pt.Y);
 	}
 
-	int SetMouse(int* ptr, Point pt)
+	int SetMouse(int* ptr, Point pt) 
 	{
 		int(__thiscall *SetMouse)(int*, int a2, int a3) = (int(__thiscall*)(int*, int a2, int a3))0x005F2990;
 		return SetMouse(ptr, pt.X, pt.Y);

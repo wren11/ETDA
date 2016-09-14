@@ -21,12 +21,12 @@ namespace BotCore.Actions
         }
 
 
-        public static void Refresh(GameClient client, Func<GameClient, Packet, bool> callback = null)
+        public static void Refresh(GameClient client, bool force = false, Func<GameClient, Packet, bool> callback = null)
         {
             var p = new Packet();
             p.Write(new byte[] { 0x38, 0x00, 0x38 });
-            GameClient.InjectPacket<ServerPacket>(client, p);
-            GameClient.InjectPacket<ServerPacket>(client, p);
+            GameClient.InjectPacket<ServerPacket>(client, p, force);
+            GameClient.InjectPacket<ServerPacket>(client, p, force);
 
             callback?.Invoke(client, p);
         }

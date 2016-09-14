@@ -285,9 +285,9 @@ namespace BotCore
                             continue;
 
                         if (outgoing)
-                            GameClient.InjectPacket<ServerPacket>(client, new Packet(buffer));
+                            GameClient.InjectPacket<ServerPacket>(client, new Packet(buffer), true);
                         else
-                            GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer));
+                            GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer), true);
 
                         continue;
                     }
@@ -304,9 +304,9 @@ namespace BotCore
 
 
                     if (comboBox2.Text == "Client")
-                        GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer));
+                        GameClient.InjectPacket<ClientPacket>(client, new Packet(buffer), true);
                     if (comboBox2.Text == "Server")
-                        GameClient.InjectPacket<ServerPacket>(client, new Packet(buffer));
+                        GameClient.InjectPacket<ServerPacket>(client, new Packet(buffer), true);
                 }
                 catch (InvalidOperationException)
                 {
@@ -368,6 +368,40 @@ namespace BotCore
                     GameClient.InjectPacket<ClientPacket>(client, packet);
                 }
             }
+        }
+
+        public static int OptionTable = 0x00750000;  
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            client[OptionTable + 0x08] = (byte)((checkBox4.Checked == true) ? 1 : 0);
+            Actions.GameActions.Refresh(client, true);
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            client[OptionTable + 0x10] = (byte)((checkBox5.Checked == true) ? 1 : 0);
+            Actions.GameActions.Refresh(client, true);
+        }
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            client[OptionTable + 0x02] = (byte)((checkBox8.Checked == true) ? 1 : 0);
+            Actions.GameActions.Refresh(client, true);
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+            client[OptionTable + 0x06] = (byte)((checkBox7.Checked == true) ? 1 : 0);
+            Actions.GameActions.Refresh(client, true);
+
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            client[OptionTable + 0x04] = (byte)((checkBox6.Checked == true) ? 1 : 0);
+            Actions.GameActions.Refresh(client, true);
+
         }
     }
 }

@@ -77,6 +77,22 @@ namespace BotCore
             Utilities = new GameUtilities(this);
         }
 
+        internal byte this[int Address]
+        {
+            get
+            {
+                if (IsInGame())
+                    return _memory.Read<byte>((IntPtr)Address, false);
+
+                return byte.MinValue;
+            }
+            set
+            {
+                if (IsInGame())
+                    _memory.Write((IntPtr)Address, value, false);
+            }
+        }
+
         internal void AddClientHandler(byte action, EventHandler<Packet> data)
         {
             ClientPacketHandler[action] = data;
@@ -451,8 +467,21 @@ namespace BotCore
             return crc;
         }
 
-        public static void InjectPacket<T>(GameClient client, Packet packet) where T : Packet
+        public static void InjectPacket<T>(GameClient client, Packet packet, bool force = false) where T : Packet
         {
+            if (client == null)
+                return;
+
+            if (force)
+            {
+                if (typeof(T) == typeof(ClientPacket))
+                    client.InjectToClientQueue.Enqueue(packet.Data);
+                else if (typeof(T) == typeof(ServerPacket))
+                    client.InjectToServerQueue.Enqueue(packet.Data);
+
+                return;
+            }
+
             var a = Crc16(packet.Data);
             var b = LastCRC;
 
