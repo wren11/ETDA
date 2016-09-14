@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using BotCore.PathFinding;
+using BotCore.Actions;
 
 namespace BotCore.Types
 {
@@ -10,7 +11,7 @@ namespace BotCore.Types
     {
         public MapObject()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1000));
         }
 
         public Direction Direction;

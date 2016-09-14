@@ -30,11 +30,6 @@ namespace BotCore
             return Color.FromArgb(percentage, Color.Green);
         }
 
-        private double Interpolate(double d1, double d2, double fraction)
-        {
-            return d1 + (d1 - d2) * fraction;
-        }
-
         private void BotInterface_VisibleChanged(object sender, EventArgs e)
         {
             if (client.ClientReady && client.IsInGame() && !IsDisposed)
@@ -365,7 +360,7 @@ namespace BotCore
                     packet.WriteUInt16(0x0000);
                     packet.WriteUInt16(0x0064);
 
-                    GameClient.InjectPacket<ClientPacket>(client, packet);
+                    GameClient.InjectPacket<ClientPacket>(client, packet, true);
                 }
             }
         }
