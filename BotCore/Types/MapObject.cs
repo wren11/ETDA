@@ -10,7 +10,7 @@ namespace BotCore.Types
     {
         public MapObject()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
         }
 
         public Direction Direction;

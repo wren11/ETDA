@@ -10,7 +10,7 @@ namespace BotCore.Components
     {
         public StressTest()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(10.0));        
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));        
         }
 
         public override void Pulse()

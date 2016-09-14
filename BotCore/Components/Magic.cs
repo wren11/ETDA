@@ -25,7 +25,7 @@ namespace BotCore.Components
 
         public Magic()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(50.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
         }
 
 

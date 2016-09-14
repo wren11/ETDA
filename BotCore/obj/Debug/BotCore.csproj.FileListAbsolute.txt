@@ -31,3 +31,4 @@ C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.States.StateSett
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.csproj.GenerateResource.Cache
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.dll
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.pdb
+C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\Debug\BotCore.csprojResolveAssemblyReference.cache

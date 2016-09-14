@@ -38,7 +38,7 @@ namespace BotCore
 
         public GameClient()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(50));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
             PrepareComponents();
 
             ShouldUpdate = true;
@@ -453,19 +453,21 @@ namespace BotCore
 
         public static void InjectPacket<T>(GameClient client, Packet packet) where T : Packet
         {
-
             var a = Crc16(packet.Data);
             var b = LastCRC;
 
             if (a != b)
             {
-
                 if (typeof(T) == typeof(ClientPacket))
                     client.InjectToClientQueue.Enqueue(packet.Data);
                 else if (typeof(T) == typeof(ServerPacket))
                     client.InjectToServerQueue.Enqueue(packet.Data);
 
                 LastCRC = a;
+            }
+            else
+            {
+                client.CleanUpMememory();
             }
         }
 

@@ -48,7 +48,7 @@ namespace BotCore.Components
 
         public GameEquipment()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(50.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
         }
 
         public override void Update(TimeSpan tick)

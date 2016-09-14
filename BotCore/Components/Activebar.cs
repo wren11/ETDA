@@ -24,7 +24,7 @@ namespace BotCore.Components
 
         public Activebar()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(135.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
             HardReset();
         }
 

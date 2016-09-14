@@ -18,7 +18,7 @@ namespace BotCore.Components
 
         public Map()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
             Width = 0;
             Height = 0;
         }

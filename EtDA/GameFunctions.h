@@ -111,8 +111,8 @@ public:
 
 };
 
-#define ASSAIL GameFunction::SendToServer(new BYTE[] {0x13, 0x01}, 3);
-#define F5     GameFunction::SendToServer(new BYTE[] {0x38, 0x01}, 3);
+#define ASSAIL GameFunction::SendToServer(new BYTE[] { 0x13, 0x01 }, 3);
+#define F5     GameFunction::SendToServer(new BYTE[] { 0x38, 0x01 }, 3);
 
 
 #ifdef __cplusplus

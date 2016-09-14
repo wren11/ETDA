@@ -90,7 +90,7 @@ namespace BotCore.Components
 
         public PlayerAttributes()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(50.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
         }
 
         public int CurrentHP()
