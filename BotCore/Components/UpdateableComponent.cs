@@ -26,10 +26,28 @@ namespace BotCore
             get { return Client.Memory; }
         }
 
-        public abstract void Update(TimeSpan tick);
 
+        protected int lastTick;
+        protected int lastFrameRate;
+        protected int frameRate;
+
+        public int CalculateFrameRate()
+        {
+            if (System.Environment.TickCount - lastTick >= 1000)
+            {
+                lastFrameRate = frameRate;
+                frameRate = 0;
+                lastTick = System.Environment.TickCount;
+            }
+            frameRate++;
+            return lastFrameRate;
+        }
+
+        public double Cycle = 0;
+        public abstract void Update(TimeSpan tick);
         public virtual void Pulse()
         {
+            Cycle = CalculateFrameRate();
         }
 
         public void Dispose()

@@ -132,6 +132,7 @@ namespace BotCore.Components
 
                 IsUpdating = false;
             }
+            base.Pulse();
         }
     }
 }

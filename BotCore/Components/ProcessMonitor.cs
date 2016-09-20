@@ -25,17 +25,18 @@ namespace BotCore.Components
             if (Timer.Elapsed)
             {
                 Timer.Reset();
+                base.Pulse();
 
-                 var count = Process.GetProcessesByName("Darkages");
-                 if (count.Length != Processes.Count)
-                 {
-                     var id  = count.Select(i => i.Id).Except(Processes).FirstOrDefault();
-                     var p   = count.FirstOrDefault(i => i.Id == id);
+                var count = Process.GetProcessesByName("Darkages");
+                if (count.Length != Processes.Count)
+                {
+                    var id = count.Select(i => i.Id).Except(Processes).FirstOrDefault();
+                    var p = count.FirstOrDefault(i => i.Id == id);
 
-                     SetupProcess(p);
-                 }
+                    SetupProcess(p);
+                }
 
-                 Updated(this, new EventArgs());
+                Updated(this, new EventArgs());
             }
         }
 

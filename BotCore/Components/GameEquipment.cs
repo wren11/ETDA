@@ -84,6 +84,7 @@ namespace BotCore.Components
 
         public override void Pulse()
         {
+
             if (!IsInGame())
                 return;
             if (_memory == null || !_memory.IsRunning)
@@ -112,6 +113,8 @@ namespace BotCore.Components
             {
 
             }
+
+            base.Pulse();
         }
     }
 }

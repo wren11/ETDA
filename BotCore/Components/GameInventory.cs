@@ -54,6 +54,7 @@ namespace BotCore.Components
             return this[slot];
         }
 
+        
         public override void Pulse()
         {
             if (!IsInGame())
@@ -74,6 +75,7 @@ namespace BotCore.Components
 
                 inventoryptr += 0x10B - 0x05;
             }
+            base.Pulse();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace BotCore.Components
 
         public Map()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100.0));
             Width = 0;
             Height = 0;
         }
@@ -302,6 +302,12 @@ namespace BotCore.Components
             ProcessMap(data);
             data.Dispose();
 
+            if (!CanCastSpells)
+            {
+                CanCastSpells = true;
+                Console.WriteLine("Allowing spells to resume. ");
+            }
+
             if (Client.IsInGame())
                 ((Client) Client).OnClientStateUpdated(true);
 
@@ -352,6 +358,8 @@ namespace BotCore.Components
                 OnUpdate();
 
                 Timer.Reset();
+
+                base.Pulse();
             }
         }
 

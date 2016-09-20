@@ -38,7 +38,7 @@ namespace BotCore
 
         public GameClient()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1.0));
             PrepareComponents();
 
             ShouldUpdate = true;
@@ -225,6 +225,11 @@ namespace BotCore
 
             //init state machine.
             StateMachine = new GameStateEngine(this);
+            StateMachine.Client = this;
+            StateMachine.Enabled = true;
+
+            InstalledComponents.Add(StateMachine);
+
             LoadStates("BotCore.dll");
 
             callback = value => { };
@@ -268,9 +273,6 @@ namespace BotCore
                 var objs = ObjectSearcher.VisibleObjects.ToArray();
                 foreach (var obj in objs)
                     obj.Update(tick);
-
-                //pulse state machine
-                StateMachine.Pulse(tick);
             }
         }
 

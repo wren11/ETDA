@@ -46,6 +46,8 @@ namespace BotCore
                 {
                     Invoke((MethodInvoker)delegate ()
                     {
+                        UpdateComponentUIList();
+
                         if (client.Paused)
                         {
                             if (!button4.Enabled)
@@ -85,6 +87,16 @@ namespace BotCore
                     });
                 }
                 Thread.Sleep(1500);
+            }
+        }
+
+        private void UpdateComponentUIList()
+        {
+            listView1.Items.Clear();
+            var running_components = client.InstalledComponents.ToArray();
+            foreach (var component in running_components)
+            {
+                listView1.Items.Add(new ListViewItem(new[] { component.GetType().Name, component.Enabled ? "Running" : "Disabled", component.Cycle + " Frames Per Sec" }));
             }
         }
 

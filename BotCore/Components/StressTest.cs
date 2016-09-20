@@ -27,6 +27,7 @@ namespace BotCore.Components
                 if (Client.InjectToClientQueue.Count > 100)
                     Client.CleanUpMememory();
             }
+            base.Pulse();
         }
 
         public override void Update(TimeSpan tick)

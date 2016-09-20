@@ -177,6 +177,7 @@ namespace BotCore.Components
                 }
 
                 Timer.Reset();
+                base.Pulse();
             }
         }
 

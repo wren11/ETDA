@@ -48,6 +48,7 @@ namespace BotCore.Components
 
         public override void Pulse()
         {
+
             if (!IsInGame())
                 return;
 
@@ -91,6 +92,7 @@ namespace BotCore.Components
                 if (!Client.SpellBar.Contains(icon))
                     Client.SpellBar.Add(icon);
             }
+            base.Pulse();
         }
 
         public override void Update(TimeSpan tick)

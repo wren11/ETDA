@@ -235,6 +235,9 @@ namespace BotCore
                 return false;
             }
 
+            if (Client.FieldMap != null && Client.FieldMap.Ready && !Client.FieldMap.CanCastSpells)
+                return false;
+
             return true;
         }
 
@@ -245,7 +248,6 @@ namespace BotCore
 
             if (!SafeToCast())
             {
-                Console.Beep(1277, 300);
                 return;
             }
 
