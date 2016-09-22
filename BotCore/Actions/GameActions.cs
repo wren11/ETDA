@@ -145,8 +145,13 @@ namespace BotCore.Actions
 
         public static void Walk(GameClient Client, Direction dir)
         {
-            BeginWalk(Client, dir);
-            EndWalk(Client, dir);
+            var p = new Packet();
+            p.WriteByte(0x95);
+            p.WriteByte((byte)dir);
+            GameClient.InjectPacket<ServerPacket>(Client, p, true);
+
+            //BeginWalk(Client, dir);
+            //EndWalk(Client, dir);
         }
 
         public static void BeginWalk(GameClient Client, Direction dir)

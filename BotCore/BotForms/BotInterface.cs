@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using BotCore.Types;
 using System.Drawing;
 using BotCore.BotForms;
+
 namespace BotCore
 {
     public partial class BotInterface : Form
@@ -46,6 +47,7 @@ namespace BotCore
                 {
                     Invoke((MethodInvoker)delegate ()
                     {
+
                         UpdateComponentUIList();
 
                         if (client.Paused)

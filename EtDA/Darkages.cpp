@@ -56,37 +56,6 @@ void RenderCalls()
 {
 	if (context == NULL)
 		return;
-
-
-	if (hud)
-	{
-		std::string s(base.Name);
-
-		if (s.empty())
-		{
-			char *name = { 0 };
-
-			__asm
-			{
-				mov eax, userNameoffset
-				mov name, eax
-			}
-
-			s = name;
-		}
-
-		::SetBkMode(context, TRANSPARENT);
-		::SetTextColor(context, RGB(0, 33, 255));
-		::TextOut(context, 395 + 295, 380, s.c_str(), s.length());
-
-		HPEN hEllipsePen;
-		COLORREF qEllipseColor;
-		qEllipseColor = RGB(255, 0, 0);
-		hEllipsePen = CreatePen(PS_DASH, 0.5, qEllipseColor);
-		HPEN hPenOld = (HPEN)SelectObject(context, hEllipsePen);
-
-		Arc(context, 558, 276, 681, 437, 0, 0, 0, 0);
-	}
 }
 
 int __fastcall DrawOverlay(int *ecx, int hdcptr)

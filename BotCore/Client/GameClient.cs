@@ -469,6 +469,11 @@ namespace BotCore
             return crc;
         }
 
+        static ManualResetEvent   PacketRecvEvent   = new ManualResetEvent(true);
+        static ManualResetEvent   PacketSendEvent   = new ManualResetEvent(true);
+        static ManualResetEvent[] CommandEventArr   = { PacketSendEvent, PacketRecvEvent };
+
+
         public static void InjectPacket<T>(GameClient client, Packet packet, bool force = false) where T : Packet
         {
             if (client == null)
@@ -490,11 +495,23 @@ namespace BotCore
             if (a != b)
             {
                 if (typeof(T) == typeof(ClientPacket))
-                    client.InjectToClientQueue.Enqueue(packet.Data);
+                {
+                    lock (client.InjectToClientQueue)
+                    {
+                        client.InjectToClientQueue.Enqueue(packet.Data);
+                        PacketRecvEvent.Set();
+                    }
+                }
                 else if (typeof(T) == typeof(ServerPacket))
-                    client.InjectToServerQueue.Enqueue(packet.Data);
-
+                {
+                    lock (client.InjectToServerQueue)
+                    {
+                        client.InjectToServerQueue.Enqueue(packet.Data);
+                        PacketSendEvent.Set();
+                    }
+                }
                 LastCRC = a;
+                b = a;
             }
             else
             {
@@ -519,28 +536,34 @@ namespace BotCore
                 if (!client.Memory.IsRunning || !client.IsInGame())
                     continue;
 
-                byte[] activeBuffer;
-                while (client.InjectToClientQueue.TryDequeue(out activeBuffer))
+                while ((WaitHandle.WaitAny(CommandEventArr) != 1))
                 {
-                    Interlocked.Add(ref _Total, 1);
-                    while (client.Memory.Read<byte>((IntPtr) 0x00721000, false) == 1)
+                    byte[] activeBuffer;
+                    while (client.InjectToClientQueue.TryDequeue(out activeBuffer))
                     {
-                        if (!client.Memory.IsRunning)
-                            break;
-                        Thread.Sleep(1);
+                        Interlocked.Add(ref _Total, 1);
+                        while (client.Memory.Read<byte>((IntPtr)0x00721000, false) == 1)
+                        {
+                            if (!client.Memory.IsRunning)
+                                break;
+                            Thread.Sleep(1);
+                        }
+                        try
+                        {
+                            client.Memory.Write((IntPtr)0x00721000, 1, false);
+                            client.Memory.Write((IntPtr)0x00721004, 0, false);
+                            client.Memory.Write((IntPtr)0x00721008, activeBuffer.Length, false);
+                            client.Memory.Write((IntPtr)0x00721012, activeBuffer, false);
+                        }
+                        catch
+                        {
+                            PacketRecvEvent.Reset();
+                            client.CleanUpMememory();
+                            return;
+                        }
                     }
-                    try
-                    {
-                        client.Memory.Write((IntPtr) 0x00721000, 1, false);
-                        client.Memory.Write((IntPtr) 0x00721004, 0, false);
-                        client.Memory.Write((IntPtr) 0x00721008, activeBuffer.Length, false);
-                        client.Memory.Write((IntPtr) 0x00721012, activeBuffer, false);
-                    }
-                    catch
-                    {
-                        client.CleanUpMememory();
-                        return;
-                    }
+
+                    PacketRecvEvent.Reset();
                 }
             }
         }
@@ -558,22 +581,26 @@ namespace BotCore
                 if (!client.Memory.IsRunning || !client.IsInGame())
                     continue;
 
-                byte[] activeBuffer;
-                while (client.InjectToServerQueue.TryDequeue(out activeBuffer))
+                while ((WaitHandle.WaitAny(CommandEventArr) != 1))
                 {
-                    Interlocked.Add(ref _Total, 1);
-
-                    while (client.Memory.Read<byte>((IntPtr) 0x006FD000, false) == 1)
+                    byte[] activeBuffer;
+                    while (client.InjectToServerQueue.TryDequeue(out activeBuffer))
                     {
-                        if (!client.Memory.IsRunning)
-                            break;
-                        Thread.Sleep(1);
+                        Interlocked.Add(ref _Total, 1);
+
+                        while (client.Memory.Read<byte>((IntPtr)0x006FD000, false) == 1)
+                        {
+                            if (!client.Memory.IsRunning)
+                                break;
+                            Thread.Sleep(1);
+                        }
+                        client.Memory.Write((IntPtr)0x006FD000, 1, false);
+                        client.Memory.Write((IntPtr)0x006FD004, 1, false);
+                        client.Memory.Write((IntPtr)0x006FD008, activeBuffer.Length, false);
+                        client.Memory.Write((IntPtr)0x006FD012, activeBuffer, false);
                     }
-                    client.Memory.Write((IntPtr) 0x006FD000, 1, false);
-                    client.Memory.Write((IntPtr) 0x006FD004, 1, false);
-                    client.Memory.Write((IntPtr) 0x006FD008, activeBuffer.Length, false);
-                    client.Memory.Write((IntPtr) 0x006FD012, activeBuffer, false);
                 }
+                PacketSendEvent.Reset();
             }
         }
 

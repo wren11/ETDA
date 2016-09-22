@@ -14,7 +14,7 @@ namespace BotCore.Components
         private MapObject[] _mapObjects = new MapObject[0];
 
         public bool Ready;
-        short Width, Height;
+        public short Width, Height;
 
         public Map()
         {
@@ -265,6 +265,14 @@ namespace BotCore.Components
             throw new mapException("Not Loaded");
         }
 
+        public bool IsCollision(short x, short y)
+        {
+            x = (short)(x % Grid.GetLength(0));
+            y = (short)(y % Grid.GetLength(1));
+
+            return Grid[x, y] == 1;
+        }
+
         public void ProcessMap(Stream stream)
         {
             var reader = new BinaryReader(stream);
@@ -317,8 +325,11 @@ namespace BotCore.Components
 
         private void SetTile(int value, short x, short y)
         {
-            var w = Grid.GetLength(0);
-            var h = Grid.GetLength(1);
+            if (Grid == null)
+                return;
+
+            var w = Grid?.GetLength(0);
+            var h = Grid?.GetLength(1);
 
             if (x > w || x < w)
                 return;

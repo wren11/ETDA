@@ -84,6 +84,27 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 				if (length <= 0)
 					continue;
 
+				//this is a custom packet format. to override the games walking
+				//with ETDA's own walking function.
+				if (data[0] == 0x95)
+				{					
+					int Hook = 0x005F0C40;
+					int magicTokenPointer = 0x00882E68;
+					int magicToken = { 0 };
+
+					void* memory = malloc(sizeof(char));
+					memory = (void*)data[1];
+					ReadProcessMemory(GetCurrentProcess(), (void*)magicTokenPointer, &magicToken, 4, NULL);
+
+					__asm
+					{
+						mov eax, memory
+						push eax
+						mov ecx, [magicToken]
+						call Hook
+					}
+				}
+
 				vector<byte> packet;
 				for (int i = 0; i < length; i++, data++)
 					packet.push_back(*data);

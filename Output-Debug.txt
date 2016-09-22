@@ -1,0 +1,132 @@
+﻿'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_32\mscorlib\v4.0_4.0.0.0__b77a5c561934e089\mscorlib.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Windows.Forms\v4.0_4.0.0.0__b77a5c561934e089\System.Windows.Forms.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Drawing\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Drawing.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.HostingProcess.Utilities.Sync\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.HostingProcess.Utilities.Sync.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.Debugger.Runtime\14.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.Debugger.Runtime.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\Users\IT Manager\Source\Repos\ETDA\Bot\bin\Debug\Bot.vshost.exe'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml.Linq\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.Linq.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Data.DataSetExtensions\v4.0_4.0.0.0__b77a5c561934e089\System.Data.DataSetExtensions.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_32\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Xml\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+The thread 0x32ec has exited with code 0 (0x0).
+The thread 0x3acc has exited with code 0 (0x0).
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\Users\IT Manager\Source\Repos\ETDA\Bot\bin\Debug\Bot.exe'. Symbols loaded.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\Users\IT Manager\Source\Repos\ETDA\Bot\bin\Debug\BotCore.dll'. Symbols loaded.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\Users\IT Manager\Source\Repos\ETDA\Bot\bin\Debug\MemorySharp.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+Map Init 0, 0
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Design\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Design.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Bot.vshost.exe' (CLR v4.0.30319: Bot.vshost.exe): Loaded 'C:\Users\IT Manager\Source\Repos\ETDA\Bot\bin\Debug\Fasm.NET.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+The thread 0x3890 has exited with code 0 (0x0).
+Entity Moved 6,31 -> 6,30
+Entity Moved 8,26 -> 7,26
+Entity Moved 11,28 -> 11,29
+Entity Moved 9,24 -> 9,23
+Entity Moved 6,30 -> 6,29
+Entity Moved 7,26 -> 6,26
+Entity Moved 11,29 -> 11,30
+Entity Moved 11,24 -> 12,24
+Entity Moved 13,22 -> 12,22
+Entity Moved 12,24 -> 13,24
+Entity: 42994 was Removed.
+Entity Moved 13,24 -> 14,24
+Entity Moved 14,24 -> 15,24
+Entity Moved 11,30 -> 11,31
+Entity Moved 9,23 -> 9,22
+Entity Moved 12,22 -> 11,22
+Entity Moved 15,24 -> 14,24
+Entity Moved 6,26 -> 7,26
+Entity Moved 14,24 -> 13,24
+Entity Moved 11,31 -> 10,31
+Entity Moved 13,24 -> 12,24
+Entity Moved 9,22 -> 8,22
+Entity: 42999 was Removed.
+Entity Moved 12,24 -> 11,24
+Entity Moved 11,24 -> 10,24
+Entity Moved 10,24 -> 9,24
+Entity Moved 7,26 -> 8,26
+Entity Moved 9,24 -> 8,24
+Entity Moved 8,22 -> 7,22
+Entity Moved 8,24 -> 7,24
+Entity Moved 7,24 -> 7,23
+Entity Moved 8,26 -> 9,26
+Entity Moved 8,29 -> 8,30
+Entity Moved 11,22 -> 10,22
+Entity Moved 9,26 -> 10,26
+Entity Moved 7,23 -> 8,23
+The thread 0x2a50 has exited with code 0 (0x0).
+Entity Moved 8,30 -> 8,31
+Entity Moved 10,31 -> 9,31
+Entity: 42990 was Removed.
+Entity Moved 8,23 -> 8,22
+Entity: 42996 was Removed.
+Entity Moved 8,22 -> 8,21
+Entity Moved 8,21 -> 8,20
+Entity Moved 10,26 -> 11,26
+Entity Moved 10,22 -> 9,22
+Entity: 42991 was Removed.
+Entity Moved 8,20 -> 8,19
+Entity Moved 7,22 -> 6,22
+Entity: 42994 was Removed.
+Entity Moved 8,19 -> 8,18
+Entity: 42999 was Removed.
+Entity Moved 8,18 -> 8,17
+Entity Moved 11,26 -> 12,26
+Entity: 42998 was Removed.
+Entity Moved 6,22 -> 5,22
+Entity: 42999 was Removed.
+Entity Moved 8,17 -> 7,17
+Entity Moved 7,17 -> 6,17
+Entity Moved 6,17 -> 6,16
+Entity Moved 6,16 -> 6,15
+Entity Moved 6,15 -> 6,14
+Entity Moved 6,14 -> 7,14
+Entity Moved 9,22 -> 8,22
+Entity Moved 7,14 -> 8,14
+Entity Moved 8,14 -> 9,14
+Entity: 42992 was Removed.
+Entity Moved 9,14 -> 10,14
+Entity Moved 10,14 -> 11,14
+Entity Moved 8,22 -> 7,22
+Entity: 43000 was Removed.
+Entity Moved 11,14 -> 11,13
+Entity Moved 11,13 -> 11,12
+Entity: 42999 was Removed.
+Entity Moved 11,12 -> 11,11
+Entity Moved 11,11 -> 11,10
+Entity Moved 14,9 -> 13,9
+Entity Moved 15,7 -> 14,7
+Entity Moved 11,10 -> 11,9
+Entity Moved 11,9 -> 11,8
+Entity Moved 11,8 -> 11,7
+Entity Moved 11,7 -> 11,8
+Entity Moved 11,8 -> 11,9
+Entity Moved 14,7 -> 13,7
+Entity Moved 12,2 -> 13,2
+Entity Moved 11,9 -> 12,9
+Entity Moved 12,9 -> 12,8
+Entity Moved 13,9 -> 13,8
+Entity Moved 20,7 -> 21,7
+Entity Moved 12,8 -> 12,7
+Entity Moved 13,2 -> 14,2
+Entity Moved 21,7 -> 22,7
+Entity Moved 14,2 -> 15,2
+Entity Moved 12,7 -> 12,8
+Entity Moved 22,7 -> 23,7
+Entity Moved 12,8 -> 12,7
+Entity Moved 15,2 -> 16,2
+Destroying Component Inventory
+Destroying Component PlayerAttributes
+Destroying Component Magic
+Destroying Component GameEquipment
+Destroying Component Activebar
+Destroying Component TargetFinder
+Destroying Component StressTest
+Destroying Component Map
+Destroying Component GameStateEngine
+Exception thrown: 'System.Exception' in BotCore.dll
+The program '[0x3704] Bot.vshost.exe: Program Trace' has exited with code 0 (0x0).
+The program '[0x3704] Bot.vshost.exe' has exited with code -1 (0xffffffff).

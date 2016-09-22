@@ -65,7 +65,6 @@ public:
 
 	int __stdcall StubSender(BYTE *packet, int Length)
 	{
-		MessageBox(NULL, "1", "2", MB_OK);
 		return 1;
 	}
 
