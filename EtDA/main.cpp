@@ -92,16 +92,29 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 					int magicTokenPointer = 0x00882E68;
 					int magicToken = { 0 };
 
-					void* memory = malloc(sizeof(char));
-					memory = (void*)data[1];
-					ReadProcessMemory(GetCurrentProcess(), (void*)magicTokenPointer, &magicToken, 4, NULL);
+					void* memory = (void*)data[1];
+					magicToken = *(int*)magicTokenPointer;
 
-					__asm
+					if ((int)memory >= 0 && (int)memory <= 255)
 					{
-						mov eax, memory
-						push eax
-						mov ecx, [magicToken]
-						call Hook
+						__asm
+						{
+							pushfd;
+							pushad;
+
+							mov eax, memory
+							cmp eax, 0xFFFFFFFE
+							jne valid
+					valid:
+							push eax
+							mov ecx, [magicToken]
+							cmp ecx, 0xFFFFFFFE
+							jne k
+					k:
+							call Hook
+							popad;
+							popfd;
+						}
 					}
 				}
 

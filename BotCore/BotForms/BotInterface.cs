@@ -412,5 +412,21 @@ namespace BotCore
             Actions.GameActions.Refresh(client, true);
 
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var obj = client.ObjectSearcher.TargetedMonsters.FirstOrDefault();
+
+            if (obj != null)
+            {
+                while (true)
+                {
+                    obj.WalkTowards(1); // TO DO - Finish this
+
+                    Thread.Sleep(10);
+                }
+            }
+
+        }
     }
 }

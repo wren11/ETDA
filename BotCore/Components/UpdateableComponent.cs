@@ -26,6 +26,7 @@ namespace BotCore
             get { return Client.Memory; }
         }
 
+        public int ComponentID { get; internal set; }
 
         protected int lastTick;
         protected int lastFrameRate;

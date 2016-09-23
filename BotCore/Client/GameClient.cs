@@ -428,6 +428,7 @@ namespace BotCore
         public DateTime LastEquipmentUpdate { get; internal set; }
         public byte EquippedWeaponId { get; set; }
         public DateTime WhenLastCasted { get; internal set; }
+        public DateTime LastMovementUpdate { get; internal set; }
 
         #endregion
 

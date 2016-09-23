@@ -145,13 +145,16 @@ namespace BotCore.Actions
 
         public static void Walk(GameClient Client, Direction dir)
         {
+            if ((DateTime.Now - Client.LastMovementUpdate).TotalMilliseconds <= 300)
+            {
+                return;
+            }      
+
             var p = new Packet();
             p.WriteByte(0x95);
             p.WriteByte((byte)dir);
             GameClient.InjectPacket<ServerPacket>(Client, p, true);
-
-            //BeginWalk(Client, dir);
-            //EndWalk(Client, dir);
+            Client.LastMovementUpdate = DateTime.Now;
         }
 
         public static void BeginWalk(GameClient Client, Direction dir)

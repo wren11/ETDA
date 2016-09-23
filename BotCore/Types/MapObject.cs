@@ -7,11 +7,11 @@ using BotCore.Actions;
 
 namespace BotCore.Types
 {
-    public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable
+    public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable, IWalkable
     {
         public MapObject()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1000));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100));
         }
 
         public Direction Direction;
@@ -49,6 +49,13 @@ namespace BotCore.Types
         {
             Client = client;
 
+            if (Client.InstalledComponents.Count(n => 
+                n.ComponentID == Serial) == 0)
+            {
+                base.ComponentID = Serial;
+                Client.InstalledComponents.Add(this);
+            }
+
             if (Type == MapObjectType.NPC || Type == MapObjectType.Monster || Type == MapObjectType.Aisling ||
                 this is Aisling)
                 client.FieldMap.SetWall(ServerPosition);
@@ -67,6 +74,14 @@ namespace BotCore.Types
             client.FieldMap.SetPassable(ServerPosition);
             client.FieldMap.RemoveObject(this);
             PathToMapObject = null;
+
+            var obj = client.InstalledComponents.FirstOrDefault
+                (n => n.ComponentID == Serial);
+
+            if (obj != null)
+            {
+                client.InstalledComponents.Remove(obj);
+            }
         }
 
         public void OnPositionUpdated(GameClient client, Position oldPosition, Position newPosition)
@@ -91,6 +106,7 @@ namespace BotCore.Types
             client.FieldMap.SetPassable(oldPosition);
             client.FieldMap.SetWall(newPosition);
             UpdatePath(client);
+
         }
 
         private void ReassignObj(GameClient client)
@@ -201,6 +217,42 @@ namespace BotCore.Types
                     break;
             }
         }
+
+        public bool WalkTowards(int distance)
+        {
+            if (Client.FieldMap == null)
+                return false;
+            if (!Client.FieldMap.Ready)
+                return false;
+
+            UpdatePath(Client);
+
+            if (PathToMapObject == null)
+                return false;
+
+            if (PathToMapObject?.Count == 0)
+                return false;
+
+            Direction dir = Direction.None;
+            var PathNodes = PathToMapObject;
+
+            if (PathNodes[1].X == Client.FieldMap.X() && PathNodes[1].Y == Client.FieldMap.Y() - 1)
+                dir = Direction.North;
+            else if (PathNodes[1].X == Client.FieldMap.X() && PathNodes[1].Y == Client.FieldMap.Y() + 1)
+                dir = Direction.South;
+            else if (PathNodes[1].X == Client.FieldMap.X() - 1 && PathNodes[1].Y == Client.FieldMap.Y())
+                dir = Direction.West;
+            else if (PathNodes[1].X == Client.FieldMap.X() + 1 && PathNodes[1].Y == Client.FieldMap.Y())
+                dir = Direction.East;
+
+            GameActions.Walk(Client, dir);
+            return true;
+        }
+    }
+
+    internal interface IWalkable
+    {
+        bool WalkTowards(int distance);
     }
 
     internal interface ISearchable

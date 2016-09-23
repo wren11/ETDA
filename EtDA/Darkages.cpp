@@ -272,7 +272,6 @@ void Darkages::Run()
 	Receiver = (OnRecvEvent)DetourFunction((PBYTE)recvPacketin, (PBYTE)OnPacketRecv);
 	Sender = (OnSendEvent)DetourFunction((PBYTE)sendPacketout, (PBYTE)OnPacketSend);
 	hPaint = (pPaint)DetourFunction((PBYTE)hPaintPtr, (PBYTE)DrawOverlay);
-
 	LetsGo(*this, &CallBack);
 }
 

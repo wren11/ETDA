@@ -20,8 +20,15 @@ namespace BotCore
 
         private void MiniInterace_VisibleChanged(object sender, EventArgs e)
         {
-            if (client.Attributes != null)
-                this.Text = client?.Attributes.PlayerName + " (" + client.Attributes.Serial + ")";
+            try
+            {
+                if (client.Attributes != null)
+                    this.Text = client?.Attributes.PlayerName + " (" + client.Attributes.Serial + ")";
+            }
+            catch (Exception xp)
+            {
+
+            }
         }
 
         private void MiniInterace_FormClosing(object sender, FormClosingEventArgs e)
