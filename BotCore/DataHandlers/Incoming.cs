@@ -77,6 +77,20 @@ namespace BotCore.DataHandlers
             obj.OnPositionUpdated(client, oldPosition, newPosition);
         }
 
+        internal static void Stats(object sender, Packet packet)
+        {
+            var client = Collections.AttachedClients[(int)sender];
+
+            //08 14 00 03 73 7C 00 00 50 98 00 08 00 00 00 00 00 06 00 01 50 00 00}
+            if (packet.Data.Length >= 11 && packet.Data[11] == 8)
+            {
+                packet.Data[11] = 0x07;
+
+                //return without sending packet ect
+            }
+
+        }
+
         internal static void EquipmentUpdated(object sender, Packet e)
         {
             var client = Collections.AttachedClients[(int)sender];

@@ -38,7 +38,7 @@ namespace BotCore
             AddServerHandler(0x05, Incoming.PlayerSerialAssigned);
             AddServerHandler(0x06, Incoming.LoadingMap);
             AddServerHandler(0x37, Incoming.EquipmentUpdated);
-
+            AddServerHandler(0x08, Incoming.Stats);
             AddClientHandler(0x03, Outgoing.LoggingIn);
             AddClientHandler(0x0B, Outgoing.LoggingOut);
             AddClientHandler(0x1C, Outgoing.UseInventorySlot);
@@ -62,6 +62,13 @@ namespace BotCore
 
             GameActions.Refresh(Client, true, (a, b) => true);
             GameActions.Refresh(Client, true, (a, b) => true);
+
+
+            //disable blind
+            if (_memory.Read<byte>((IntPtr)0x005D2DD4, false) != 0x75)
+                _memory.Write<byte>((IntPtr)0x005D2DD4, 0x75, false);
+
+
 
             Client.ReleaseMovementLock();
         }

@@ -120,6 +120,16 @@ namespace BotCore.Actions
             callback?.Invoke(client, packet);
         }
 
+        public static void Face(GameClient client, Direction dir)
+        {
+            if (dir != client.Attributes.Direction)
+            {
+                var packet = new Packet(0x11);
+                packet.WriteByte((byte)dir);
+                GameClient.InjectPacket<ServerPacket>(client, packet);
+            }
+        }
+
         public static void RequestProfile(GameClient client,
             Func<GameClient, Packet, bool> callback = null)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BotCore.Actions;
+using System;
 
 namespace BotCore.Types
 {
@@ -26,5 +27,33 @@ namespace BotCore.Types
         public Position(byte x, byte y) : this((short)x, (short)y) { }
         public Position(int x, int y) : this((short)x, (short)y) { }
         public Position() : this(0, 0) { }
+
+        public bool IsNearby(Position pos)
+        {
+            return pos.DistanceFrom(X, Y) <= 1;
+        }
+
+        public bool IsNextTo(Position pos)
+        {
+            if (X == pos.X && Y + 1 == pos.Y)
+            {
+                return true;
+            }
+            if (X == pos.X && Y - 1 == pos.Y)
+            {
+                return true;
+            }
+            if (X == pos.X + 1 && Y == pos.Y)
+            {
+                return true;
+            }
+            if (X == pos.X - 1 && Y == pos.Y)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }

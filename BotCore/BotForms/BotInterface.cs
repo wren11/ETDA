@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using BotCore.Types;
 using System.Drawing;
 using BotCore.BotForms;
+using BotCore.Actions;
 
 namespace BotCore
 {
@@ -421,7 +422,18 @@ namespace BotCore
             {
                 while (true)
                 {
-                    obj.WalkTowards(1); // TO DO - Finish this
+                    var nt = client
+                        .Attributes
+                        .ServerPosition
+                        .IsNextTo(obj
+                        .ServerPosition);  
+                                     
+                    if (nt)
+                    {
+                        break;
+                    }
+
+                    obj.WalkTowards(2);
 
                     Thread.Sleep(10);
                 }
