@@ -1,14 +1,4 @@
-# ETDA ( DISCONTINUED )
-
-- Project is discontinued, I no longer have the time or energy for Darkages related projects.
-
-*New cool feature added:
-Custom Walk Function:
-
-Works like this:
-
-Bot.exe -> Walk function sends packet 0x95, 0x01 -> ETDA.DLL -> Custom Walk -> client is now using a new walk function.
-this essessialy is extending the DA client through ETDA.dll by using unuses packet handlers to call new functions.
+# ETDA
 
 This Project is still in development, The current release forecast is unknown for the current
 development roadmap, Feel free to submit contributions to further push this project along the way.
