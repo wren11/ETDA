@@ -1,4 +1,6 @@
-# ETDA
+# ETDA ( DISCONTINUED )
+
+- Project is discontinued, I no longer have the time or energy for Darkages related projects.
 
 *New cool feature added:
 Custom Walk Function:
