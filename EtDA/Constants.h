@@ -1,3 +1,5 @@
+#ifndef C_H
+#define C_H
 
 //updated for 7.41
 const int senderOffset = 0x0073D958;   // sender class pointer
@@ -18,8 +20,9 @@ const int OptionC = 0x00750006;        // for Setting Toggles.
 const int OptionD = 0x00750008;        // for Setting Toggles.
 const int OptionE = 0x00750010;        // for Setting Toggles.
 const int OptionF = 0x00750012;        // for Setting Toggles.
-
-
+const int AutoWalkOn = 0x00750014;        // for Setting Toggles.
+const int AutoWalkTargetX = 0x00750018;        // for Setting Toggles.
+const int AutoWalkTargetY = 0x00750022;        // for Setting Toggles.
 
 const int hPaintPtr = 0x004AC910;      // end Paint 7.41
 const int hOnCharacter = 0x004C1B60;   // On Character Login Function 7.41
@@ -36,3 +39,18 @@ const int SendConsumerPacketAvailable = 0x006FD000;
 const int SendConsumerPacketType      = 0x006FD004;
 const int SendConsumerPacketLength    = 0x006FD008;
 const int SendConsumerPacketData      = 0x006FD012;
+const int DAPROC				      = 0x004A9C30;
+
+struct c_walk
+{
+	DAPoint CurrentPos;
+	DAPoint TargetPos;
+	void   *A;
+};
+
+char __fastcall MySubWalk(int ecx, char dir);
+char __fastcall MySetCommand(int thisptr, int command);
+
+void WalkTowards();
+
+#endif

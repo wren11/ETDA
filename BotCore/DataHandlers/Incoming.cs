@@ -2,6 +2,7 @@
 using BotCore.Shared.Helpers;
 using BotCore.Types;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -31,8 +32,12 @@ namespace BotCore.DataHandlers
                {
                    LoadMap(client, number, width, height);
                    client.MapLoaded = true;
-                   //reset again
+
+                   //reset active bar pointer
                    client.Active?.HardReset();
+
+                   //todo: reset any other pointers here on new map load.
+                   ;
                }) { IsBackground = true }.Start();
 
             GameActions.RequestProfile(client);
@@ -89,6 +94,32 @@ namespace BotCore.DataHandlers
                 //return without sending packet ect
             }
 
+        }
+
+        internal static void WorldList(object sender, Packet e)
+        {
+            var client = Collections.AttachedClients[(int)sender];
+            var count = e.ReadInt16();
+            var local = e.ReadInt16();
+
+            var users = new List<string>();
+
+            for (int i = 0; i < local * 2; i++)
+            {
+                var icon = e.ReadByte();
+                var color = e.ReadByte();
+                var name = e.ReadString8();
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    if (name.ToLower() == "reich" || name.ToLower() == "acnologia")
+                        continue;
+
+                    users.Add(name);
+                }
+            }
+
+            client.LocalWorldUsers = users;
         }
 
         internal static void EquipmentUpdated(object sender, Packet e)
@@ -241,7 +272,7 @@ namespace BotCore.DataHandlers
             var oldPosition = client.Attributes.ServerPosition;
 
             client.Attributes.ServerPosition = new Position(x, y);
-            var newPosition = client.Attributes.ClientPosition = new Position(x, y);
+            var newPosition = client.Attributes.ServerPosition = new Position(x, y);
 
             var obj = client.FieldMap.GetObject(i => i.Serial == client.Attributes.Serial);
             if (obj != null)
@@ -306,7 +337,6 @@ namespace BotCore.DataHandlers
             if (serial == client.Attributes.Serial)
             {
                 client.Attributes.ServerPosition = new Position(x, y);
-                client.Attributes.ClientPosition = new Position(x, y);
                 client.Attributes.Direction = (Direction)direction;
             }
 
@@ -416,18 +446,9 @@ namespace BotCore.DataHandlers
         private static void LoadMap(Client client, short number, short width, short height)
         {
             var path = Path.Combine(Collections.DAPATH, "maps") + "\\lod" + number.ToString(CultureInfo.InvariantCulture) + ".map";
-            if (!File.Exists(path))
-                path = UseDefaultDAPath(client, number);
+
             if (File.Exists(path))
                 PrepareMap(client, number, width, height, path);
-        }
-
-        private static string UseDefaultDAPath(Client client, short number)
-        {
-            string path;
-            Collections.DAPATH = new FileInfo(client.Memory.Modules.MainModule.Path).Directory.FullName;
-            path = Path.Combine(Collections.DAPATH, "maps") + "\\lod" + number.ToString(CultureInfo.InvariantCulture) + ".map";
-            return path;
         }
 
         private static void PrepareMap(Client client, short number, short width, short height, string path)

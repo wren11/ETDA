@@ -14,6 +14,7 @@
 #include <string>
 #include <functional>
 #include <cstdio>
+#include <cctype>
 
 class Later
 {
@@ -42,12 +43,85 @@ public:
 Darkages da;
 DABase base;
 
+
+
 typedef void (_stdcall *OnRecvEvent)(BYTE *data, unsigned int Length); OnRecvEvent Receiver = NULL;
 typedef int  (__stdcall *OnSendEvent)(BYTE *data, int arg1, int arg2, char arg3); OnSendEvent Sender = NULL;
 
 /* DirectDraw / GDI */
 typedef int(__thiscall *pPaint)(int *ecx, int hdc); pPaint hPaint = NULL;
 typedef HDC(__thiscall *DAGetDC)(int ecx);          DAGetDC pDAGetDC = NULL;
+
+static c_walk *cPointer = { 0 };
+//char __thiscall sub_5F0C40(int this, char a2);
+
+
+typedef int(__stdcall *pWNDPROC)(HWND hWnd, signed int Msg, WPARAM wParam, LPARAM lParam);
+pWNDPROC oWndProc = NULL;
+
+BYTE WalkOrdinal = 0;
+
+
+std::vector<int> split(const std::string &s, char delim) {
+	std::vector<int> elems;
+	std::stringstream ss(s);
+	std::string number;
+	while (std::getline(ss, number, delim)) {
+		elems.push_back(std::stoi(number));
+	}
+	return elems;
+}
+
+int __stdcall myWndProc(HWND hWnd, signed int Msg, WPARAM wParam, LPARAM lParam)
+{
+	if (Msg == 0x004A)
+	{
+		COPYDATASTRUCT* pcds = (COPYDATASTRUCT*)lParam;
+		
+		if (pcds->dwData == 1) //WALK EAST
+		{
+			int thisptr = *(int*)0x00882E68;
+			void* data = malloc(sizeof(char));
+			data = (void*)0x01;
+			if ((int)data < 5)
+			{
+				da.hWalk(thisptr, (int)data);
+			}
+		}
+		else if(pcds->dwData == 2)
+		{
+			int thisptr = *(int*)0x00882E68;
+			void* data = malloc(sizeof(char));
+			data = (void*)0x02;
+			if ((int)data < 5)
+			{
+				da.hWalk(thisptr, (int)data);
+			}
+		}
+		else if (pcds->dwData == 0)
+		{
+			int thisptr = *(int*)0x00882E68;
+			void* data = malloc(sizeof(char));
+			data = (void*)0x00;
+			if ((int)data < 5)
+			{
+				da.hWalk(thisptr, (int)data);
+			}
+		}
+		else if (pcds->dwData == 3)
+		{
+			int thisptr = *(int*)0x00882E68;
+			void* data = malloc(sizeof(char));
+			data = (void*)0x03;
+			if ((int)data < 5)
+			{
+				da.hWalk(thisptr, (int)data);
+			}
+		}
+	}
+
+	return oWndProc(hWnd, Msg, wParam, lParam);
+}
 
 HDC context = NULL;
 bool hud = false;
@@ -57,6 +131,29 @@ void RenderCalls()
 	if (context == NULL)
 		return;
 }
+
+
+char __fastcall MySetCommand(int thisptr, int command)
+{
+	return da.hSetCommand(thisptr, command);
+}
+
+char __fastcall MySubWalk(int ecx, char dir)
+{
+	int thisptr = *(int*)0x00882E68;
+
+	void* data  = malloc(sizeof(char));
+	data = (void*)dir;
+
+	if ((int)data < 5)
+	{
+		if (thisptr > 0 && ecx == thisptr)
+			da.hWalk(ecx, (int)data);
+	}
+
+	return dir;
+}
+
 
 int __fastcall DrawOverlay(int *ecx, int hdcptr)
 {
@@ -194,8 +291,6 @@ void __stdcall OnPacketRecv(BYTE *data, unsigned int Length)
 				USHORT ycord = (USHORT)((data[index + 5] << 8) + data[index + 6]);
 				USHORT sprite = (USHORT)((data[index + 11] << 8) + data[index + 12]);
 
-
-
 				if (sprite > 0x8000 && sprite < 0x9000)
 				{
 					if (sprite == 0 || sprite == 32000)
@@ -257,13 +352,17 @@ bool Darkages::Init(void *hModule)
 };
 
 
-int CallBack(Darkages da)
+int CallBack(Darkages game)
 {
-	da = da;
+	da = game;
 	da.ProcessId = GetCurrentProcessId();
-	base = *da.base;
 
 	base.OnCharacter = (DABase::OnCharacterLoginEvent)DetourFunction((PBYTE)hOnCharacter, (PBYTE)OnCharacterLogin);
+	
+	da.hWalk = (Darkages::SubWalk)DetourFunction((PBYTE)0x005F0C40, (PBYTE)MySubWalk);	
+	//da.hSetWalkPos = (Darkages::SetWalkPos)DetourFunction((PBYTE)0x005F4DE0, (PBYTE)MySetWalkPos);
+	//da.hSetCommand = (Darkages::SetCommand)DetourFunction((PBYTE)0x005EFBE0, (PBYTE)MySetCommand);
+	da.base = &base;
 	return 1;
 }
 
@@ -272,6 +371,7 @@ void Darkages::Run()
 	Receiver = (OnRecvEvent)DetourFunction((PBYTE)recvPacketin, (PBYTE)OnPacketRecv);
 	Sender = (OnSendEvent)DetourFunction((PBYTE)sendPacketout, (PBYTE)OnPacketSend);
 	hPaint = (pPaint)DetourFunction((PBYTE)hPaintPtr, (PBYTE)DrawOverlay);
+	oWndProc = (pWNDPROC)DetourFunction((PBYTE)DAPROC, (PBYTE)myWndProc);
 	LetsGo(*this, &CallBack);
 }
 

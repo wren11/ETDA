@@ -8,9 +8,6 @@ namespace BotCore.Components
     public class PlayerAttributes : UpdateableComponent
     {
         public Direction Direction;
-
-        public Position ClientPosition { get; set; }
-
         public Position ServerPosition { get; set; }
 
         public List<PartyGroup> GroupMembers = new List<PartyGroup>();
@@ -166,16 +163,6 @@ namespace BotCore.Components
 
             if (Timer.Elapsed)
             {
-                if (ServerPosition == null)
-                {
-                    ServerPosition = new Position(Client.FieldMap.X(), Client.FieldMap.Y());
-                }
-
-                if (ClientPosition == null)
-                {
-                    ClientPosition = new Position(Client.FieldMap.X(), Client.FieldMap.Y());
-                }
-
                 Timer.Reset();
                 base.Pulse();
             }

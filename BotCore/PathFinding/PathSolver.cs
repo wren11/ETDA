@@ -1,23 +1,38 @@
 ﻿using BotCore.Types;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BotCore.PathFinding
 {
     public class PathSolver
     {
-        public static List<PathFinderNode> FindPath(int[,] Matrix, Position Start, Position End)
+        public class PathNode
         {
+            public DateTime LastAccessed { get; set; }
+            public int Steps { get; set; }
+            public bool HasReactor { get; set; }
+            public bool IsDoor { get; set; }
+            public bool IsBlock { get; set; }
+        }
+
+        public static List<PathFinderNode> FindPath(ref PathNode[,] Matrix, int[,] Matrix2, Position Start, Position End)
+        {
+
+            if (Start == null || End == null)
+                return null;
+
             var w = Matrix.GetLength(0);
             var h = Matrix.GetLength(1);
 
             try
             {
-                Matrix[Start.X, Start.Y] = 0;
-                Matrix[End.X, End.Y] = 0;
+                Matrix[Start.X, Start.Y].IsBlock = false;
+                Matrix[End.X, End.Y].IsBlock = false;
 
                 var ClosedNodes = new bool[Matrix.GetUpperBound(0) + 1, Matrix.GetUpperBound(1) + 1];
                 var Stack = new List<PathFinderNode>(new[] { new PathFinderNode { X = Start.X, Y = Start.Y, Heuristic = 0 } });
-                var Heuristic = 1;
+                var Heuristic = 0;
 
                 PathFinderNode FinalNode = null;
 
@@ -34,7 +49,7 @@ namespace BotCore.PathFinding
                         if (Stack[i].X - 1 <= Matrix.GetUpperBound(0))
                             if (Stack[i].X - 1 >= 0)
                                 if (!ClosedNodes[Stack[i].X - 1, Stack[i].Y])
-                                    if (Matrix[Stack[i].X - 1, Stack[i].Y] != 1)
+                                    if (!Matrix[Stack[i].X - 1, Stack[i].Y].IsBlock)
                                     {
                                         var LastNode = new PathFinderNode
                                         {
@@ -48,7 +63,7 @@ namespace BotCore.PathFinding
                                             X = Stack[i].X - 1,
                                             Y = Stack[i].Y,
                                             NextNode = null,
-                                            Heuristic = LastNode.Heuristic + (byte)Matrix[Stack[i].X - 1, Stack[i].Y]
+                                            Heuristic = LastNode.Heuristic + (byte)(Matrix[Stack[i].X, Stack[i].Y + 1].IsBlock ? 1 : 0)
                                         };
                                         LastNode.NextNode = NewNode;
                                         NewNode.LastNode = LastNode;
@@ -63,7 +78,7 @@ namespace BotCore.PathFinding
                         if (Stack[i].X + 1 <= Matrix.GetUpperBound(0))
                             if (Stack[i].X + 1 >= 0)
                                 if (!ClosedNodes[Stack[i].X + 1, Stack[i].Y])
-                                    if (Matrix[Stack[i].X + 1, Stack[i].Y] != 1)
+                                    if (!Matrix[Stack[i].X + 1, Stack[i].Y].IsBlock)
                                     {
                                         var LastNode = new PathFinderNode
                                         {
@@ -77,7 +92,7 @@ namespace BotCore.PathFinding
                                             X = Stack[i].X + 1,
                                             Y = Stack[i].Y,
                                             NextNode = null,
-                                            Heuristic = LastNode.Heuristic + (byte)Matrix[Stack[i].X + 1, Stack[i].Y]
+                                            Heuristic = LastNode.Heuristic + (byte)(Matrix[Stack[i].X, Stack[i].Y + 1].IsBlock ? 1 : 0)
                                         };
                                         LastNode.NextNode = NewNode;
                                         NewNode.LastNode = LastNode;
@@ -92,7 +107,7 @@ namespace BotCore.PathFinding
                         if (Stack[i].Y - 1 <= Matrix.GetUpperBound(1))
                             if (Stack[i].Y - 1 >= 0)
                                 if (!ClosedNodes[Stack[i].X, Stack[i].Y - 1])
-                                    if (Matrix[Stack[i].X, Stack[i].Y - 1] != 1)
+                                    if (!Matrix[Stack[i].X, Stack[i].Y - 1].IsBlock)
                                     {
                                         var LastNode = new PathFinderNode
                                         {
@@ -106,7 +121,7 @@ namespace BotCore.PathFinding
                                             X = Stack[i].X,
                                             Y = Stack[i].Y - 1,
                                             NextNode = null,
-                                            Heuristic = LastNode.Heuristic + (byte)Matrix[Stack[i].X, Stack[i].Y - 1]
+                                            Heuristic = LastNode.Heuristic + (byte)(Matrix[Stack[i].X, Stack[i].Y + 1].IsBlock ? 1 : 0)
                                         };
                                         LastNode.NextNode = NewNode;
                                         NewNode.LastNode = LastNode;
@@ -121,7 +136,7 @@ namespace BotCore.PathFinding
                         if (Stack[i].Y + 1 <= Matrix.GetUpperBound(1))
                             if (Stack[i].Y + 1 >= 0)
                                 if (!ClosedNodes[Stack[i].X, Stack[i].Y + 1])
-                                    if (Matrix[Stack[i].X, Stack[i].Y + 1] != 1)
+                                    if (!Matrix[Stack[i].X, Stack[i].Y + 1].IsBlock)
                                     {
                                         var LastNode = new PathFinderNode
                                         {
@@ -135,7 +150,7 @@ namespace BotCore.PathFinding
                                             X = Stack[i].X,
                                             Y = Stack[i].Y + 1,
                                             NextNode = null,
-                                            Heuristic = LastNode.Heuristic + (byte)Matrix[Stack[i].X, Stack[i].Y + 1]
+                                            Heuristic = LastNode.Heuristic + (byte)(Matrix[Stack[i].X, Stack[i].Y + 1].IsBlock ? 1 : 0)
                                         };
                                         LastNode.NextNode = NewNode;
                                         NewNode.LastNode = LastNode;

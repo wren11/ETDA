@@ -7,7 +7,7 @@ using BotCore.Actions;
 
 namespace BotCore.Types
 {
-    public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable, IWalkable
+    public class MapObject : GameClient.RepeatableTimer, IDiscoverable, ISearchable, ITargetable
     {
         public MapObject()
         {
@@ -49,7 +49,7 @@ namespace BotCore.Types
         {
             Client = client;
 
-            if (Client.InstalledComponents.Count(n => 
+            if (Client.InstalledComponents.Count(n =>
                 n.ComponentID == Serial) == 0)
             {
                 base.ComponentID = Serial;
@@ -64,6 +64,8 @@ namespace BotCore.Types
             SetTargetPriorties(client);
             OverrideTargetPriorties();
             UpdatePath(client);
+
+            Console.WriteLine("Entity {0} Discovered. ", Enum.GetName(typeof(MapObjectType), Type));
 
             timer.Start();
         }
@@ -89,14 +91,13 @@ namespace BotCore.Types
             if (Timer == null)
             {
                 Timer = new UpdateTimer(TimeSpan.FromMilliseconds(1));
+                Timer.Reset();
             }
-
-            Timer.Reset();
 
 
             //lets time movement speed.
             if (timer.ElapsedMilliseconds > 0)
-                MovementSpeed = (int) timer.ElapsedMilliseconds;
+                MovementSpeed = (int)timer.ElapsedMilliseconds;
 
 
             Console.WriteLine("Entity Moved {0},{1} -> {2},{3}", oldPosition.X, oldPosition.Y, newPosition.X,
@@ -107,6 +108,27 @@ namespace BotCore.Types
             client.FieldMap.SetWall(newPosition);
             UpdatePath(client);
 
+        }
+
+        internal bool IsNearby(int distance = 10)
+        {
+            return Client.Attributes.ServerPosition.DistanceFrom(ServerPosition) < distance;
+        }
+
+
+        internal bool IsNearby(Position other, int distance = 10)
+        {
+            return Client.Attributes.ServerPosition.DistanceFrom(other) < distance;
+        }
+
+        internal bool IsOnScreen()
+        {
+            return OnScreen;
+        }
+
+        internal bool OnScreen
+        {
+            get { return IsNearby(); }
         }
 
         private void ReassignObj(GameClient client)
@@ -129,10 +151,10 @@ namespace BotCore.Types
 
         private void OverrideTargetPriorties()
         {
-            if (Collections.TargetConditions.ContainsKey((short) Sprite))
+            if (Collections.TargetConditions.ContainsKey((short)Sprite))
             {
-                CanTarget = Collections.TargetConditions[(short) Sprite].predicate;
-                TargetPriority = Collections.TargetConditions[(short) Sprite].Priority;
+                CanTarget = Collections.TargetConditions[(short)Sprite].predicate;
+                TargetPriority = Collections.TargetConditions[(short)Sprite].Priority;
             }
         }
 
@@ -141,22 +163,22 @@ namespace BotCore.Types
         private void SetTargetPriorties(GameClient client)
         {
             if (Type == MapObjectType.Monster && CanTarget == null)
-                // don't re-create it again if it's already defined.
-                //as this can be defined by plugin settings.
+            // don't re-create it again if it's already defined.
+            //as this can be defined by plugin settings.
             {
                 switch (Sprite)
                 {
                     case 1: // target is a wasp.
-                    {
-                        CanTarget = target => true; //return true, no special condition here.
-                        TargetPriority = 1; //give it 1, making this sprite a higher priority.
-                    }
+                        {
+                            CanTarget = target => true; //return true, no special condition here.
+                            TargetPriority = 1; //give it 1, making this sprite a higher priority.
+                        }
                         break;
                     default:
-                    {
-                        CanTarget = target => true;
-                        TargetPriority = 0; //give it 0 - nothing special.
-                    }
+                        {
+                            CanTarget = target => true;
+                            TargetPriority = 0; //give it 0 - nothing special.
+                        }
                         break;
                 }
             }
@@ -168,7 +190,7 @@ namespace BotCore.Types
                 || this is Aisling
                 && Serial != client.Attributes.Serial)
             {
-                PathToMapObject = client.FieldMap.Search(client.Attributes.ClientPosition, ServerPosition);
+                PathToMapObject = client.FieldMap.Search(client.Attributes.ServerPosition, ServerPosition);
                 PathUpdated(client, PathToMapObject);
             }
         }
@@ -178,8 +200,6 @@ namespace BotCore.Types
             if (CurseInfo != null && CurseInfo.CurseElapsed)
                 CurseInfo = null;
 
-            //if (Type == MapObjectType.Monster || this is Aisling)
-            //    GameActions.Say(Client, this, Serial + " (" + ServerPosition.X + "," + ServerPosition.Y + ")  " + (CurseInfo != null ? "Cursed" : "Not Cursed"));
         }
 
         public override void Update(TimeSpan tick)
@@ -195,64 +215,141 @@ namespace BotCore.Types
 
         public void OnAnimation(short animation, int to, int from)
         {
-            switch ((Animation) animation)
+            switch ((Animation)animation)
             {
                 //TODO: Add more Animation Handling here.
                 case Animation.ardcradh:
-                {
-                    if (CurseInfo != null)
-                        CurseInfo.Applied = DateTime.Now;
-
-                    if (CurseInfo == null)
                     {
-                        CurseInfo = new CurseInfo
+                        if (CurseInfo != null)
+                            CurseInfo.Applied = DateTime.Now;
+
+                        if (CurseInfo == null)
                         {
-                            Applied = DateTime.Now,
-                            Type = CurseInfo.Curse.ardcradh,
-                            Duration = 240000
-                        };
+                            CurseInfo = new CurseInfo
+                            {
+                                Applied = DateTime.Now,
+                                Type = CurseInfo.Curse.ardcradh,
+                                Duration = 240000
+                            };
+                        }
+                        IsCursed = true;
                     }
-                    IsCursed = true;
-                }
                     break;
             }
         }
 
-        public bool WalkTowards(int distance)
+        public void MoveTowards()
         {
-            if (Client.FieldMap == null)
-                return false;
-            if (!Client.FieldMap.Ready)
-                return false;
+            var EndLocation = ServerPosition;
+            var MyLocation = Client.Attributes.ServerPosition;
+
+            if (MyLocation.IsNextTo(EndLocation))
+            {
+                throw new WalkingException();
+            }
+
 
             UpdatePath(Client);
 
             if (PathToMapObject == null)
-                return false;
+                return;
 
-            if (PathToMapObject?.Count == 0)
-                return false;
-
-            Direction dir = Direction.None;
             var PathNodes = PathToMapObject;
 
-            if (PathNodes[1].X == Client.FieldMap.X() && PathNodes[1].Y == Client.FieldMap.Y() - 1)
-                dir = Direction.North;
-            else if (PathNodes[1].X == Client.FieldMap.X() && PathNodes[1].Y == Client.FieldMap.Y() + 1)
-                dir = Direction.South;
-            else if (PathNodes[1].X == Client.FieldMap.X() - 1 && PathNodes[1].Y == Client.FieldMap.Y())
-                dir = Direction.West;
-            else if (PathNodes[1].X == Client.FieldMap.X() + 1 && PathNodes[1].Y == Client.FieldMap.Y())
-                dir = Direction.East;
+            for (int i = 0; i < 4; i++)
+            {
+                UpdatePath(Client);
+                PathNodes = PathToMapObject;
 
-            GameActions.Walk(Client, dir);
-            return true;
+                if (PathNodes == null)
+                {
+                    if (i == 3)
+                        throw new WalkingException();
+                    continue;
+                }
+                if (PathNodes.Count == 1)
+                {
+                    if (i == 3)
+                        throw new WalkingException();
+                    GameActions.Refresh(Client);
+                    continue;
+                }
+                break;
+            }
+
+            UpdatePath(Client);
+            PathNodes = PathToMapObject;
+
+            if (PathNodes == null)
+                return;
+
+            for (int i = 1; i < PathNodes.Count - 1; i++)
+            {
+                if (Client.FieldMap == null)
+                    return;
+
+                if (Client.ObjectSearcher != null)
+                {
+                    if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
+                        return;
+                }
+
+
+                if (ServerPosition.X != EndLocation.X || ServerPosition.Y != EndLocation.Y)
+                {
+                    EndLocation = ServerPosition;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (Client.FieldMap == null)
+                            return;
+
+                        if (Client.ObjectSearcher != null)
+                        {
+                            if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
+                                return;
+                        }
+
+                        UpdatePath(Client);
+                        PathNodes = PathToMapObject;
+
+                        if (PathNodes == null)
+                            throw new WalkingException();
+                        if (PathNodes.Count == 1)
+                            GameActions.Refresh(Client);
+                        if (PathNodes.Count == 2)
+                            return;
+
+                        if (j == 3)
+                            throw new WalkingException();
+                    }
+                    i = 1;
+                }
+                if (Client.FieldMap == null)
+                    return;
+
+                if (Client.ObjectSearcher != null)
+                {
+                    if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
+                        return;
+                }
+
+                Direction dir = Direction.None;
+                PathNodes = PathToMapObject;
+
+                if (PathNodes[i].X == Client.FieldMap.X() && PathNodes[i].Y == Client.FieldMap.Y() - 1)
+                    dir = Direction.North;
+                else if (PathNodes[i].X == Client.FieldMap.X() && PathNodes[i].Y == Client.FieldMap.Y() + 1)
+                    dir = Direction.South;
+                else if (PathNodes[i].X == Client.FieldMap.X() - 1 && PathNodes[i].Y == Client.FieldMap.Y())
+                    dir = Direction.West;
+                else if (PathNodes[i].X == Client.FieldMap.X() + 1 && PathNodes[i].Y == Client.FieldMap.Y())
+                    dir = Direction.East;
+
+
+                GameActions.Walk(Client, dir);
+            }
         }
-    }
-
-    internal interface IWalkable
-    {
-        bool WalkTowards(int distance);
     }
 
     internal interface ISearchable

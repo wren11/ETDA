@@ -15,3 +15,20 @@ C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.States.Sta
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.csproj.GenerateResource.Cache
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.dll
 C:\Users\IT Manager\Source\Repos\ETDA\BotCore\obj\x86\Release\BotCore.pdb
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\sotp.dat
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\BotCore.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\BotCore.pdb
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\Fasm.NET.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\log4net.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\MemorySharp.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\Microsoft.CSharp.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\bin\x86\Release\log4net.xml
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.csprojResolveAssemblyReference.cache
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.BotInterface.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.MiniInterace.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.BotForms.statetoggle.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.Properties.Resources.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.States.StateSettings.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.csproj.GenerateResource.Cache
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\BotCore\obj\x86\Release\BotCore.pdb

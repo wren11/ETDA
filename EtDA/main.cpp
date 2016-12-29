@@ -4,6 +4,7 @@
 
 Darkages* da;
 
+
 void RenderCalls(void);
 
 
@@ -84,37 +85,26 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 				if (length <= 0)
 					continue;
 
-				//this is a custom packet format. to override the games walking
-				//with ETDA's own walking function.
+				//if (data[0] == 0x94)
+				//{
+				//	//5EFFE0((void *)v6, v10, v9, a2, 1);
+				//	//char __thiscall sub_5EFFE0(void *this, int a2, int a3, char a4, char a5);
+
+				//	char(__thiscall *E)(void*, DAPoint, char steps, char direction) 
+				//		= (char(__thiscall*)(void*, DAPoint, char steps, char direction))0x005EFFE0;
+
+				//	int thisptr = *(int*)0x00882E68;
+				//}
+
+
 				if (data[0] == 0x95)
 				{					
-					int Hook = 0x005F0C40;
-					int magicTokenPointer = 0x00882E68;
-					int magicToken = { 0 };
-
-					void* memory = (void*)data[1];
-					magicToken = *(int*)magicTokenPointer;
-
-					if ((int)memory >= 0 && (int)memory <= 255)
+					int memory = data[1];
+					if ((int)memory >= 0 && (int)memory <= 4)
 					{
-						__asm
-						{
-							pushfd;
-							pushad;
-
-							mov eax, memory
-							cmp eax, 0xFFFFFFFE
-							jne valid
-					valid:
-							push eax
-							mov ecx, [magicToken]
-							cmp ecx, 0xFFFFFFFE
-							jne k
-					k:
-							call Hook
-							popad;
-							popfd;
-						}
+						_ASSERT(_CrtCheckMemory());
+						MySubWalk(*(int*)0x00882E68, memory);
+						_ASSERT(_CrtCheckMemory());
 					}
 				}
 

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BotCore.PathFinding;
+using BotCore.States;
 using BotCore.Types;
 
 namespace BotCore.Components
 {
     public class Map : UpdateableComponent
     {
-        public static byte[] sotp = File.ReadAllBytes("sotp.dat");
+        private static byte[] sotp = File.ReadAllBytes("sotp.dat");
 
         private MapObject[] _mapObjects = new MapObject[0];
+
+        private PathSolver.PathNode[,] nodes = null;
 
         public bool Ready;
         public short Width, Height;
@@ -27,10 +30,18 @@ namespace BotCore.Components
 
         public int this[short x, short y]
         {
-            get { return Grid[x, y]; }
+            get
+            {
+                if (((x + 1) * (y + 1)) <= Grid.Length)
+                {
+                    return Grid[x, y];
+                }
+
+                return int.MinValue;
+            }
             set
             {
-                if (x != 0 && y != 0)
+                if (x != 0 && y != 0 && ((x + 1) * (y + 1)) <= Grid.Length)
                 {
                     Grid[x, y] = value;
                 }
@@ -47,12 +58,10 @@ namespace BotCore.Components
         {
             get
             {
-                List<MapObject> copy;
                 lock (_mapObjects)
                 {
-                    copy = new List<MapObject>(_mapObjects);
+                    return _mapObjects;
                 }
-                return copy.ToArray();
             }
         }
 
@@ -82,8 +91,8 @@ namespace BotCore.Components
         public List<Position> GetNearByTiles(short x, short y, double radius)
         {
             var nearbyPtsSet = new List<Position>();
-            var innerBound = radius*(Math.Sqrt(2.0)/2.0);
-            var radiusSq = radius*radius;
+            var innerBound = radius * (Math.Sqrt(2.0) / 2.0);
+            var radiusSq = radius * radius;
 
             for (short j = 0; j < Height; j++)
             {
@@ -114,8 +123,8 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr) 0x00882E68, false) + 0x26C;
-            var num = _memory.Read<short>((IntPtr) ptr, false);
+            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x26C;
+            var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
         }
@@ -125,8 +134,8 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr) 0x00882E68, false) + 0x1C4;
-            var num = _memory.Read<short>((IntPtr) ptr, false);
+            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x1C4;
+            var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
         }
@@ -136,8 +145,8 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr) 0x00882E68, false) + 0x1C8;
-            var num = _memory.Read<short>((IntPtr) ptr, false);
+            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x1C8;
+            var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
         }
@@ -215,8 +224,8 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr) 0x00882E68, false) + 0x238;
-            var xcoord = _memory.Read<short>((IntPtr) ptr, false);
+            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x238;
+            var xcoord = _memory.Read<short>((IntPtr)ptr, false);
             return xcoord;
         }
 
@@ -232,7 +241,7 @@ namespace BotCore.Components
             {
                 fixed (int* ptr = m_grid)
                 {
-                    for (var i = 0; i < w*h; ++i)
+                    for (var i = 0; i < w * h; ++i)
                         ptr[i] = 0;
                 }
             }
@@ -265,13 +274,6 @@ namespace BotCore.Components
             throw new mapException("Not Loaded");
         }
 
-        public bool IsCollision(short x, short y)
-        {
-            x = (short)(x % Grid.GetLength(0));
-            y = (short)(y % Grid.GetLength(1));
-
-            return Grid[x, y] == 1;
-        }
 
         public void ProcessMap(Stream stream)
         {
@@ -316,8 +318,31 @@ namespace BotCore.Components
                 Console.WriteLine("Allowing spells to resume. ");
             }
 
+            if (!CanUseSkills)
+            {
+                CanUseSkills = true;
+                Console.WriteLine("Allowing skills to resume. ");
+            }
+
             if (Client.IsInGame())
-                ((Client) Client).OnClientStateUpdated(true);
+                ((Client)Client).OnClientStateUpdated(true);
+
+
+            nodes = new PathSolver.PathNode[Width, Height];
+
+            for (short y = 0; y < Height; y++)
+            {
+                for (short x = 0; x < Width; x++)
+                {
+                    nodes[x, y] = new PathSolver.PathNode()
+                    {
+                        HasReactor = false,
+                        IsBlock = this[x, y] == 1,
+                        Steps = 0,
+                        IsDoor = false
+                    };
+                }
+            }
 
             Console.WriteLine("Map Handled {0}, {1}", Width, Height);
         }
@@ -328,15 +353,10 @@ namespace BotCore.Components
             if (Grid == null)
                 return;
 
-            var w = Grid?.GetLength(0);
-            var h = Grid?.GetLength(1);
-
-            if (x > w || x < w)
-                return;
-            if (y > h || y < h)
-                return;
-
-            this[x, y] = value;
+            if (((x + 1) * (y + 1)) <= Grid.Length)
+            {
+                this[x, y] = value;
+            }
         }
 
         public void SetPassable(short x, short y)
@@ -376,36 +396,10 @@ namespace BotCore.Components
 
         private void OnUpdate()
         {
-            Client.Attributes.ClientPosition = new Position(X(), Y());
 
-            //TODO: these need reworking!
-            //RemoveOutofSight();
-            //AddOnSight();
         }
 
-        private void AddOnSight()
-        {
-            lock (_mapObjects)
-            {
-                for (var i = 0; i < _mapObjects.Length; i++)
-                {
-                    if (_mapObjects[i%_mapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) < 9)
-                        _mapObjects[i%_mapObjects.Length].OnDiscovery(Client);
-                }
-            }
-        }
 
-        private void RemoveOutofSight()
-        {
-            lock (_mapObjects)
-            {
-                for (var i = 0; i < _mapObjects.Length; i++)
-                {
-                    if (_mapObjects[i%_mapObjects.Length].ServerPosition.DistanceFrom(new Position(X(), Y())) > 9)
-                        _mapObjects[i%_mapObjects.Length].OnRemoved(Client);
-                }
-            }
-        }
 
         public List<PathSolver.PathFinderNode> Search(Position Start, Position End)
         {
@@ -417,7 +411,7 @@ namespace BotCore.Components
                 if (!Client.MapLoaded)
                     return null;
 
-                var usingpath = PathSolver.FindPath(Grid, Start, End);
+                var usingpath = PathSolver.FindPath(ref nodes, Grid, Start, End);
                 return usingpath;
             }
         }

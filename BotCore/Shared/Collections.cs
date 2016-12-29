@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using BotCore.Types;
+using BotCore.Components;
+using BotCore.PathFinding;
 
 namespace BotCore
 {
     public static class Collections
     {
-        public static string DAPATH = Path.Combine(Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), @"VirtualStore\Program Files (x86)\KRU\Dark Ages");
+        public static string DAPATH = Environment.CurrentDirectory;
         public static Form ParentForm { get; set; }
 
         public static Dictionary<int, Client> AttachedClients = new Dictionary<int, Client>();
@@ -297,6 +299,9 @@ namespace BotCore
             BaseStaffs["Yowien Tree Staff"] = new StaffTable() { Id = 30, Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Goldberry Harp"] = new StaffTable() { Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Master Divine Staff"] = new StaffTable() { Id = 110, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.AllExcept, Name = "cradh", Value = 3 } };
+            BaseStaffs["Divinities Staff"] = new StaffTable() { Id = 161, Level = 99, Class = "Bard", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.All, Value = 2 } };
+            BaseStaffs["Dragon Emberwood Staff"] = new StaffTable() {Id = 11,  Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
+
         }
         #endregion
 

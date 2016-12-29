@@ -60,8 +60,6 @@ namespace BotCore.States
                     break;
                 }
             }
-
-            GC.Collect();
         }
 
         public override void Update(TimeSpan tick)

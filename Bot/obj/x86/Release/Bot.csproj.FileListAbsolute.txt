@@ -12,3 +12,17 @@ C:\Users\IT Manager\Source\Repos\ETDA\Bot\obj\x86\Release\Bot.MainForm.resources
 C:\Users\IT Manager\Source\Repos\ETDA\Bot\obj\x86\Release\Bot.csproj.GenerateResource.Cache
 C:\Users\IT Manager\Source\Repos\ETDA\Bot\obj\x86\Release\Bot.exe
 C:\Users\IT Manager\Source\Repos\ETDA\Bot\obj\x86\Release\Bot.pdb
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\sotp.dat
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\Bot.exe.config
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\Bot.exe
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\Bot.pdb
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\BotCore.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\Fasm.NET.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\MemorySharp.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\Microsoft.CSharp.dll
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\bin\x86\Release\BotCore.pdb
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Release\Bot.csprojResolveAssemblyReference.cache
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Release\Bot.MainForm.resources
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Release\Bot.csproj.GenerateResource.Cache
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Release\Bot.exe
+F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Release\Bot.pdb

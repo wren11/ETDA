@@ -74,10 +74,10 @@
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.groupBox2);
-            this.tabPage4.Location = new System.Drawing.Point(4, 23);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(716, 433);
+            this.tabPage4.Size = new System.Drawing.Size(716, 431);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Settings";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -101,7 +101,7 @@
             this.checkBox8.AutoSize = true;
             this.checkBox8.Location = new System.Drawing.Point(21, 57);
             this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(85, 18);
+            this.checkBox8.Size = new System.Drawing.Size(105, 20);
             this.checkBox8.TabIndex = 4;
             this.checkBox8.Text = "Hide Assails";
             this.checkBox8.UseVisualStyleBackColor = true;
@@ -112,7 +112,7 @@
             this.checkBox7.AutoSize = true;
             this.checkBox7.Location = new System.Drawing.Point(21, 76);
             this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(120, 18);
+            this.checkBox7.Size = new System.Drawing.Size(153, 20);
             this.checkBox7.TabIndex = 3;
             this.checkBox7.Text = "Monster Animations";
             this.checkBox7.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             this.checkBox6.AutoSize = true;
             this.checkBox6.Location = new System.Drawing.Point(21, 94);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(89, 18);
+            this.checkBox6.Size = new System.Drawing.Size(114, 20);
             this.checkBox6.TabIndex = 2;
             this.checkBox6.Text = "Filter Sounds";
             this.checkBox6.UseVisualStyleBackColor = true;
@@ -134,7 +134,7 @@
             this.checkBox5.AutoSize = true;
             this.checkBox5.Location = new System.Drawing.Point(21, 38);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(94, 18);
+            this.checkBox5.Size = new System.Drawing.Size(120, 20);
             this.checkBox5.TabIndex = 1;
             this.checkBox5.Text = "Simple Sprites";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -145,7 +145,7 @@
             this.checkBox4.AutoSize = true;
             this.checkBox4.Location = new System.Drawing.Point(21, 20);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(77, 18);
+            this.checkBox4.Size = new System.Drawing.Size(98, 20);
             this.checkBox4.TabIndex = 0;
             this.checkBox4.Text = "Hide Coins";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -155,10 +155,10 @@
             // 
             this.tabPage3.Controls.Add(this.button6);
             this.tabPage3.Controls.Add(this.button5);
-            this.tabPage3.Location = new System.Drawing.Point(4, 23);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(716, 433);
+            this.tabPage3.Size = new System.Drawing.Size(716, 431);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Simulator";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -183,11 +183,11 @@
             this.tabPage2.Controls.Add(this.richTextBox2);
             this.tabPage2.Controls.Add(this.richTextBox1);
             this.tabPage2.Controls.Add(this.checkBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 23);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tabPage2.Size = new System.Drawing.Size(716, 433);
+            this.tabPage2.Size = new System.Drawing.Size(716, 431);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Packet Editor";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             this.comboBox2.Location = new System.Drawing.Point(470, 396);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 22);
+            this.comboBox2.Size = new System.Drawing.Size(121, 24);
             this.comboBox2.TabIndex = 6;
             this.comboBox2.Text = "Server";
             // 
@@ -246,7 +246,7 @@
             this.checkBox3.Location = new System.Drawing.Point(482, 280);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(68, 18);
+            this.checkBox3.Size = new System.Drawing.Size(86, 20);
             this.checkBox3.TabIndex = 4;
             this.checkBox3.Text = "Incoming";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -261,7 +261,7 @@
             this.checkBox2.Location = new System.Drawing.Point(587, 280);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(69, 18);
+            this.checkBox2.Size = new System.Drawing.Size(88, 20);
             this.checkBox2.TabIndex = 3;
             this.checkBox2.Text = "Outgoing";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -304,7 +304,7 @@
             this.checkBox1.Location = new System.Drawing.Point(14, 280);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(58, 18);
+            this.checkBox1.Size = new System.Drawing.Size(74, 20);
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "Enable";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -317,11 +317,11 @@
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 23);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(716, 433);
+            this.tabPage1.Size = new System.Drawing.Size(716, 431);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Botting States";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@
             this.comboBox1.Location = new System.Drawing.Point(11, 8);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(192, 22);
+            this.comboBox1.Size = new System.Drawing.Size(192, 24);
             this.comboBox1.TabIndex = 2;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -384,10 +384,10 @@
             // statepanel
             // 
             this.statepanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statepanel.Location = new System.Drawing.Point(4, 17);
+            this.statepanel.Location = new System.Drawing.Point(4, 20);
             this.statepanel.Margin = new System.Windows.Forms.Padding(4);
             this.statepanel.Name = "statepanel";
-            this.statepanel.Size = new System.Drawing.Size(476, 392);
+            this.statepanel.Size = new System.Drawing.Size(476, 389);
             this.statepanel.TabIndex = 0;
             // 
             // tabControl1
@@ -408,10 +408,10 @@
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.listView1);
-            this.tabPage5.Location = new System.Drawing.Point(4, 23);
+            this.tabPage5.Location = new System.Drawing.Point(4, 25);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(716, 433);
+            this.tabPage5.Size = new System.Drawing.Size(716, 431);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Components";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -447,17 +447,17 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(46, 90);
+            this.button6.Location = new System.Drawing.Point(26, 74);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.Size = new System.Drawing.Size(154, 37);
             this.button6.TabIndex = 1;
-            this.button6.Text = "button6";
+            this.button6.Text = "Dont Click Me";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // BotInterface
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 460);
             this.Controls.Add(this.tabControl1);

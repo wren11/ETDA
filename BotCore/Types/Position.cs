@@ -32,6 +32,45 @@ namespace BotCore.Types
         {
             return pos.DistanceFrom(X, Y) <= 1;
         }
+        public bool WithinSquare(Position loc, int num)
+        {
+            return Math.Abs(X - loc.X) <= num && Math.Abs(Y - loc.Y) <= num;
+        }
+
+        public static Position operator +(Position a, Direction b)
+        {
+            var location = new Position(a.X, a.Y);
+            switch (b)
+            {
+                case Direction.North:
+                    location.Y--;
+                    return location;
+                case Direction.East:
+                    location.X++;
+                    return location;
+                case Direction.South:
+                    location.Y++;
+                    return location;
+                case Direction.West:
+                    location.X--;
+                    return location;
+            }
+            return location;
+        }
+
+        public static Direction operator -(Position a, Position b)
+        {
+            if ((a.X == b.X) && (a.Y == (b.Y + 1)))
+                return Direction.North;
+            if ((a.X == b.X) && (a.Y == (b.Y - 1)))
+                return Direction.South;
+            if ((a.X == (b.X + 1)) && (a.Y == b.Y))
+                return Direction.West;
+            if ((a.X == (b.X - 1)) && (a.Y == b.Y))
+                return Direction.East;
+
+            return Direction.None;
+        }
 
         public bool IsNextTo(Position pos)
         {

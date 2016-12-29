@@ -16,6 +16,7 @@ using BotCore.Actions;
 using BotCore.Components;
 using BotCore.States;
 using BotCore.Types;
+using BotCore.PathFinding;
 
 namespace BotCore
 {
@@ -285,6 +286,7 @@ namespace BotCore
         internal bool ShouldUpdate;
 
         public EventHandler<Packet> OnPacketRecevied = delegate { };
+
         public EventHandler<Packet> OnPacketSent = delegate { };
 
         public int SendPointer { get; set; }
@@ -388,18 +390,6 @@ namespace BotCore
             }
         }
 
-        public List<short> SpellBar { get; set; }
-
-        public bool ClientReady = true;
-
-        public bool MapLoaded = false;
-
-        public bool MapLoading { get; set; }
-
-        public string EquippedWeapon { get; set; }
-
-        public int Steps { get; set; }
-
         public List<GameClient> OtherClients
         {
             get
@@ -429,6 +419,16 @@ namespace BotCore
         public byte EquippedWeaponId { get; set; }
         public DateTime WhenLastCasted { get; internal set; }
         public DateTime LastMovementUpdate { get; internal set; }
+        public DateTime LastDirectionTurn { get; internal set; }
+        public List<short> SpellBar { get; set; }
+
+        public bool ClientReady = true;
+
+        public bool MapLoaded = false;
+        public bool MapLoading { get; set; }
+        public string EquippedWeapon { get; set; }
+        public int Steps { get; set; }
+        public List<string> LocalWorldUsers { get; set; }
 
         #endregion
 
@@ -470,10 +470,55 @@ namespace BotCore
             return crc;
         }
 
-        static ManualResetEvent   PacketRecvEvent   = new ManualResetEvent(true);
-        static ManualResetEvent   PacketSendEvent   = new ManualResetEvent(true);
-        static ManualResetEvent[] CommandEventArr   = { PacketSendEvent, PacketRecvEvent };
+        #region Inject op Commands - Syncronized
+        public const Int32 WM_COPYDATA = 0x4A;
 
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
+
+        public struct COPYDATASTRUCT
+        {
+            public IntPtr dwData;
+            public int cbData;
+            [MarshalAs(UnmanagedType.LPStr)]
+            public string lpData;
+        }
+
+
+        public void InjectSyncOperation(SyncOperation Code)
+        {
+            if (!IsInGame())
+                return;
+
+            if (Memory != null && Memory.IsRunning)
+            {
+                string msg = GetEnumDescription((SyncOperation)Code) + ";" + Attributes.Serial + ";" + Attributes.ServerPosition.X + ";" + Attributes.ServerPosition.Y;
+                var cds = new COPYDATASTRUCT
+                {
+                    dwData = (IntPtr)(int)Code,
+                    cbData = msg.Length + 1,
+                    lpData = msg
+                };
+                SendMessage((int)Memory.Windows.MainWindowHandle, WM_COPYDATA, 0, ref cds);
+            }
+        }
+        public static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
+
+        #endregion
 
         public static void InjectPacket<T>(GameClient client, Packet packet, bool force = false) where T : Packet
         {
@@ -500,7 +545,6 @@ namespace BotCore
                     lock (client.InjectToClientQueue)
                     {
                         client.InjectToClientQueue.Enqueue(packet.Data);
-                        PacketRecvEvent.Set();
                     }
                 }
                 else if (typeof(T) == typeof(ServerPacket))
@@ -508,7 +552,6 @@ namespace BotCore
                     lock (client.InjectToServerQueue)
                     {
                         client.InjectToServerQueue.Enqueue(packet.Data);
-                        PacketSendEvent.Set();
                     }
                 }
                 LastCRC = a;
@@ -537,34 +580,30 @@ namespace BotCore
                 if (!client.Memory.IsRunning || !client.IsInGame())
                     continue;
 
-                while ((WaitHandle.WaitAny(CommandEventArr) != 1))
-                {
-                    byte[] activeBuffer;
-                    while (client.InjectToClientQueue.TryDequeue(out activeBuffer))
-                    {
-                        Interlocked.Add(ref _Total, 1);
-                        while (client.Memory.Read<byte>((IntPtr)0x00721000, false) == 1)
-                        {
-                            if (!client.Memory.IsRunning)
-                                break;
-                            Thread.Sleep(1);
-                        }
-                        try
-                        {
-                            client.Memory.Write((IntPtr)0x00721000, 1, false);
-                            client.Memory.Write((IntPtr)0x00721004, 0, false);
-                            client.Memory.Write((IntPtr)0x00721008, activeBuffer.Length, false);
-                            client.Memory.Write((IntPtr)0x00721012, activeBuffer, false);
-                        }
-                        catch
-                        {
-                            PacketRecvEvent.Reset();
-                            client.CleanUpMememory();
-                            return;
-                        }
-                    }
 
-                    PacketRecvEvent.Reset();
+                byte[] activeBuffer;
+                while (client.InjectToClientQueue.TryDequeue(out activeBuffer))
+                {
+                    Interlocked.Add(ref _Total, 1);
+                    while (client.Memory.Read<byte>((IntPtr)0x00721000, false) == 1)
+                    {
+                        if (!client.Memory.IsRunning)
+                            break;
+                        Thread.Sleep(1);
+                    }
+                    try
+                    {
+                        client.Memory.Write((IntPtr)0x00721000, 1, false);
+                        client.Memory.Write((IntPtr)0x00721004, 0, false);
+                        client.Memory.Write((IntPtr)0x00721008, activeBuffer.Length, false);
+                        client.Memory.Write((IntPtr)0x00721012, activeBuffer, false);
+                    }
+                    catch
+                    {
+
+                        client.CleanUpMememory();
+                        return;
+                    }
                 }
             }
         }
@@ -582,26 +621,24 @@ namespace BotCore
                 if (!client.Memory.IsRunning || !client.IsInGame())
                     continue;
 
-                while ((WaitHandle.WaitAny(CommandEventArr) != 1))
-                {
-                    byte[] activeBuffer;
-                    while (client.InjectToServerQueue.TryDequeue(out activeBuffer))
-                    {
-                        Interlocked.Add(ref _Total, 1);
 
-                        while (client.Memory.Read<byte>((IntPtr)0x006FD000, false) == 1)
-                        {
-                            if (!client.Memory.IsRunning)
-                                break;
-                            Thread.Sleep(1);
-                        }
-                        client.Memory.Write((IntPtr)0x006FD000, 1, false);
-                        client.Memory.Write((IntPtr)0x006FD004, 1, false);
-                        client.Memory.Write((IntPtr)0x006FD008, activeBuffer.Length, false);
-                        client.Memory.Write((IntPtr)0x006FD012, activeBuffer, false);
+                byte[] activeBuffer;
+                while (client.InjectToServerQueue.TryDequeue(out activeBuffer))
+                {
+                    Interlocked.Add(ref _Total, 1);
+
+                    while (client.Memory.Read<byte>((IntPtr)0x006FD000, false) == 1)
+                    {
+                        if (!client.Memory.IsRunning)
+                            break;
+                        Thread.Sleep(1);
                     }
+                    client.Memory.Write((IntPtr)0x006FD000, 1, false);
+                    client.Memory.Write((IntPtr)0x006FD004, 1, false);
+                    client.Memory.Write((IntPtr)0x006FD008, activeBuffer.Length, false);
+                    client.Memory.Write((IntPtr)0x006FD012, activeBuffer, false);
                 }
-                PacketSendEvent.Reset();
+
             }
         }
 

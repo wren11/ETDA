@@ -7,6 +7,7 @@ using BotCore.Types;
 using System.Drawing;
 using BotCore.BotForms;
 using BotCore.Actions;
+using System.Runtime.InteropServices;
 
 namespace BotCore
 {
@@ -42,7 +43,7 @@ namespace BotCore
         {
             while (true)
             {
-              
+
                 if (!Disposing && !IsDisposed
                     && InvokeRequired)
                 {
@@ -106,7 +107,7 @@ namespace BotCore
         private void BotInterface_Load(object sender, EventArgs e)
         {
             Invalidated += BotInterface_Invalidated;
-            client.ObjectSearcher.OnTargetUpdated  += ObjectUpdated;
+            client.ObjectSearcher.OnTargetUpdated += ObjectUpdated;
             comboBox1.DataSource = client.StateMachine.States.OrderBy(i => i.Priority).Select(i => i.GetType().Name).ToList();
             button4.Enabled = false;
 
@@ -146,7 +147,12 @@ namespace BotCore
 
         private void ObjectUpdated(object sender, MapObject[] e)
         {
+            var nearest = client.ObjectSearcher?.NearestTarget;
 
+            if (nearest != null)
+            {
+
+            }
         }
 
         private void BotInterface_FormClosing(object sender, FormClosingEventArgs e)
@@ -171,7 +177,10 @@ namespace BotCore
 
             var state = client.StateMachine.States.FirstOrDefault(i => i.GetType().Name == name);
             if (state != null)
+            {
+                state.InitState();
                 statepanel.Controls.Add(state.SettingsInterface);
+            }
 
             SetStateNodes();
         }
@@ -180,7 +189,7 @@ namespace BotCore
         #region Packet Editor Stuff
         bool EnablePacketEditor = false;
         bool IsReceivingPackets = false;
-        bool IsSendingPackets   = false;
+        bool IsSendingPackets = false;
 
 
         public void AppendText(RichTextBox box, string text, Color color, bool AddNewLine = false)
@@ -380,7 +389,7 @@ namespace BotCore
             }
         }
 
-        public static int OptionTable = 0x00750000;  
+        public static int OptionTable = 0x00750000;
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
@@ -414,31 +423,16 @@ namespace BotCore
 
         }
 
+     
+
         private void button6_Click(object sender, EventArgs e)
         {
-            var obj = client.ObjectSearcher.TargetedMonsters.FirstOrDefault();
+            var users = client.LocalWorldUsers;
 
-            if (obj != null)
+            if (users.Count > 0)
             {
-                while (true)
-                {
-                    var nt = client
-                        .Attributes
-                        .ServerPosition
-                        .IsNextTo(obj
-                        .ServerPosition);  
-                                     
-                    if (nt)
-                    {
-                        break;
-                    }
 
-                    obj.WalkTowards(2);
-
-                    Thread.Sleep(10);
-                }
             }
-
         }
     }
 }

@@ -3,23 +3,49 @@ using System.Collections.Generic;
 using BotCore.Actions;
 using BotCore.DataHandlers;
 using BotCore.States;
+using BotCore.PathFinding;
 
 namespace BotCore
 {
     [Serializable]
     public class Client : GameClient
     {
+
+
         public Client()
         {
             Client = this;
+
+            //Add any Client Extenders here.
             Client.SpellBar = new List<short>();
+            Client.LocalWorldUsers = new List<string>();
         }
 
 
         public new Client OnAttached()
         {
+            //Initialize Map from Cache
             Incoming.InitializeMapLoad(this);
 
+            AddServerHandlers();
+            AddClientHandlers();
+            PreparePrelims();
+
+            base.OnAttached();
+            return this;
+        }
+
+        private void AddClientHandlers()
+        {
+            AddClientHandler(0x03, Outgoing.LoggingIn);
+            AddClientHandler(0x0B, Outgoing.LoggingOut);
+            AddClientHandler(0x1C, Outgoing.UseInventorySlot);
+            AddClientHandler(0x0F, Outgoing.SpellCasted);
+            AddClientHandler(0x0D, Outgoing.SpellBegin);
+        }
+
+        private void AddServerHandlers()
+        {
             AddServerHandler(0x04, Incoming.ClientLocationUpdated);
             AddServerHandler(0x07, Incoming.EntitiesAdded);
             AddServerHandler(0x0A, Incoming.Barmessage);
@@ -39,16 +65,7 @@ namespace BotCore
             AddServerHandler(0x06, Incoming.LoadingMap);
             AddServerHandler(0x37, Incoming.EquipmentUpdated);
             AddServerHandler(0x08, Incoming.Stats);
-            AddClientHandler(0x03, Outgoing.LoggingIn);
-            AddClientHandler(0x0B, Outgoing.LoggingOut);
-            AddClientHandler(0x1C, Outgoing.UseInventorySlot);
-            AddClientHandler(0x0F, Outgoing.SpellCasted);
-            AddClientHandler(0x0D, Outgoing.SpellBegin);
-
-            PreparePrelims();
-
-            base.OnAttached();
-            return this;
+            AddServerHandler(0x36, Incoming.WorldList);
         }
 
         private void PreparePrelims()
@@ -64,7 +81,7 @@ namespace BotCore
             GameActions.Refresh(Client, true, (a, b) => true);
 
 
-            //disable blind
+            //disable blind effects in client.
             if (_memory.Read<byte>((IntPtr)0x005D2DD4, false) != 0x75)
                 _memory.Write<byte>((IntPtr)0x005D2DD4, 0x75, false);
 

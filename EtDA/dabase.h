@@ -2,7 +2,7 @@
 #ifndef DABASE_H
 #define DABASE_H
 
-struct Point
+struct DAPoint
 {
 	int X, Y;
 };
@@ -34,7 +34,7 @@ public:
 		return ptr == 0;
 	}
 
-	int SetCursor(Point pt)
+	int SetCursor(DAPoint pt)
 	{
 		int baseAddress = 0x008A4DE0;
 		int offsets[] = { 0x20c, 0x00 };
@@ -46,13 +46,13 @@ public:
 		return Set(ptr, pt.X, pt.Y);
 	}
 
-	int SetMouse(int* ptr, Point pt) 
+	int SetMouse(int* ptr, DAPoint pt) 
 	{
 		int(__thiscall *SetMouse)(int*, int a2, int a3) = (int(__thiscall*)(int*, int a2, int a3))0x005F2990;
 		return SetMouse(ptr, pt.X, pt.Y);
 	}
 
-	void Walk(Point pt)
+	void Walk(DAPoint pt)
 	{
 		void *(__thiscall *WalkTo)(void*, int a2, int a3) = (void*(__thiscall*)(void*, int a2, int a3))0x0061A1E0;
 

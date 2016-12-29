@@ -15,8 +15,8 @@ namespace BotCore.Actions
         {
             var p = new Packet();
             p.Write(new byte[] { 0x13, 0x01 });
-            GameClient.InjectPacket<ServerPacket>(client, p);
 
+            GameClient.InjectPacket<ServerPacket>(client, p);
             callback?.Invoke(client, p);
         }
 
@@ -46,7 +46,7 @@ namespace BotCore.Actions
             packet.WriteByte(0x00);
             packet.WriteByte(0x00);
 
-            GameClient.InjectPacket<ClientPacket>(client, packet);
+            GameClient.InjectPacket<ClientPacket>(client, packet, true);
         }
 
         public static void UseInventorySlot(GameClient client, byte slot)
@@ -122,12 +122,12 @@ namespace BotCore.Actions
 
         public static void Face(GameClient client, Direction dir)
         {
-            if (dir != client.Attributes.Direction)
-            {
-                var packet = new Packet(0x11);
-                packet.WriteByte((byte)dir);
-                GameClient.InjectPacket<ServerPacket>(client, packet);
-            }
+            var packet = new Packet(0x11);
+            packet.WriteByte((byte)dir);
+            GameClient.InjectPacket<ServerPacket>(client, packet);
+            client.Attributes.Direction = dir;
+
+            client.LastDirectionTurn = DateTime.Now;
         }
 
         public static void RequestProfile(GameClient client,
@@ -153,30 +153,69 @@ namespace BotCore.Actions
             GameClient.InjectPacket<ClientPacket>(client, p);
         }
 
+        private static Random rnd = new Random();
+
         public static void Walk(GameClient Client, Direction dir)
         {
-            if ((DateTime.Now - Client.LastMovementUpdate).TotalMilliseconds <= 300)
+            while (dir != Client.Attributes.Direction)
             {
-                return;
-            }      
+                Face(Client, dir);
+                Thread.Sleep(25);
+            }
 
-            var p = new Packet();
-            p.WriteByte(0x95);
-            p.WriteByte((byte)dir);
-            GameClient.InjectPacket<ServerPacket>(Client, p, true);
-            Client.LastMovementUpdate = DateTime.Now;
+            if (dir == Direction.East)
+                Client.InjectSyncOperation(SyncOperation.WalkEast);
+            if (dir == Direction.North)
+                Client.InjectSyncOperation(SyncOperation.WalkNorth);
+            if (dir == Direction.South)
+                Client.InjectSyncOperation(SyncOperation.WalkSouth);
+            if (dir == Direction.West)
+                Client.InjectSyncOperation(SyncOperation.WalkWest);
+
+
+            Client.Attributes.Direction = dir;
+
+            switch (dir)
+            {
+                case Direction.North:
+                    --Client.Attributes.ServerPosition.Y;
+                    break;
+
+                case Direction.East:
+                    ++Client.Attributes.ServerPosition.X;
+                    break;
+
+                case Direction.South:
+                    ++Client.Attributes.ServerPosition.Y;
+                    break;
+
+                case Direction.West:
+                    --Client.Attributes.ServerPosition.X;
+                    break;
+            }
+        }
+
+
+        public static void PacketWalk(GameClient Client, Direction dir)
+        {
+            BeginWalk(Client, dir);
+            Thread.Sleep(15);
+            EndWalk(Client, dir, 300);
         }
 
         public static void BeginWalk(GameClient Client, Direction dir)
         {
+
+            Client.WalkOrdinal = (Client.WalkOrdinal + 1);
+
+
             var p = new Packet();
             p.WriteByte(0x06);
             p.WriteByte((byte)dir);
-            p.WriteByte((byte)(Client.WalkOrdinal++ % 255));
+            p.WriteByte((byte)(Client.WalkOrdinal));
             p.WriteByte(0x00);
             p.WriteByte(0x06);
             GameClient.InjectPacket<ServerPacket>(Client, p);
-            Client?.ApplyMovementLock();
         }
 
         public static void EndWalk(GameClient Client, Direction dir, int WalkSpeed = 50)
@@ -194,7 +233,6 @@ namespace BotCore.Actions
 
             GameClient.InjectPacket<ClientPacket>(Client, p);
             Thread.Sleep(WalkSpeed);
-            Client?.ReleaseMovementLock();
         }
 
     }

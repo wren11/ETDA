@@ -42,7 +42,7 @@ namespace BotCore.Components
 
         private void SetupProcess(Process p)
         {
-            try {
+            //try {
                 if (Processes.Contains(p.Id))
                     return;
 
@@ -51,12 +51,12 @@ namespace BotCore.Components
 
                 Processes.Add(p.Id);
                 Attached(p.Id, new EventArgs());
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error, There is a mismatch, if you run as admin, ensure you run both da and bot as admin, or both as normal.", "Bot Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
-            }           
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Error, There is a mismatch, if you run as admin, ensure you run both da and bot as admin, or both as normal.", "Bot Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    System.Diagnostics.Process.GetCurrentProcess().Kill();
+           // }           
         }
 
         void PExited(object sender, EventArgs e)

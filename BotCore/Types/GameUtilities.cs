@@ -1,4 +1,5 @@
 ﻿using BotCore.Actions;
+using BotCore.States;
 using BotCore.Types;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ namespace BotCore
     public class GameUtilities
     {
         private GameClient Client;
-
-        private List<StaffTable> found = new List<StaffTable>();
 
         public GameUtilities(GameClient client)
         {
@@ -263,6 +262,15 @@ namespace BotCore
 
             if (spell.EquipedLines > 0)
             {
+
+                if (Client.StateMachine.States.OfType<FollowTarget>().Count() > 0)
+                {
+                    var state = Client.StateMachine.States.OfType<FollowTarget>().FirstOrDefault();
+                    if (state != null && state.NeedToRun)
+                        return;
+                }
+
+
                 Client.ApplyMovementLock();
                 for (int i = 0; i < spell.EquipedLines; i++)
                 {
@@ -283,11 +291,6 @@ namespace BotCore
             GameActions.EndSpell(Client, spell.Slot, target);
 
             Client.LastCastedSpell = spell;
-        }
-
-        public void WalkTo(MapObject obj)
-        {
-
         }
     }
 }

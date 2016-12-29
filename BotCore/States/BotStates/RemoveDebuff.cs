@@ -62,7 +62,7 @@ namespace BotCore.States
 
             [Category("Debuff")]
             [DisplayName("Debuff Name")]
-            [Description("The Name of the debuff to Add.")]
+            [Description("The Name of the spell that will remove the debuff.")]
             public string Name { get; set; }
         }
 

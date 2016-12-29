@@ -1,4 +1,5 @@
-﻿using BotCore.Types;
+﻿using BotCore.Actions;
+using BotCore.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +61,11 @@ namespace BotCore.Components
             return VisibleObjects.ToList().FindAll(n => n is Aisling && predicate(n));
         }
 
+        public List<MapObject> RetreiveAllTargets(Predicate<MapObject> predicate)
+        {
+            return VisibleObjects.ToList().FindAll(n => n != null && predicate(n));
+        }
+
         public MapObject[] VisibleObjects
         {
             get
@@ -75,7 +81,7 @@ namespace BotCore.Components
 
         public TargetFinder()
         {
-            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(0.1));
+            Timer = new UpdateTimer(TimeSpan.FromMilliseconds(100.0));
             OnTargetUpdated += TargetsUpdated;
         }
 
@@ -93,8 +99,11 @@ namespace BotCore.Components
                     m_TargetedMonsters.Add(obj);
             }
 
-            m_SelectedTarget = m_TargetedMonsters.FirstOrDefault();
+            m_SelectedTarget = (from v in m_TargetedMonsters
+                                orderby Client.Attributes.ServerPosition.DistanceFrom(v.ServerPosition)
+                                select v).FirstOrDefault();
         }
+
 
         public override void Update(TimeSpan tick)
         {
@@ -107,31 +116,24 @@ namespace BotCore.Components
             }
         }
 
-        public bool IsUpdating = false;
-
         private void OnUpdate()
         {
-            if (!IsUpdating)
+
+            //this is preliminary checks, to ensure targets are valid.
+            var objects = (from v in Client.FieldMap.MapObjects
+                           where v != null
+                           && v.ServerPosition.DistanceFrom(Client.Attributes.ServerPosition) < 12
+                           orderby Client.Attributes.ServerPosition.DistanceFrom(v.ServerPosition) descending
+                           select v).ToArray();
+
+            if (objects.Length > 0)
             {
-                IsUpdating = true;
+                Array.Resize(ref _mobjects, objects.Length);
+                Array.Copy(objects, 0, _mobjects, 0, objects.Length);
 
-                //this is preliminary checks, to ensure target is valid.
-                var objects = (from v in Client.FieldMap.MapObjects
-                               where v != null 
-                               && v.ServerPosition.DistanceFrom(Client.Attributes.ClientPosition) < 12
-                               orderby v.ServerPosition.DistanceFrom(Client.Attributes.ClientPosition) descending 
-                               select v).ToArray();
-
-                if (objects.Length > 0)
-                {
-                    Array.Resize(ref _mobjects, objects.Length);
-                    Array.Copy(objects, 0, _mobjects, 0, objects.Length);
-
-                    OnTargetUpdated(Client, _mobjects);
-                }
-
-                IsUpdating = false;
+                OnTargetUpdated(Client, _mobjects);
             }
+
             base.Pulse();
         }
     }
