@@ -127,11 +127,6 @@ namespace BotCore.States
 
         public override int Priority { get; set; }
 
-        public bool IsSurrounded(Position loc)
-        {
-            return false;
-        }
-
         Position lastlocation;
         DateTime laststep;
 
@@ -140,70 +135,6 @@ namespace BotCore.States
             return (!Client.SpellBar.Contains((short)SpellBar.palsy)
                 || Client.SpellBar.Contains((short)SpellBar.skulled)
                 || Client.SpellBar.Contains((short)SpellBar.pramh));
-        }
-
-        public void Follow(int distance, List<PathFinding.PathSolver.PathFinderNode> array
-            , PlayerAttributes player, MapObject mapobj)
-        {
-            int num = 0;
-
-            if (Client.FieldMap != null && Client.MapLoaded)
-            {
-                if (player != null && !IsSurrounded(player.ServerPosition))
-                {
-                    if (Client.Attributes.ServerPosition.DistanceFrom(player.ServerPosition) > distance)
-                    {
-
-                        num = distance;
-                        lastlocation = player.ServerPosition;
-
-                        for (int i = 1; i < array.Count - num; i++)
-                        {
-                            if (IsSurrounded(player.ServerPosition))
-                            {
-                                break;
-                            }
-                            if (player.ServerPosition.DistanceFrom(Client.Attributes.ServerPosition) < num)
-                            {
-                                break;
-                            }
-                            if (!CanWalk())
-                            {
-                                break;
-                            }
-
-                            if (player == null)
-                            {
-                                break;
-                            }
-                            if (num == 0)
-                            {
-                                break;
-                            }
-
-                            var block = Client.FieldMap.Grid[array[i].X, array[i].Y];
-                            if (block == 1)
-                            {
-                                break;
-                            }
-                            if (Math.Abs(Client.Attributes.ServerPosition.X - array[i].X) +
-                                Math.Abs(Client.Attributes.ServerPosition.Y - array[i].Y) != 1)
-                            {
-                                break;
-                            }
-                            Direction direction = Client.Attributes.ServerPosition - new Position(array[i].X, array[i].Y);
-                            if (direction == Direction.None)
-                            {
-                                break;
-                            }
-                            GameActions.Walk(Client, direction);
-                            laststep = DateTime.UtcNow;
-
-                            Thread.Sleep(20);
-                        }
-                    }
-                }
-            }
         }
 
         public override void Run(TimeSpan Elapsed)
@@ -245,8 +176,6 @@ namespace BotCore.States
                                 GameActions.Walk(Client, Direction.South);
                             }
                         }
-
-                        Follow(Distance, path, player, mapobj);
                     }
                 }
             }
