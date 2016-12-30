@@ -6,6 +6,7 @@
         East = 1,
         South = 2,
         West = 3,
-        None = 4
+        None = 4,
+        Random = 5
     }
 }

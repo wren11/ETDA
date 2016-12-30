@@ -98,6 +98,7 @@ namespace BotCore
         {
             ClientPacketHandler[action] = data;
         }
+    
 
         internal void AddServerHandler(byte action, EventHandler<Packet> data)
         {

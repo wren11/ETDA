@@ -157,10 +157,10 @@ namespace BotCore.Actions
 
         public static void Walk(GameClient Client, Direction dir)
         {
-            while (dir != Client.Attributes.Direction)
+            if (dir == Direction.Random)
             {
-                Face(Client, dir);
-                Thread.Sleep(25);
+                var random = (Direction)rnd.Next(0, 3);
+                Walk(Client, random);
             }
 
             if (dir == Direction.East)
@@ -172,27 +172,8 @@ namespace BotCore.Actions
             if (dir == Direction.West)
                 Client.InjectSyncOperation(SyncOperation.WalkWest);
 
-
             Client.Attributes.Direction = dir;
 
-            switch (dir)
-            {
-                case Direction.North:
-                    --Client.Attributes.ServerPosition.Y;
-                    break;
-
-                case Direction.East:
-                    ++Client.Attributes.ServerPosition.X;
-                    break;
-
-                case Direction.South:
-                    ++Client.Attributes.ServerPosition.Y;
-                    break;
-
-                case Direction.West:
-                    --Client.Attributes.ServerPosition.X;
-                    break;
-            }
         }
 
 

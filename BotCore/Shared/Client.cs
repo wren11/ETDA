@@ -21,7 +21,6 @@ namespace BotCore
             Client.LocalWorldUsers = new List<string>();
         }
 
-
         public new Client OnAttached()
         {
             //Initialize Map from Cache

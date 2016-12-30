@@ -17,6 +17,13 @@ namespace BotCore
             Client = client;
         }
 
+        public bool CanWalk()
+        {
+
+            return (!Client.SpellBar.Contains((short)SpellBar.palsy)
+                        || Client.SpellBar.Contains((short)SpellBar.skulled)
+                        || Client.SpellBar.Contains((short)SpellBar.pramh));
+        }
         public void CastSpell(string spellName, Client client)
         {
             CastSpell(spellName,

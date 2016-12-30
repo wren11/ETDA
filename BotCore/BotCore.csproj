@@ -126,7 +126,6 @@
     <Compile Include="Types\CurseInfo.cs" />
     <Compile Include="Types\FasInfo.cs" />
     <Compile Include="Types\GameUtilities.cs" />
-    <Compile Include="Common\GlobalAspects.cs" />
     <Compile Include="Types\KeyboardHook.cs" />
     <Compile Include="Types\Packet.cs" />
     <Compile Include="PathFinding\PathSolver.cs" />
@@ -6622,7 +6621,9 @@
       <DependentUpon>StateSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\bug.jpg" />
   </ItemGroup>

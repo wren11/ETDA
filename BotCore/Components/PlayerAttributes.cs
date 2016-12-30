@@ -163,6 +163,11 @@ namespace BotCore.Components
 
             if (Timer.Elapsed)
             {
+                if (Client.FieldMap != null && IsInGame())
+                {
+                    ServerPosition = new Position(Client.FieldMap.X(), Client.FieldMap.Y());
+                }
+
                 Timer.Reset();
                 base.Pulse();
             }

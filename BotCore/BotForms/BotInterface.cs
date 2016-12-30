@@ -49,9 +49,6 @@ namespace BotCore
                 {
                     Invoke((MethodInvoker)delegate ()
                     {
-
-                        UpdateComponentUIList();
-
                         if (client.Paused)
                         {
                             if (!button4.Enabled)
@@ -91,16 +88,6 @@ namespace BotCore
                     });
                 }
                 Thread.Sleep(1500);
-            }
-        }
-
-        private void UpdateComponentUIList()
-        {
-            listView1.Items.Clear();
-            var running_components = client.InstalledComponents.ToArray();
-            foreach (var component in running_components)
-            {
-                listView1.Items.Add(new ListViewItem(new[] { component.GetType().Name, component.Enabled ? "Running" : "Disabled", component.Cycle + " Frames Per Sec" }));
             }
         }
 
@@ -363,76 +350,39 @@ namespace BotCore
             client.Paused = false;
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            if (!client.IsInGame())
-                return;
-
-            var ids = client.ObjectSearcher
-                ?.RetreivePlayerTargets(i => i != null)
-                .Select(i => i.Serial).ToArray();
-
-            if (ids.Length > 0)
-            {
-                foreach (var id in ids)
-                {
-                    var packet = new Packet();
-                    packet.WriteByte(0x29);
-                    packet.WriteInt32(id);
-                    packet.WriteInt32(client.Attributes.Serial);
-                    packet.WriteAnimation(Animation.ardcradh);
-                    packet.WriteUInt16(0x0000);
-                    packet.WriteUInt16(0x0064);
-
-                    GameClient.InjectPacket<ClientPacket>(client, packet, true);
-                }
-            }
-        }
 
         public static int OptionTable = 0x00750000;
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             client[OptionTable + 0x08] = (byte)((checkBox4.Checked == true) ? 1 : 0);
-            Actions.GameActions.Refresh(client, true);
+            GameActions.Refresh(client, true);
         }
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
             client[OptionTable + 0x10] = (byte)((checkBox5.Checked == true) ? 1 : 0);
-            Actions.GameActions.Refresh(client, true);
+            GameActions.Refresh(client, true);
         }
 
         private void checkBox8_CheckedChanged(object sender, EventArgs e)
         {
             client[OptionTable + 0x02] = (byte)((checkBox8.Checked == true) ? 1 : 0);
-            Actions.GameActions.Refresh(client, true);
+            GameActions.Refresh(client, true);
         }
 
         private void checkBox7_CheckedChanged(object sender, EventArgs e)
         {
             client[OptionTable + 0x06] = (byte)((checkBox7.Checked == true) ? 1 : 0);
-            Actions.GameActions.Refresh(client, true);
+            GameActions.Refresh(client, true);
 
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
         {
             client[OptionTable + 0x04] = (byte)((checkBox6.Checked == true) ? 1 : 0);
-            Actions.GameActions.Refresh(client, true);
+            GameActions.Refresh(client, true);
 
-        }
-
-     
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            var users = client.LocalWorldUsers;
-
-            if (users.Count > 0)
-            {
-
-            }
         }
     }
 }

@@ -96,7 +96,7 @@ namespace BotCore.States
 
 
                 if (Client.FieldMap != null && Client.IsInGame()
-                    && Client.MapLoaded && CanWalk())
+                    && Client.MapLoaded && Client.Utilities.CanWalk())
                 {
 
                     if (Client.ObjectSearcher != null)
@@ -127,15 +127,6 @@ namespace BotCore.States
 
         public override int Priority { get; set; }
 
-        Position lastlocation;
-        DateTime laststep;
-
-        public bool CanWalk()
-        {
-            return (!Client.SpellBar.Contains((short)SpellBar.palsy)
-                || Client.SpellBar.Contains((short)SpellBar.skulled)
-                || Client.SpellBar.Contains((short)SpellBar.pramh));
-        }
 
         public override void Run(TimeSpan Elapsed)
         {
@@ -145,43 +136,33 @@ namespace BotCore.States
 
                 if (m_target != null)
                 {
-                    var player = m_target.Client.Attributes;
-                    var mapobj = Client.ObjectSearcher.RetreivePlayerTarget(i => i.Serial == player.Serial);
+                    var mapobj = Client.ObjectSearcher.RetreivePlayerTarget(i =>
+                        i?.Serial == m_target?.Serial);
 
                     if (mapobj != null)
                     {
                         mapobj.UpdatePath(Client);
                         var path = mapobj.PathToMapObject;
 
-                        if (path != null && path.Count > 0)
+                        if (path != null && path.Count > Distance)
                         {
-                            var pos = new Position(path[1].X, path[1].Y);
+                            var pos = new Position(path[Distance].X, path[Distance].Y);
                             var abx = pos.X - Client.Attributes.ServerPosition.X;
                             var aby = pos.Y - Client.Attributes.ServerPosition.Y;
 
-                            if (abx == 1 && aby == 0)
-                            {
+                            if (abx == Distance && aby == 0)
                                 GameActions.Walk(Client, Direction.East);
-                            }
-                            else if (abx == 0 && aby == -1)
-                            {
+                            else if (abx == 0 && aby == -Distance)
                                 GameActions.Walk(Client, Direction.North);
-                            }
-                            else if (abx == -1 && aby == 0)
-                            {
+                            else if (abx == -Distance && aby == 0)
                                 GameActions.Walk(Client, Direction.West);
-                            }
-                            else
-                            {
+                            else if (abx == 0 && aby == Distance)
                                 GameActions.Walk(Client, Direction.South);
-                            }
                         }
                     }
                 }
             }
-
             Client.TransitionTo(this, Elapsed);
-
         }
     }
 }
