@@ -1,4 +1,4 @@
-# ETDA
+# ETDA   i may never finish this... but i continue chugging away at it...
 
 This Project is still in development, The current release forecast is unknown for the current
 development roadmap, Feel free to submit contributions to further push this project along the way.
