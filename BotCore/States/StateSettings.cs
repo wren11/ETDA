@@ -10,9 +10,8 @@ namespace BotCore.States
         public delegate void SettingsUpdated(GameState state);
 
         public event SettingsUpdated OnSettingsUpdated = null;
-
         private GameState State { get; set; }
-        
+
         private bool Running = false;
 
         public StateSettings(GameState state)
@@ -48,8 +47,7 @@ namespace BotCore.States
             if (State != null)
                 State.Enabled = Running;
 
-            if (OnSettingsUpdated != null)
-                OnSettingsUpdated(State);
+                OnSettingsUpdated?.Invoke(State);
         }
 
         private void StateSettings_Load(object sender, EventArgs e)
@@ -57,8 +55,7 @@ namespace BotCore.States
             statename.Text = State.GetType().Name;
             numericUpDown1.Value = State.Priority;
 
-            if (OnSettingsUpdated != null)
-                OnSettingsUpdated(State);
+            OnSettingsUpdated?.Invoke(State);
 
             propertyGrid1.SelectedObject = null;
             propertyGrid1.SelectedObject = State;
@@ -69,9 +66,7 @@ namespace BotCore.States
             if (State != null)
             {
                 State.Priority = (int)numericUpDown1.Value;
-
-                if (OnSettingsUpdated != null)
-                    OnSettingsUpdated(State);
+                OnSettingsUpdated?.Invoke(State);
             }
         }
 

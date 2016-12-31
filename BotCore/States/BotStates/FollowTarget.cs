@@ -39,7 +39,7 @@ namespace BotCore.States
         {
             FollowTarget.Leader item = new FollowTarget.Leader();
             item = (FollowTarget.Leader)value;
-            
+
             return base.GetDisplayText(string.Format("{0}, {1}", item.Name,
                 item.Serial));
         }
@@ -56,7 +56,8 @@ namespace BotCore.States
         {
             Leaders = new List<Leader>();
 
-            Leaders.AddRange(Client.OtherClients.Select(i => new Leader() {
+            Leaders.AddRange(Client.OtherClients.Select(i => new Leader()
+            {
                 Name = i.Attributes.PlayerName,
                 Serial = i.Attributes.Serial,
                 Client = i.Client
@@ -68,7 +69,6 @@ namespace BotCore.States
         public class Leader
         {
             public string Name { get; set; }
-
             public int Serial { get; set; }
 
             [Browsable(false)]
@@ -146,23 +146,69 @@ namespace BotCore.States
 
                         if (path != null && path.Count > Distance)
                         {
-                            var pos = new Position(path[Distance].X, path[Distance].Y);
-                            var abx = pos.X - Client.Attributes.ServerPosition.X;
-                            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
-
-                            if (abx == Distance && aby == 0)
-                                GameActions.Walk(Client, Direction.East);
-                            else if (abx == 0 && aby == -Distance)
-                                GameActions.Walk(Client, Direction.North);
-                            else if (abx == -Distance && aby == 0)
-                                GameActions.Walk(Client, Direction.West);
-                            else if (abx == 0 && aby == Distance)
-                                GameActions.Walk(Client, Direction.South);
+                            ComputeStep(path, mapobj);
                         }
                     }
                 }
             }
             Client.TransitionTo(this, Elapsed);
+        }
+
+        private void ComputeDirection(List<PathFinding.PathSolver.PathFinderNode> path, MapObject obj, int idx = 0)
+        {
+            var pos = new Position(path[idx].X, path[idx].Y);
+            var abx = pos.X - Client.Attributes.ServerPosition.X;
+            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
+
+            if (abx == (idx + 1) && aby == 0)
+                GameActions.Walk(Client, Direction.East);
+            else if (abx == 0 && aby == -(idx + 1))
+                GameActions.Walk(Client, Direction.North);
+            else if (abx == -(idx + 1) && aby == 0)
+                GameActions.Walk(Client, Direction.West);
+            else if (abx == 0 && aby == (idx + 1))
+                GameActions.Walk(Client, Direction.South);
+        }
+
+        private void ComputeStep(List<PathFinding.PathSolver.PathFinderNode> path, MapObject obj)
+        {
+            var pos = new Position(path[Distance].X, path[Distance].Y);
+            var abx = pos.X - Client.Attributes.ServerPosition.X;
+            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
+
+            if (abx == Distance && aby == 0)
+                GameActions.Walk(Client, Direction.East);
+            else if ((abx == 0 && aby == -Distance) || (abx == 1 && aby == -1) || (abx == -1 && aby == -1))
+                GameActions.Walk(Client, Direction.North);
+            else if (abx == -Distance && aby == 0)
+                GameActions.Walk(Client, Direction.West);
+            else if ((abx == 0 && aby == Distance) || (abx == 1 && aby == 1) || (abx == -1 && aby == 1))
+                GameActions.Walk(Client, Direction.South);
+            else
+                for (int i = 0; i < 3; i++)
+                {
+                    obj?.UpdatePath(Client);
+                    path = obj?.PathToMapObject;
+
+                    if (obj == null || path == null)
+                        break;
+
+                    if (path.Count == 1)
+                    {
+                        i = 1;
+                        break;
+                    }
+
+                    if (path.Count == 0)
+                        break;
+
+                    if (Client.Attributes?
+                               .ServerPosition?
+                               .DistanceFrom(m_target?.Client.Attributes.ServerPosition) <= Distance)
+                        break;
+
+                    ComputeDirection(path, obj, i);
+                }
         }
     }
 }

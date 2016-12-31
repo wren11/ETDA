@@ -106,7 +106,6 @@
     <Compile Include="Interop\MemoryPatternSearcher.cs" />
     <Compile Include="States\BotStates\AttackMonsters.cs" />
     <Compile Include="States\BotStates\FollowTarget.cs" />
-    <Compile Include="States\RecursionSolver.cs" />
     <Compile Include="Shared\Client.cs" />
     <Compile Include="Shared\Collections.cs" />
     <Compile Include="Components\GameEquipment.cs" />

@@ -19,10 +19,15 @@ namespace BotCore
 
         public bool CanWalk()
         {
+            //add other conditions that may prevent walking.
+            return !IsFrozen();
+        }
 
-            return (!Client.SpellBar.Contains((short)SpellBar.palsy)
-                        || Client.SpellBar.Contains((short)SpellBar.skulled)
-                        || Client.SpellBar.Contains((short)SpellBar.pramh));
+        public bool IsFrozen()
+        {
+            return ((Client.SpellBar.Contains((short)SpellBar.palsy) 
+                || Client.SpellBar.Contains((short)SpellBar.skulled)
+                || Client.SpellBar.Contains((short)SpellBar.pramh)));
         }
         public void CastSpell(string spellName, Client client)
         {
