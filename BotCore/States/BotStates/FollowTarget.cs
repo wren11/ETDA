@@ -1,5 +1,4 @@
 ﻿using BotCore.Actions;
-using BotCore.Components;
 using BotCore.States.BotStates;
 using BotCore.Types;
 using System;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Linq;
-using System.Threading;
 
 namespace BotCore.States
 {
@@ -178,37 +176,16 @@ namespace BotCore.States
 
             if (abx == Distance && aby == 0)
                 GameActions.Walk(Client, Direction.East);
-            else if ((abx == 0 && aby == -Distance) || (abx == 1 && aby == -1) || (abx == -1 && aby == -1))
+            else if ((abx == 0 && aby == -Distance)
+                || (abx == 1 && aby == -1)
+                || (abx == -1 && aby == -1))
                 GameActions.Walk(Client, Direction.North);
             else if (abx == -Distance && aby == 0)
                 GameActions.Walk(Client, Direction.West);
-            else if ((abx == 0 && aby == Distance) || (abx == 1 && aby == 1) || (abx == -1 && aby == 1))
+            else if ((abx == 0 && aby == Distance)
+                || (abx == 1 && aby == 1)
+                || (abx == -1 && aby == 1))
                 GameActions.Walk(Client, Direction.South);
-            else
-                for (int i = 0; i < 3; i++)
-                {
-                    obj?.UpdatePath(Client);
-                    path = obj?.PathToMapObject;
-
-                    if (obj == null || path == null)
-                        break;
-
-                    if (path.Count == 1)
-                    {
-                        i = 1;
-                        break;
-                    }
-
-                    if (path.Count == 0)
-                        break;
-
-                    if (Client.Attributes?
-                               .ServerPosition?
-                               .DistanceFrom(m_target?.Client.Attributes.ServerPosition) <= Distance)
-                        break;
-
-                    ComputeDirection(path, obj, i);
-                }
         }
     }
 }

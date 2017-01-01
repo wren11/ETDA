@@ -85,7 +85,7 @@ namespace BotCore.States
             {
                 Client.Active.Pulse();
 
-                if (InTransition || Client.IsCurrentlyCasting)
+                if (InTransition)
                     return false;
 
                 if (Client.SpellBar.Contains(89))
@@ -120,8 +120,7 @@ namespace BotCore.States
             {
                 InTransition = true;
 
-                if (!string.IsNullOrWhiteSpace(m_spell) && Client.Utilities.HaveSpell(m_spell)
-                    && !Client.IsCurrentlyCasting)
+                if (!string.IsNullOrWhiteSpace(m_spell) && Client.Utilities.HaveSpell(m_spell))
                 {
                     Client.Utilities.CastSpell(m_spell, Client as Client);
                     NeedToRun = false;

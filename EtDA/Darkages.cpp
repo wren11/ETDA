@@ -72,51 +72,43 @@ std::vector<int> split(const std::string &s, char delim) {
 	return elems;
 }
 
+void InjectWalk(byte direction)
+{
+	int thisptr = *(int*)0x00882E68;
+	int Hook = 0x005F0C40;
+	void* memory = malloc(sizeof(char));
+	memory = (void*)direction;
+
+	__asm
+	{
+		mov eax, memory
+		push eax
+		mov ecx, [thisptr]
+		call Hook
+	}
+}
+
 int __stdcall myWndProc(HWND hWnd, signed int Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (Msg == 0x004A)
 	{
 		COPYDATASTRUCT* pcds = (COPYDATASTRUCT*)lParam;
 		
-		if (pcds->dwData == 1) //WALK EAST
+		if (pcds->dwData == 1)
 		{
-			int thisptr = *(int*)0x00882E68;
-			void* data = malloc(sizeof(char));
-			data = (void*)0x01;
-			if ((int)data < 5)
-			{
-				da.hWalk(thisptr, (int)data);
-			}
+			InjectWalk(1);
 		}
 		else if(pcds->dwData == 2)
 		{
-			int thisptr = *(int*)0x00882E68;
-			void* data = malloc(sizeof(char));
-			data = (void*)0x02;
-			if ((int)data < 5)
-			{
-				da.hWalk(thisptr, (int)data);
-			}
+			InjectWalk(2);
 		}
 		else if (pcds->dwData == 0)
 		{
-			int thisptr = *(int*)0x00882E68;
-			void* data = malloc(sizeof(char));
-			data = (void*)0x00;
-			if ((int)data < 5)
-			{
-				da.hWalk(thisptr, (int)data);
-			}
+			InjectWalk(0);
 		}
 		else if (pcds->dwData == 3)
 		{
-			int thisptr = *(int*)0x00882E68;
-			void* data = malloc(sizeof(char));
-			data = (void*)0x03;
-			if ((int)data < 5)
-			{
-				da.hWalk(thisptr, (int)data);
-			}
+			InjectWalk(3);
 		}
 	}
 
@@ -213,9 +205,9 @@ void RedirectPacketInformation(byte *packet, int length, int type)
 			static_cast<WPARAM>(
 		    reinterpret_cast<int>(packet)), 
 			reinterpret_cast<LPARAM>(
-			static_cast<LPVOID>(&payload)), SMTO_NORMAL, 5,
+			static_cast<LPVOID>(&payload)), SMTO_NORMAL, 50,
 			nullptr);
-		SendMessageTimeout(hTargetWnd, WM_COPYDATA, static_cast<WPARAM>(da.ProcessId) == 0 ? GetCurrentProcessId() : da.ProcessId, (LPARAM)(LPVOID)&payload, SMTO_NORMAL, 10, NULL);
+		SendMessageTimeout(hTargetWnd, WM_COPYDATA, static_cast<WPARAM>(da.ProcessId) == 0 ? GetCurrentProcessId() : da.ProcessId, (LPARAM)(LPVOID)&payload, SMTO_NORMAL, 50, NULL);
 	}
 	catch (exception)
 	{
@@ -359,7 +351,6 @@ int CallBack(Darkages game)
 
 	base.OnCharacter = (DABase::OnCharacterLoginEvent)DetourFunction((PBYTE)hOnCharacter, (PBYTE)OnCharacterLogin);
 	
-	da.hWalk = (Darkages::SubWalk)DetourFunction((PBYTE)0x005F0C40, (PBYTE)MySubWalk);	
 	//da.hSetWalkPos = (Darkages::SetWalkPos)DetourFunction((PBYTE)0x005F4DE0, (PBYTE)MySetWalkPos);
 	//da.hSetCommand = (Darkages::SetCommand)DetourFunction((PBYTE)0x005EFBE0, (PBYTE)MySetCommand);
 	da.base = &base;

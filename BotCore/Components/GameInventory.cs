@@ -1,4 +1,5 @@
-﻿using BotCore.Types;
+﻿using BotCore.Shared.Memory;
+using BotCore.Types;
 using System;
 using System.Collections.Generic;
 
@@ -60,7 +61,7 @@ namespace BotCore.Components
             if (!IsInGame())
                 return;
 
-            var inventoryptr = _memory.Read<int>((IntPtr)_memory.Read<int>((IntPtr)0x00882E68, false) + 0x2CC, false) + 0x1092;
+            var inventoryptr = _memory.Read<int>((IntPtr)_memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x2CC, false) + 0x1092;
             inventoryptr += 0x05;
 
             _items = new InventoryItem[59];

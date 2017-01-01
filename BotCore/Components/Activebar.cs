@@ -1,4 +1,5 @@
 ﻿using BotCore.Interop;
+using BotCore.Shared.Memory;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -57,7 +58,7 @@ namespace BotCore.Components
             if (MemoryPointer == 0)
             {
                 var FunctionSearch = new MemoryPatternSearcher(Client);
-                var pointer = FunctionSearch.FindMemoryRegion(0x006887EC);
+                var pointer = FunctionSearch.FindMemoryRegion((int)DAStaticPointers.ActiveBar);
                 if (pointer != null && pointer > 0)
                     MemoryPointer = (int)pointer;
             }

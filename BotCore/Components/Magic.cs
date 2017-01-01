@@ -1,4 +1,5 @@
-﻿using BotCore.Types;
+﻿using BotCore.Shared.Memory;
+using BotCore.Types;
 using System;
 using System.Linq;
 
@@ -41,7 +42,7 @@ namespace BotCore.Components
                 if (!IsInGame())
                     return;
 
-                var ptr = Client.Memory.Read<int>((IntPtr)Client.Memory.Read<int>((IntPtr)0x00882E68, false) + 0x2CC, false) + 0x4DFA;
+                var ptr = Client.Memory.Read<int>((IntPtr)Client.Memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x2CC, false) + 0x4DFA;
                 ptr += 0x05;
 
                 for (int i = 0; i < 90; i++)

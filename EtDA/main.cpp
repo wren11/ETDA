@@ -85,27 +85,15 @@ DWORD WINAPI PacketConsumer(LPVOID Args)
 				if (length <= 0)
 					continue;
 
-				//if (data[0] == 0x94)
-				//{
-				//	//5EFFE0((void *)v6, v10, v9, a2, 1);
-				//	//char __thiscall sub_5EFFE0(void *this, int a2, int a3, char a4, char a5);
+				if (data[0] == 0x94)
+				{
+					//5EFFE0((void *)v6, v10, v9, a2, 1);
+					//char __thiscall sub_5EFFE0(void *this, int a2, int a3, char a4, char a5);
 
-				//	char(__thiscall *E)(void*, DAPoint, char steps, char direction) 
-				//		= (char(__thiscall*)(void*, DAPoint, char steps, char direction))0x005EFFE0;
+					char(__thiscall *E)(void*, DAPoint, char steps, char direction) 
+						= (char(__thiscall*)(void*, DAPoint, char steps, char direction))0x005EFFE0;
 
-				//	int thisptr = *(int*)0x00882E68;
-				//}
-
-
-				if (data[0] == 0x95)
-				{					
-					int memory = data[1];
-					if ((int)memory >= 0 && (int)memory <= 4)
-					{
-						_ASSERT(_CrtCheckMemory());
-						MySubWalk(*(int*)0x00882E68, memory);
-						_ASSERT(_CrtCheckMemory());
-					}
+					int thisptr = *(int*)0x00882E68;
 				}
 
 				vector<byte> packet;

@@ -5,6 +5,7 @@ using System.Linq;
 using BotCore.PathFinding;
 using BotCore.States;
 using BotCore.Types;
+using BotCore.Shared.Memory;
 
 namespace BotCore.Components
 {
@@ -123,7 +124,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x26C;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x26C;
             var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
@@ -134,7 +135,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x1C4;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x1C4;
             var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
@@ -145,7 +146,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x1C8;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x1C8;
             var num = _memory.Read<short>((IntPtr)ptr, false);
 
             return num;
@@ -214,7 +215,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x23C;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x23C;
             var xcoord = _memory.Read<short>((IntPtr)ptr, false);
             return xcoord;
         }
@@ -224,7 +225,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00882E68, false) + 0x238;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false) + 0x238;
             var xcoord = _memory.Read<short>((IntPtr)ptr, false);
             return xcoord;
         }

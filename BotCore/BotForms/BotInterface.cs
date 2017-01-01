@@ -8,6 +8,7 @@ using System.Drawing;
 using BotCore.BotForms;
 using BotCore.Actions;
 using System.Runtime.InteropServices;
+using BotCore.Shared.Memory;
 
 namespace BotCore
 {
@@ -351,7 +352,7 @@ namespace BotCore
         }
 
 
-        public static int OptionTable = 0x00750000;
+        public static int OptionTable = (int)DAStaticPointers.OptionTable;
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
@@ -382,6 +383,16 @@ namespace BotCore
         {
             client[OptionTable + 0x04] = (byte)((checkBox6.Checked == true) ? 1 : 0);
             GameActions.Refresh(client, true);
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            new Task(() =>
+            {
+                client.Utilities.CastSpell("Dark Seal", client);
+
+            }).Start();
 
         }
     }

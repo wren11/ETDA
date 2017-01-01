@@ -1,5 +1,6 @@
 ﻿using System;
 using Binarysharp.MemoryManagement;
+using BotCore.Shared.Memory;
 
 namespace BotCore
 {
@@ -74,7 +75,7 @@ namespace BotCore
             {
                 if (_memory == null || !_memory.IsRunning)
                     return false;
-                var x = _memory.Read<int>((IntPtr)0x00882E68, false);
+                var x = _memory.Read<int>((IntPtr)DAStaticPointers.ObjectBase, false);
                 if (x > 0)
                     x = _memory.Read<int>((IntPtr)x + 0x23C, false);
                 if (x > 0)

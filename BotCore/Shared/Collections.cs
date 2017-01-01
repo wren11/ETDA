@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using BotCore.Types;
 using BotCore.Components;
 using BotCore.PathFinding;
+using System.Net;
 
 namespace BotCore
 {
@@ -18,6 +19,7 @@ namespace BotCore
         public static Dictionary<string, BaseSpellInformation> BaseSpells = new Dictionary<string, BaseSpellInformation>();
         public static Dictionary<string, BaseSkillInformation> BaseSkills = new Dictionary<string, BaseSkillInformation>();
         public static Dictionary<string, StaffTable> BaseStaffs = new Dictionary<string, StaffTable>();
+        public static List<string> RandomWords = new List<string>();
 
         static Collections()
         {
@@ -295,7 +297,7 @@ namespace BotCore
             BaseStaffs["Empowered Serphant Sphere"] = new StaffTable() { Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Glimmering Wand"] = new StaffTable() { Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Holy Hy-brasyl Baton"] = new StaffTable() { Id = 6, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
-            BaseStaffs["Brute's Quill1"] = new StaffTable() { Id = 239, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
+            //BaseStaffs["Brute's Quill1"] = new StaffTable() { Id = 239, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Yowien Tree Staff"] = new StaffTable() { Id = 30, Level = 99, Class = "Wizard", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Goldberry Harp"] = new StaffTable() { Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Set, Scope = SpellScope.All, Value = 1 } };
             BaseStaffs["Master Divine Staff"] = new StaffTable() { Id = 110, Level = 99, Class = "Priest", Modifer = new SpellModifiers() { Action = ActionModifier.Decrease, Scope = SpellScope.AllExcept, Name = "cradh", Value = 3 } };

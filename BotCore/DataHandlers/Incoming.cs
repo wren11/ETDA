@@ -1,5 +1,4 @@
 ﻿using BotCore.Actions;
-using BotCore.Shared.Helpers;
 using BotCore.Types;
 using System;
 using System.Collections.Generic;
@@ -140,8 +139,6 @@ namespace BotCore.DataHandlers
                     client.LastEquipmentUpdate = DateTime.Now;
                     Console.WriteLine(client.EquippedWeaponId);
                 }
-
-                CallHelper.Reset();
             }
         }
 
@@ -318,10 +315,7 @@ namespace BotCore.DataHandlers
                 obj.OnPositionUpdated(client, oldPosition, newPosition);
             }
 
-
             client.Steps++;
-            CasterHelper.Reset();
-
         }
 
         public static void AislingsAdded(object sender, Packet packet)
@@ -417,10 +411,6 @@ namespace BotCore.DataHandlers
             var id   = packet.ReadInt32();
             var msg  = packet.ReadString8();
 
-            if (Collections.BaseSpells.ContainsKey(msg) && id == client.Attributes.Serial)
-            {
-                client.IsCurrentlyCasting = false;
-            }
         }
 
         public static void PlaySound(object sender, Packet packet)
@@ -546,5 +536,7 @@ namespace BotCore.DataHandlers
                 objects[i].OnDiscovery(client);
             }
         }
+
+
     }
 }

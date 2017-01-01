@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using BotCore.Actions;
 using BotCore.DataHandlers;
 using BotCore.States;
-using BotCore.PathFinding;
+using BotCore.Shared.Memory;
 
 namespace BotCore
 {
     [Serializable]
     public class Client : GameClient
     {
-
-
         public Client()
         {
             Client = this;
@@ -40,7 +38,7 @@ namespace BotCore
             AddClientHandler(0x0B, Outgoing.LoggingOut);
             AddClientHandler(0x1C, Outgoing.UseInventorySlot);
             AddClientHandler(0x0F, Outgoing.SpellCasted);
-            AddClientHandler(0x0D, Outgoing.SpellBegin);
+            AddClientHandler(0x4D, Outgoing.SpellBegin);
         }
 
         private void AddServerHandlers()
@@ -81,8 +79,8 @@ namespace BotCore
 
 
             //disable blind effects in client.
-            if (_memory.Read<byte>((IntPtr)0x005D2DD4, false) != 0x75)
-                _memory.Write<byte>((IntPtr)0x005D2DD4, 0x75, false);
+            if (_memory.Read<byte>((IntPtr)DAStaticPointers.NoBlind, false) != 0x75)
+                _memory.Write<byte>((IntPtr)DAStaticPointers.NoBlind, 0x75, false);
 
 
 

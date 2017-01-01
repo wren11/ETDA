@@ -1,4 +1,5 @@
-﻿using BotCore.Types;
+﻿using BotCore.Shared.Memory;
+using BotCore.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,7 +56,7 @@ namespace BotCore.Components
         {
             get
             {
-                return IsInGame() ? _memory.ReadString((IntPtr)0x0073D910, false, 20) : "NoName";
+                return IsInGame() ? _memory.ReadString((IntPtr)DAStaticPointers.Username, false, 20) : "NoName";
             }
             set
             {
@@ -95,7 +96,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00755AA4, false) + 0x19C;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.Attributes, false) + 0x19C;
             var hp = _memory.Read<int>((IntPtr)ptr, false);
 
             return hp;
@@ -106,7 +107,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00755AA4, false) + 0x19C + 0x04;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.Attributes, false) + 0x19C + 0x04;
             var hp = _memory.Read<int>((IntPtr)ptr, false);
 
             return hp;
@@ -117,7 +118,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00755AA4, false) + 0x1A4;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.Attributes, false) + 0x1A4;
             var hp = _memory.Read<int>((IntPtr)ptr, false);
 
             return hp;
@@ -128,7 +129,7 @@ namespace BotCore.Components
             if (_memory == null || !_memory.IsRunning || !IsInGame())
                 return 0;
 
-            var ptr = _memory.Read<int>((IntPtr)0x00755AA4, false) + 0x1A8;
+            var ptr = _memory.Read<int>((IntPtr)DAStaticPointers.Attributes, false) + 0x1A8;
             var hp = _memory.Read<int>((IntPtr)ptr, false);
 
             return hp;
@@ -147,7 +148,7 @@ namespace BotCore.Components
                     _memory.Read<int>((IntPtr)
                         _memory.Read<int>((IntPtr)
                             _memory.Read<int>((IntPtr)
-                                _memory.Read<int>((IntPtr)0x0073D944, false) + 0x4C, false) + 0x30, false) + 0x10, false);
+                                _memory.Read<int>((IntPtr)DAStaticPointers.UserID, false) + 0x4C, false) + 0x30, false) + 0x10, false);
 
                 return id;
             }

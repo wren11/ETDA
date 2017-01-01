@@ -1,5 +1,4 @@
-﻿using BotCore.Shared.Helpers;
-using BotCore.Types;
+﻿using BotCore.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,18 +57,15 @@ namespace BotCore.States
 
         private void CastFailed(GameClient client)
         {
-            CallHelper.Reset();
         }
 
         private void CastMissed(GameClient client)
         {
-            CallHelper.Reset();
         }
 
         private void GmPorted(GameClient client)
         {
             client.Paused = true;
-            CallHelper.Reset();
         }
 
         public void RegisterMessageState(string message, SystemMessageHandler handler)
@@ -106,8 +102,6 @@ namespace BotCore.States
         {
             client.LastCastedSpell = null;
             client.LastCastTarget = null;
-            client.IsCurrentlyCasting = false;
-            CallHelper.Reset();
         }
 
         private void NoSkills(GameClient client)
@@ -117,15 +111,12 @@ namespace BotCore.States
         private void NoSpells(GameClient client)
         {
             client.FieldMap.CanCastSpells = false;
-            client.IsCurrentlyCasting = false;
             client.LastCastedSpell = null;
             client.LastCastTarget = null;
         }
 
         private void AlreadyCasted(GameClient client)
         {
-            client.IsCurrentlyCasting = false;
-
             if (client.LastCastTarget == null || client.LastCastedSpell == null)
                 return;
 
@@ -137,8 +128,6 @@ namespace BotCore.States
             if (client.LastCastedSpell.Name.StartsWith("mor fas nadur"))
                 SetIsFas(client, "mor fas nadur");
             #endregion
-
-            CallHelper.Reset();
 
         }
 
@@ -159,7 +148,7 @@ namespace BotCore.States
 
         private void redMissed(GameClient client)
         {
-            //refresh this client, He's not facing the target
+            //refresh this client, not facing the target
             Actions.GameActions.Refresh(client);
         }
 
@@ -185,8 +174,6 @@ namespace BotCore.States
 
         private void CastedSpell(GameClient client, Match match)
         {
-            client.IsCurrentlyCasting = false;
-
             if (client.LastCastTarget == null || client.LastCastedSpell == null)
                 return;
 
@@ -257,23 +244,16 @@ namespace BotCore.States
                 default:
                     break;
             }
-
-
-            CallHelper.Reset();
         }
 
         private void AlreadyCursed(GameClient client, Match match)
         {
-            client.IsCurrentlyCasting = false;
-
             if (client.LastCastTarget == null || client.LastCastedSpell == null)
                 return;
 
             string value = match.Groups[1].Value;
             if (!string.IsNullOrWhiteSpace(value))
                 SetIsCursed(client, value);
-
-            CallHelper.Reset();
         }
 
 

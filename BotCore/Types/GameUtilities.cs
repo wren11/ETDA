@@ -70,7 +70,9 @@ namespace BotCore
         {
             var spell = Client.GameMagic[basespell.Name];
             if (spell == null)
+            {
                 return;
+            }
 
             spell.UnequipedLines = basespell.BaseLines;
 
@@ -90,8 +92,6 @@ namespace BotCore
 
                 if (spell.EquipedLines == 255)
                     spell.EquipedLines = 0;
-
-
 
                 if (basespell.Group == "fas nadur" && staff.Key.ToLower() == "assassin's cross")
                     spell.EquipedLines += 1;
@@ -143,38 +143,50 @@ namespace BotCore
 
         public void CastSpell(string spellName, MapObject target)
         {
-            if (Client.SpellBar.Contains((short)SpellBar.palsy))
+            if (string.IsNullOrEmpty(spellName))
+            {
+                return;
+            }
+
+            if (Client.SpellBar.Contains((short)SpellBar.palsy) && HaveSpell("ao suain"))
                 spellName = "ao suain";
 
             if (!SafeToCast())
+            {
                 return;
-
-            if (string.IsNullOrEmpty(spellName))
-                return;
+            }
 
             var basespell = Collections.BaseSpells[spellName];
 
             if (Client.Attributes.CurrentMP() < basespell.Mana)
+            {
                 return;
+            }
 
             var spell = Client.GameMagic[basespell.Name];
             if (spell == null)
+            {
                 return;
+            }
 
             if (spell.OptimalStaff == null)
                 CalculateBaseSpellLines(basespell);
             if (spell.OptimalStaff == null)
+            {
                 return;
+            }
 
             var weapon = Client.ActiveEquipment.CurrentWeaponName();
             while (weapon == string.Empty)
             {
                 weapon = Client.ActiveEquipment.CurrentWeaponName();
-                Thread.Sleep(1);
+                Thread.Sleep(100);
             }
 
             if (!Collections.BaseStaffs.ContainsKey(weapon))
+            {
                 return;
+            }
 
             var staff = Collections.BaseStaffs[weapon].Id;
             var item = Client.GameInventory.Items.FirstOrDefault(i =>
@@ -183,7 +195,9 @@ namespace BotCore
             if (spell.OptimalStaff.Id == staff)
             {
                 if (target == null || spell == null)
+                {
                     return;
+                }
 
                 Cast(target, spell);
                 return;
@@ -193,13 +207,16 @@ namespace BotCore
                 if (item != null)
                 {
                     Swap(target, spell, item);
-                    Thread.Sleep(500);
+                    Thread.Sleep(650);
+
                     while (true)
                     {
                         weapon = Client.ActiveEquipment.CurrentWeaponName();
 
                         if (!Collections.BaseStaffs.ContainsKey(weapon))
+                        {
                             return;
+                        }
 
                         if (weapon != string.Empty)
                         {
@@ -214,7 +231,7 @@ namespace BotCore
                             }
                         }
 
-                        Thread.Sleep(1);
+                        Thread.Sleep(10);
                     }
 
                     item = null;
@@ -254,15 +271,14 @@ namespace BotCore
 
         private void Cast(MapObject target, Spell spell)
         {
-            if (target.Sprite == 0)
-                return;
 
-            if (!SafeToCast())
+          
+            if (target.Sprite == 0 || target.Sprite == ushort.MaxValue)
             {
                 return;
             }
 
-            if (Client.IsCurrentlyCasting)
+            if (!SafeToCast())
             {
                 return;
             }
@@ -270,27 +286,26 @@ namespace BotCore
             if (spell.EquipedLines > 10)
                 spell.EquipedLines = 0;
 
+            Client.LastCastStarted = DateTime.Now;
+            Client.LastCastLines = spell.EquipedLines;
+
             GameActions.BeginSpell(Client, spell.EquipedLines);
 
             if (spell.EquipedLines > 0)
             {
-
-                if (Client.StateMachine.States.OfType<FollowTarget>().Count() > 0)
-                {
-                    var state = Client.StateMachine.States.OfType<FollowTarget>().FirstOrDefault();
-                    if (state != null && state.NeedToRun)
-                        return;
-                }
-
-
                 Client.ApplyMovementLock();
                 for (int i = 0; i < spell.EquipedLines; i++)
                 {
-                    if (Client.SpellBar.Contains((short)SpellBar.palsy) && spell.CastName != "ao suain")
-                        return;
-
                     GameActions.SendSpellLines(Client, (i + 1).ToString());
-                    Thread.Sleep(1050);
+                    for (int n = 0; n < 10; n++)
+                    {
+                        if (Client.SpellBar.Contains((short)SpellBar.palsy) && spell.CastName != "ao suain")
+                        {
+                            return;
+                        }
+
+                        Thread.Sleep(101);
+                    }
                 }
             }
 
@@ -303,6 +318,7 @@ namespace BotCore
             GameActions.EndSpell(Client, spell.Slot, target);
 
             Client.LastCastedSpell = spell;
+
         }
     }
 }

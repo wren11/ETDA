@@ -1,5 +1,4 @@
-﻿using BotCore.Shared.Helpers;
-using BotCore.Types;
+﻿using BotCore.Types;
 using System;
 using System.Threading;
 
@@ -125,8 +124,8 @@ namespace BotCore.Actions
             var packet = new Packet(0x11);
             packet.WriteByte((byte)dir);
             GameClient.InjectPacket<ServerPacket>(client, packet);
-            client.Attributes.Direction = dir;
 
+            client.Attributes.Direction = dir;
             client.LastDirectionTurn = DateTime.Now;
         }
 
@@ -157,23 +156,32 @@ namespace BotCore.Actions
 
         public static void Walk(GameClient Client, Direction dir)
         {
-            if (dir == Direction.Random)
+            if ((DateTime.Now - Client.LastMovementUpdate).TotalMilliseconds > 50)
             {
-                var random = (Direction)rnd.Next(0, 3);
-                Walk(Client, random);
+                if (dir == Direction.Random)
+                {
+                    var random = (Direction)rnd.Next(0, 3);
+                    Walk(Client, random);
+                }
+
+                if (dir != Client.Attributes.Direction)
+                {
+                    Face(Client, dir);
+                }
+
+                if (dir == Direction.East)
+                    Client.InjectSyncOperation(SyncOperation.WalkEast);
+                if (dir == Direction.North)
+                    Client.InjectSyncOperation(SyncOperation.WalkNorth);
+                if (dir == Direction.South)
+                    Client.InjectSyncOperation(SyncOperation.WalkSouth);
+                if (dir == Direction.West)
+                    Client.InjectSyncOperation(SyncOperation.WalkWest);
+
+                Client.Attributes.Direction = dir;
+
+                Client.LastMovementUpdate = DateTime.Now;
             }
-
-            if (dir == Direction.East)
-                Client.InjectSyncOperation(SyncOperation.WalkEast);
-            if (dir == Direction.North)
-                Client.InjectSyncOperation(SyncOperation.WalkNorth);
-            if (dir == Direction.South)
-                Client.InjectSyncOperation(SyncOperation.WalkSouth);
-            if (dir == Direction.West)
-                Client.InjectSyncOperation(SyncOperation.WalkWest);
-
-            Client.Attributes.Direction = dir;
-
         }
 
 
