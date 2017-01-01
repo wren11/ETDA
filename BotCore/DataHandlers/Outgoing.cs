@@ -46,14 +46,11 @@ namespace BotCore.DataHandlers
         internal static void SpellCasted(object sender, Packet e)
         {
             var client = Collections.AttachedClients[(int)sender];
-            Console.WriteLine("Casting : {0}", client.GetMoveState());
         }
 
         internal static void SpellBegin(object sender, Packet e)
         {
             var client = Collections.AttachedClients[(int)sender];
-
-            Console.WriteLine("Casting : {0}", client.GetMoveState());
         }
     }
 }

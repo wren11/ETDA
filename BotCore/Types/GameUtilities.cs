@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BotCore.PathFinding;
 
 namespace BotCore
 {
@@ -126,6 +127,25 @@ namespace BotCore
             }
         }
 
+        public void ComputeStep(List<PathSolver.PathFinderNode> path, int Distance = 2)
+        {
+            var pos = new Position(path[Distance].X, path[Distance].Y);
+            var abx = pos.X - Client.Attributes.ServerPosition.X;
+            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
+
+            if (abx == Distance && aby == 0)
+                GameActions.Walk(Client, Direction.East);
+            else if ((abx == 0 && aby == -Distance)
+                || (abx == 1 && aby == -1)
+                || (abx == -1 && aby == -1))
+                GameActions.Walk(Client, Direction.North);
+            else if (abx == -Distance && aby == 0)
+                GameActions.Walk(Client, Direction.West);
+            else if ((abx == 0 && aby == Distance)
+                || (abx == 1 && aby == 1)
+                || (abx == -1 && aby == 1))
+                GameActions.Walk(Client, Direction.South);
+        }
         public bool CanSwitchWeapon()
         {
             return
@@ -319,6 +339,240 @@ namespace BotCore
 
             Client.LastCastedSpell = spell;
 
+        }
+
+        public List<PathSolver.PathFinderNode> FindPath(Position Target)
+        {
+            try
+            {
+
+                Client.FieldMap?.SetPassable(Client.Attributes.ServerPosition);
+                Client.FieldMap?.SetPassable(Target);
+
+                var results =
+                    Client.FieldMap.Search(Client.Attributes.ServerPosition, Target);
+
+                return results;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public void WalkTowardsClient(GameClient Entity)
+        {
+            if (Client.IsRefreshing)
+                Thread.Sleep(1000);
+
+            try
+            {
+                var EndLocation = new Position { X = Entity.Attributes.ServerPosition.X,
+                    Y = Entity.Attributes.ServerPosition.Y };
+
+                List<PathSolver.PathFinderNode> PathNodes = null;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (Client.IsRefreshing)
+                        Thread.Sleep(1000);
+
+                    PathNodes = FindPath(EndLocation);
+
+                    if (PathNodes == null)
+                    {
+                        if (i == 3)
+                            throw new WalkingException();
+                        continue;
+                    }
+                    if (PathNodes.Count == 1)
+                    {
+                        if (i == 3)
+                            throw new WalkingException();
+
+                        GameActions.Refresh(Client);
+                        continue;
+                    }
+                    break;
+                }
+
+                for (int i = 1; i < PathNodes.Count - 1; i++)
+                {
+
+                    if (Entity.Attributes.ServerPosition.X != EndLocation.X || Entity.Attributes.ServerPosition.Y != EndLocation.Y)
+                    {
+                        EndLocation = new Position { X = Entity.Attributes.ServerPosition.X, Y = Entity.Attributes.ServerPosition.Y };
+
+                        for (int j = 0; j < 4; j++)
+                        {
+                            PathNodes = FindPath(EndLocation);
+                            if (PathNodes == null)
+                                throw new WalkingException();
+                            if (PathNodes.Count == 1)
+                                GameActions.Refresh(Client);
+                            if (PathNodes.Count == 2)
+                                return;
+                            if (j == 3)
+                                throw new WalkingException();
+                        }
+
+                        i = 1;
+                    }
+
+
+                    foreach (MapObject Ent in Client.ObjectSearcher.VisibleObjects)
+                    {
+                        if (Ent.Type == MapObjectType.Monster || Ent.Type == MapObjectType.Aisling)
+                        {
+                            if (Ent.ServerPosition.X == PathNodes[i].X && Ent.ServerPosition.Y == PathNodes[i].Y)
+                            {
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    if (Client.IsRefreshing)
+                                        Thread.Sleep(1000);
+
+                                    PathNodes = FindPath(Entity.Attributes.ServerPosition);
+                                    if (PathNodes == null)
+                                        throw new WalkingException();
+                                    if (PathNodes.Count == 1)
+                                        GameActions.Refresh(Client);
+                                    if (PathNodes.Count == 2)
+                                        return;
+                                    if (j == 3)
+                                        throw new WalkingException();
+                                }
+                                i = 1;
+                            }
+                        }
+                    }
+
+                    Direction Direction;
+                    var MyPosition = Client.Attributes.ServerPosition;
+
+                    if (PathNodes[i].X == MyPosition.X && PathNodes[i].Y == MyPosition.Y - 1)
+                        Direction = Direction.North;
+                    else if (PathNodes[i].X == MyPosition.X && PathNodes[i].Y == MyPosition.Y + 1)
+                        Direction = Direction.South;
+                    else if (PathNodes[i].X == MyPosition.X - 1 && PathNodes[i].Y == MyPosition.Y)
+                        Direction = Direction.West;
+                    else if (PathNodes[i].X == MyPosition.X + 1 && PathNodes[i].Y == MyPosition.Y)
+                        Direction = Direction.East;
+                    else throw new WalkingException();
+
+                    GameActions.Walk(Client, Direction);
+                }
+                throw new WalkingException();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        public void WalkTowardsObj(MapObject Entity)
+        {
+            if (Client.IsRefreshing)
+                Thread.Sleep(1000);
+
+            try
+            {
+                var EndLocation = new Position { X = Entity.ServerPosition.X, Y = Entity.ServerPosition.Y };
+
+                List<PathSolver.PathFinderNode> PathNodes = null;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (Client.IsRefreshing)
+                        Thread.Sleep(1000);
+
+                    PathNodes = FindPath(EndLocation);
+
+                    if (PathNodes == null)
+                    {
+                        if (i == 3)
+                            throw new WalkingException();
+                        continue;
+                    }
+                    if (PathNodes.Count == 1)
+                    {
+                        if (i == 3)
+                            throw new WalkingException();
+
+                        GameActions.Refresh(Client);
+                        continue;
+                    }
+                    break;
+                }
+
+                for (int i = 1; i < PathNodes.Count - 1; i++)
+                {
+
+                    if (Entity.ServerPosition.X != EndLocation.X || Entity.ServerPosition.Y != EndLocation.Y)
+                    {
+                        EndLocation = new Position { X = Entity.ServerPosition.X, Y = Entity.ServerPosition.Y };
+
+                        for (int j = 0; j < 4; j++)
+                        {
+                            PathNodes = FindPath(EndLocation);
+                            if (PathNodes == null)
+                                throw new WalkingException();
+                            if (PathNodes.Count == 1)
+                                GameActions.Refresh(Client);
+                            if (PathNodes.Count == 2)
+                                return;
+                            if (j == 3)
+                                throw new WalkingException();
+                        }
+
+                        i = 1;
+                    }
+
+
+                    foreach (MapObject Ent in Client.ObjectSearcher.VisibleObjects)
+                    {
+                        if (Ent.Type == MapObjectType.Monster || Ent.Type == MapObjectType.Aisling)
+                        {
+                            if (Ent.ServerPosition.X == PathNodes[i].X && Ent.ServerPosition.Y == PathNodes[i].Y)
+                            {
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    if (Client.IsRefreshing)
+                                        Thread.Sleep(1000);
+
+                                    PathNodes = FindPath(Entity.ServerPosition);
+                                    if (PathNodes == null)
+                                        throw new WalkingException();
+                                    if (PathNodes.Count == 1)
+                                        GameActions.Refresh(Client);
+                                    if (PathNodes.Count == 2)
+                                        return;
+                                    if (j == 3)
+                                        throw new WalkingException();
+                                }
+                                i = 1;
+                            }
+                        }
+                    }
+
+                    Direction Direction;
+                    var MyPosition = Client.Attributes.ServerPosition;
+
+                    if (PathNodes[i].X == MyPosition.X && PathNodes[i].Y == MyPosition.Y - 1)
+                        Direction = Direction.North;
+                    else if (PathNodes[i].X == MyPosition.X && PathNodes[i].Y == MyPosition.Y + 1)
+                        Direction = Direction.South;
+                    else if (PathNodes[i].X == MyPosition.X - 1 && PathNodes[i].Y == MyPosition.Y)
+                        Direction = Direction.West;
+                    else if (PathNodes[i].X == MyPosition.X + 1 && PathNodes[i].Y == MyPosition.Y)
+                        Direction = Direction.East;
+                    else throw new WalkingException();
+
+                    GameActions.Walk(Client, Direction);
+                }
+                throw new WalkingException();
+            }
+            catch (Exception e)
+            {
+            }
         }
     }
 }

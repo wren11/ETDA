@@ -251,8 +251,6 @@ namespace BotCore.Components
 
             this.Width = Width;
             this.Height = Height;
-
-            Console.WriteLine($"Map Init {Width}, {Height}");
         }
 
         public static bool Parse(short lWall, short rWall)
@@ -294,8 +292,6 @@ namespace BotCore.Components
 
             reader.Close();
             stream.Close();
-
-            Console.WriteLine("Map Process {0}, {1}", Width, Height);
         }
 
         public void OnMapLoaded(Stream data, short number, short width, short height)
@@ -316,36 +312,15 @@ namespace BotCore.Components
             if (!CanCastSpells)
             {
                 CanCastSpells = true;
-                Console.WriteLine("Allowing spells to resume. ");
             }
 
             if (!CanUseSkills)
             {
                 CanUseSkills = true;
-                Console.WriteLine("Allowing skills to resume. ");
             }
 
             if (Client.IsInGame())
                 ((Client)Client).OnClientStateUpdated(true);
-
-
-            nodes = new PathSolver.PathNode[Width, Height];
-
-            for (short y = 0; y < Height; y++)
-            {
-                for (short x = 0; x < Width; x++)
-                {
-                    nodes[x, y] = new PathSolver.PathNode()
-                    {
-                        HasReactor = false,
-                        IsBlock = this[x, y] == 1,
-                        Steps = 0,
-                        IsDoor = false
-                    };
-                }
-            }
-
-            Console.WriteLine("Map Handled {0}, {1}", Width, Height);
         }
 
 
@@ -400,20 +375,59 @@ namespace BotCore.Components
 
         }
 
-
-
         public List<PathSolver.PathFinderNode> Search(Position Start, Position End)
         {
-            lock (_mapObjects)
+            try
             {
-                if (Grid.GetLength(0) == 0 || Grid.GetLength(1) == 0)
-                    return null;
+                lock (_mapObjects)
+                {
+                    if (Grid.GetLength(0) == 0 || Grid.GetLength(1) == 0)
+                        return null;
 
-                if (!Client.MapLoaded)
-                    return null;
+                    if (!Client.MapLoaded)
+                        return null;
 
-                var usingpath = PathSolver.FindPath(ref nodes, Grid, Start, End);
-                return usingpath;
+                    nodes = new PathSolver.PathNode[Width, Height];
+
+                    for (short y = 0; y < Height; y++)
+                    {
+                        for (short x = 0; x < Width; x++)
+                        {
+                            nodes[x, y] = new PathSolver.PathNode()
+                            {
+                                HasReactor = false,
+                                IsBlock = this[x, y] == 1,
+                                Steps = 0,
+                                IsDoor = false
+                            };
+                        }
+                    }
+
+
+                    foreach (var obj in MapObjects)
+                    {
+                        if (obj.Type == MapObjectType.Monster ||
+                            obj.Type == MapObjectType.Aisling ||
+                            obj.Type == MapObjectType.NPC)
+                        {
+                            nodes[obj.ServerPosition.X, obj.ServerPosition.Y].IsBlock = true;
+                        }
+                    }
+
+                    SetPassable(Start);
+                    SetPassable(End);
+
+                    nodes[Start.X, Start.Y].IsBlock = false;
+                    nodes[End.X, End.Y].IsBlock = false;
+
+
+                    var usingpath = PathSolver.FindPath(ref nodes, Start, End);
+                    return usingpath;
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
     }

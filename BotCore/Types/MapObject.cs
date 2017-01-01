@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using BotCore.PathFinding;
-using BotCore.Actions;
 
 namespace BotCore.Types
 {
@@ -19,11 +17,10 @@ namespace BotCore.Types
         internal bool IsCursed;
 
         public Position OldPosition;
+
         public EventHandler<List<PathSolver.PathFinderNode>> PathUpdated = delegate { };
 
         public ushort Sprite;
-
-        public Stopwatch timer = new Stopwatch();
 
         public DateTime TimeSeen = DateTime.Now;
 
@@ -64,15 +61,10 @@ namespace BotCore.Types
             SetTargetPriorties(client);
             OverrideTargetPriorties();
             UpdatePath(client);
-
-            Console.WriteLine("Entity {0} Discovered. ", Enum.GetName(typeof(MapObjectType), Type));
-
-            timer.Start();
         }
 
         public void OnRemoved(GameClient client)
         {
-            Console.WriteLine("Entity: {0} was Removed.", Serial);
             client.FieldMap.SetPassable(ServerPosition);
             client.FieldMap.RemoveObject(this);
             PathToMapObject = null;
@@ -94,16 +86,6 @@ namespace BotCore.Types
                 Timer.Reset();
             }
 
-
-            //lets time movement speed.
-            if (timer.ElapsedMilliseconds > 0)
-                MovementSpeed = (int)timer.ElapsedMilliseconds;
-
-
-            Console.WriteLine("Entity Moved {0},{1} -> {2},{3}", oldPosition.X, oldPosition.Y, newPosition.X,
-                newPosition.Y);
-
-            timer.Restart();
             client.FieldMap.SetPassable(oldPosition);
             client.FieldMap.SetWall(newPosition);
             UpdatePath(client);
@@ -235,119 +217,6 @@ namespace BotCore.Types
                         IsCursed = true;
                     }
                     break;
-            }
-        }
-
-        public void MoveTowards()
-        {
-            var EndLocation = ServerPosition;
-            var MyLocation = Client.Attributes.ServerPosition;
-
-            if (MyLocation.IsNextTo(EndLocation))
-            {
-                throw new WalkingException();
-            }
-
-
-            UpdatePath(Client);
-
-            if (PathToMapObject == null)
-                return;
-
-            var PathNodes = PathToMapObject;
-
-            for (int i = 0; i < 4; i++)
-            {
-                UpdatePath(Client);
-                PathNodes = PathToMapObject;
-
-                if (PathNodes == null)
-                {
-                    if (i == 3)
-                        throw new WalkingException();
-                    continue;
-                }
-                if (PathNodes.Count == 1)
-                {
-                    if (i == 3)
-                        throw new WalkingException();
-                    GameActions.Refresh(Client);
-                    continue;
-                }
-                break;
-            }
-
-            UpdatePath(Client);
-            PathNodes = PathToMapObject;
-
-            if (PathNodes == null)
-                return;
-
-            for (int i = 1; i < PathNodes.Count - 1; i++)
-            {
-                if (Client.FieldMap == null)
-                    return;
-
-                if (Client.ObjectSearcher != null)
-                {
-                    if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
-                        return;
-                }
-
-
-                if (ServerPosition.X != EndLocation.X || ServerPosition.Y != EndLocation.Y)
-                {
-                    EndLocation = ServerPosition;
-
-                    for (int j = 0; j < 4; j++)
-                    {
-                        if (Client.FieldMap == null)
-                            return;
-
-                        if (Client.ObjectSearcher != null)
-                        {
-                            if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
-                                return;
-                        }
-
-                        UpdatePath(Client);
-                        PathNodes = PathToMapObject;
-
-                        if (PathNodes == null)
-                            throw new WalkingException();
-                        if (PathNodes.Count == 1)
-                            GameActions.Refresh(Client);
-                        if (PathNodes.Count == 2)
-                            return;
-
-                        if (j == 3)
-                            throw new WalkingException();
-                    }
-                    i = 1;
-                }
-                if (Client.FieldMap == null)
-                    return;
-
-                if (Client.ObjectSearcher != null)
-                {
-                    if (Client.ObjectSearcher.VisibleObjects.FirstOrDefault(n => n.Serial == Serial) == null)
-                        return;
-                }
-
-                Direction dir = Direction.None;
-                PathNodes = PathToMapObject;
-
-                if (PathNodes[i].X == Client.FieldMap.X() && PathNodes[i].Y == Client.FieldMap.Y() - 1)
-                    dir = Direction.North;
-                else if (PathNodes[i].X == Client.FieldMap.X() && PathNodes[i].Y == Client.FieldMap.Y() + 1)
-                    dir = Direction.South;
-                else if (PathNodes[i].X == Client.FieldMap.X() - 1 && PathNodes[i].Y == Client.FieldMap.Y())
-                    dir = Direction.West;
-                else if (PathNodes[i].X == Client.FieldMap.X() + 1 && PathNodes[i].Y == Client.FieldMap.Y())
-                    dir = Direction.East;
-
-
-                GameActions.Walk(Client, dir);
             }
         }
     }

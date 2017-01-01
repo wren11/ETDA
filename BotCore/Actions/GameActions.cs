@@ -27,6 +27,7 @@ namespace BotCore.Actions
             GameClient.InjectPacket<ServerPacket>(client, p, force);
             GameClient.InjectPacket<ServerPacket>(client, p, force);
 
+            client.LastRefreshed = DateTime.Now;
             callback?.Invoke(client, p);
         }
 

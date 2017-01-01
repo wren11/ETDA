@@ -92,11 +92,8 @@ namespace BotCore
         {
             if (ClientReady && !transit)
             {
-                //Preform hard resets here.
                 Client.Active?.HardReset();
-
                 Client.CleanUpMememory();
-                Console.WriteLine("Cleanup Time");
             }
 
             Console.WriteLine("Client is ready.");

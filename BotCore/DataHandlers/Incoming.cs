@@ -137,7 +137,6 @@ namespace BotCore.DataHandlers
                     client.EquippedWeaponId = Collections.BaseStaffs[name].Id;
                     client.EquippedWeapon = name;
                     client.LastEquipmentUpdate = DateTime.Now;
-                    Console.WriteLine(client.EquippedWeaponId);
                 }
             }
         }

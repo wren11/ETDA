@@ -1,6 +1,4 @@
-﻿using BotCore.Actions;
-using BotCore.States.BotStates;
-using BotCore.Types;
+﻿using BotCore.States.BotStates;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -103,9 +101,11 @@ namespace BotCore.States
 
                         if (m_target != null)
                         {
+                            //determine if should follow?
                             if (Client.Attributes?
                                 .ServerPosition?
-                                .DistanceFrom(m_target?.Client.Attributes.ServerPosition) > Distance)
+                                .DistanceFrom(m_target?.Client.Attributes.ServerPosition) > Distance
+                                && m_target?.Client.FieldMap.MapNumber() == Client.FieldMap.MapNumber())
                                 return true;
                         }
                     }
@@ -125,6 +125,8 @@ namespace BotCore.States
 
         public override int Priority { get; set; }
 
+        public Random rnd = new Random();
+
 
         public override void Run(TimeSpan Elapsed)
         {
@@ -134,58 +136,17 @@ namespace BotCore.States
 
                 if (m_target != null)
                 {
-                    var mapobj = Client.ObjectSearcher.RetreivePlayerTarget(i =>
-                        i?.Serial == m_target?.Serial);
+                    var path =
+                        Client.FieldMap.Search(Client.Attributes.ServerPosition,
+                        m_target.Client.Attributes?.ServerPosition);
 
-                    if (mapobj != null)
+                    if (path != null)
                     {
-                        mapobj.UpdatePath(Client);
-                        var path = mapobj.PathToMapObject;
-
-                        if (path != null && path.Count > Distance)
-                        {
-                            ComputeStep(path, mapobj);
-                        }
+                        Client.Utilities.ComputeStep(path, Distance);
                     }
                 }
             }
             Client.TransitionTo(this, Elapsed);
-        }
-
-        private void ComputeDirection(List<PathFinding.PathSolver.PathFinderNode> path, MapObject obj, int idx = 0)
-        {
-            var pos = new Position(path[idx].X, path[idx].Y);
-            var abx = pos.X - Client.Attributes.ServerPosition.X;
-            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
-
-            if (abx == (idx + 1) && aby == 0)
-                GameActions.Walk(Client, Direction.East);
-            else if (abx == 0 && aby == -(idx + 1))
-                GameActions.Walk(Client, Direction.North);
-            else if (abx == -(idx + 1) && aby == 0)
-                GameActions.Walk(Client, Direction.West);
-            else if (abx == 0 && aby == (idx + 1))
-                GameActions.Walk(Client, Direction.South);
-        }
-
-        private void ComputeStep(List<PathFinding.PathSolver.PathFinderNode> path, MapObject obj)
-        {
-            var pos = new Position(path[Distance].X, path[Distance].Y);
-            var abx = pos.X - Client.Attributes.ServerPosition.X;
-            var aby = pos.Y - Client.Attributes.ServerPosition.Y;
-
-            if (abx == Distance && aby == 0)
-                GameActions.Walk(Client, Direction.East);
-            else if ((abx == 0 && aby == -Distance)
-                || (abx == 1 && aby == -1)
-                || (abx == -1 && aby == -1))
-                GameActions.Walk(Client, Direction.North);
-            else if (abx == -Distance && aby == 0)
-                GameActions.Walk(Client, Direction.West);
-            else if ((abx == 0 && aby == Distance)
-                || (abx == 1 && aby == 1)
-                || (abx == -1 && aby == 1))
-                GameActions.Walk(Client, Direction.South);
         }
     }
 }

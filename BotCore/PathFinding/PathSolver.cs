@@ -15,7 +15,7 @@ namespace BotCore.PathFinding
             public bool IsBlock { get; set; }
         }
 
-        public static List<PathFinderNode> FindPath(ref PathNode[,] Matrix, int[,] Matrix2, Position Start, Position End)
+        public static List<PathFinderNode> FindPath(ref PathNode[,] Matrix, Position Start, Position End)
         {
 
             if (Start == null || End == null)
@@ -180,7 +180,6 @@ namespace BotCore.PathFinding
             }
             catch
             {
-                System.Console.WriteLine("Map Dimensions are fucked.");
                 return null;
             }
         }

@@ -22,7 +22,7 @@ using BotCore.Shared.Memory;
 namespace BotCore
 {
     [Serializable]
-    public abstract class GameClient : UpdateableComponent
+    public abstract partial class GameClient : UpdateableComponent
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate void ProgressCallback(int value);
@@ -271,7 +271,6 @@ namespace BotCore
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error Updating Components. \n\r" + e.StackTrace + "\n\n" + e.Message);
                 }
                 finally
                 {
@@ -438,6 +437,7 @@ namespace BotCore
         public GameState RunningState { get; internal set; }
         public DateTime LastUseInvetorySlot { get; internal set; }
         public DateTime LastEquipmentUpdate { get; internal set; }
+        public DateTime LastRefreshed { get; internal set; }
         public DateTime LastCastStarted { get; internal set; }
         public DateTime WhenLastCasted { get; internal set; }
         public DateTime LastMovementUpdate { get; internal set; }
@@ -452,6 +452,11 @@ namespace BotCore
         public int Steps { get; set; }
         public List<string> LocalWorldUsers { get; set; }
         public int LastCastLines = -1;
+
+        public bool IsRefreshing
+        {
+            get { return DateTime.Now - LastRefreshed < new TimeSpan(0, 0, 0, 0, 500); }
+        }
 
         #endregion
 
