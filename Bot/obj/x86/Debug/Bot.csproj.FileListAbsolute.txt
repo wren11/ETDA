@@ -26,3 +26,9 @@ F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Debug\Bot.MainFo
 F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Debug\Bot.csproj.GenerateResource.Cache
 F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Debug\Bot.exe
 F:\Users\IT-Manager\Desktop\ETDA-master\ETDA-master\Bot\obj\x86\Debug\Bot.pdb
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.csprojResolveAssemblyReference.cache
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.MainForm.resources
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.csproj.GenerateResource.Cache
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.csproj.CoreCompileInputs.cache
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.exe
+C:\Users\dm882\OneDrive\Documents\GitHub\ETDABot\Bot\obj\x86\Debug\Bot.pdb
