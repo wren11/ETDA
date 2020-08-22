@@ -23,3 +23,5 @@ Bot/bin/Debug/Bot.exe.config
 /Bot/obj/Debug
 /BotCore/bin/Debug
 *.db
+/.vs/BotCore/v16
+/EtDA/Debug
